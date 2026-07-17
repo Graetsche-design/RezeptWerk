@@ -19,6 +19,7 @@ struct WeekPlannerView: View {
     @State private var weekOffset = 0
     /// Tag, für den gerade ein Gericht eingeplant wird (steuert das Sheet).
     @State private var dayToPlan: Date?
+    @State private var saveFailed = false
 
     /// Montag-basierter Kalender (deutsche Wochenführung).
     private var calendar: Calendar {
@@ -52,6 +53,7 @@ struct WeekPlannerView: View {
         .screenBackground()
         .navigationTitle("Wochenplan")
         .navigationBarTitleDisplayMode(.inline)
+        .saveErrorAlert($saveFailed)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Heute") { weekOffset = 0 }
@@ -233,7 +235,14 @@ struct WeekPlannerView: View {
 
     private func remove(_ meal: PlannedMeal) {
         modelContext.delete(meal)
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+        } catch {
+            // Nicht gespeichert: Löschen zurücknehmen und Bescheid geben.
+            modelContext.rollback()
+            saveFailed = true
+            return
+        }
         // Homescreen-Widget auf den neuen Stand bringen.
         WidgetPlanSync.refresh(context: modelContext)
     }

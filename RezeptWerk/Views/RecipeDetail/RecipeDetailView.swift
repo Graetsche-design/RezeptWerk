@@ -17,6 +17,7 @@ struct RecipeDetailView: View {
     @State private var showExport = false
     @State private var showAddNote = false
     @State private var shoppingConfirmation: String?
+    @State private var saveFailed = false
 
     /// Angezeigte Portionen für den Portionsrechner (0 = noch nicht gesetzt).
     @State private var displayedServings = 0
@@ -73,6 +74,7 @@ struct RecipeDetailView: View {
         }
         .screenBackground()
         .navigationBarTitleDisplayMode(.inline)
+        .saveErrorAlert($saveFailed)
         .toolbar { toolbarContent }
         .sheet(isPresented: $showEditor) {
             RecipeEditorView(recipe: recipe)
@@ -245,7 +247,12 @@ struct RecipeDetailView: View {
 
                 Button {
                     modelContext.delete(note)
-                    try? modelContext.save()
+                    do {
+                        try modelContext.save()
+                    } catch {
+                        modelContext.rollback()
+                        saveFailed = true
+                    }
                 } label: {
                     Image(systemName: "minus.circle.fill")
                         .foregroundStyle(AppColors.textSecondary.opacity(0.55))
@@ -353,6 +360,7 @@ private struct AddCookingNoteSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var text = ""
+    @State private var saveFailed = false
 
     private var trimmedText: String {
         text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -381,12 +389,19 @@ private struct AddCookingNoteSheet: View {
                         let note = CookingNote(text: trimmedText)
                         note.recipe = recipe
                         modelContext.insert(note)
-                        try? modelContext.save()
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            modelContext.rollback()
+                            saveFailed = true
+                            return
+                        }
                         dismiss()
                     }
                     .disabled(trimmedText.isEmpty)
                 }
             }
+            .saveErrorAlert($saveFailed)
         }
         .presentationDetents([.medium])
     }

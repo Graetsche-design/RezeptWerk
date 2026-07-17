@@ -11,6 +11,7 @@ struct CategoriesView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var showNewCategorySheet = false
     @State private var categoryToDelete: RecipeCategory?
+    @State private var saveFailed = false
 
     var body: some View {
         NavigationStack {
@@ -68,7 +69,12 @@ struct CategoriesView: View {
                 Button("„\(categoryToDelete?.name ?? "")“ löschen", role: .destructive) {
                     if let category = categoryToDelete {
                         modelContext.delete(category)
-                        try? modelContext.save()
+                        do {
+                            try modelContext.save()
+                        } catch {
+                            modelContext.rollback()
+                            saveFailed = true
+                        }
                     }
                     categoryToDelete = nil
                 }
@@ -78,6 +84,7 @@ struct CategoriesView: View {
             } message: {
                 Text("Die Rezepte bleiben erhalten — sie verlieren nur die Zuordnung zu dieser Kategorie.")
             }
+            .saveErrorAlert($saveFailed)
         }
     }
 }

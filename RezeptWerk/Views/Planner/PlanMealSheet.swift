@@ -18,6 +18,7 @@ struct PlanMealSheet: View {
     @State private var searchText = ""
     /// Nur Rezepte zeigen, die zur gewählten Mahlzeit passen.
     @State private var onlySuitable = false
+    @State private var saveFailed = false
 
     /// Such-gefilterte, nach Eignung sortierte Rezeptliste.
     /// Für die gewählte Mahlzeit geeignete Rezepte stehen oben.
@@ -79,6 +80,7 @@ struct PlanMealSheet: View {
             .screenBackground()
             .navigationTitle(planTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .saveErrorAlert($saveFailed)
             .searchable(text: $searchText, prompt: "Rezept suchen …")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -159,7 +161,15 @@ struct PlanMealSheet: View {
             sortIndex: existing.count
         )
         modelContext.insert(meal)
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+        } catch {
+            // Nicht gespeichert: Einfügen zurücknehmen und Bescheid geben —
+            // das Blatt bleibt offen, der Nutzer kann es erneut versuchen.
+            modelContext.rollback()
+            saveFailed = true
+            return
+        }
         // Homescreen-Widget auf den neuen Stand bringen.
         WidgetPlanSync.refresh(context: modelContext)
         dismiss()

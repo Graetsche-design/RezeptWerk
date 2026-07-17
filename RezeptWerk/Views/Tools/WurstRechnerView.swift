@@ -516,6 +516,7 @@ private struct SaveAsRecipeSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var title = ""
+    @State private var saveFailed = false
 
     private var trimmedTitle: String {
         title.trimmingCharacters(in: .whitespaces)
@@ -551,15 +552,22 @@ private struct SaveAsRecipeSheet: View {
                             rows: rows,
                             categories: categories
                         )
-                        guard (try? RecipeImportService.save(
-                            draft: draft, updating: nil, in: modelContext
-                        )) != nil else { return }
+                        do {
+                            _ = try RecipeImportService.save(
+                                draft: draft, updating: nil, in: modelContext
+                            )
+                        } catch {
+                            modelContext.rollback()
+                            saveFailed = true
+                            return
+                        }
                         dismiss()
                         onSaved(trimmedTitle)
                     }
                     .disabled(trimmedTitle.isEmpty)
                 }
             }
+            .saveErrorAlert($saveFailed)
         }
         .presentationDetents([.medium])
     }

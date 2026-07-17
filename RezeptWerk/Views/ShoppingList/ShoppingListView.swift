@@ -17,6 +17,7 @@ struct ShoppingListView: View {
     @State private var newItemText = ""
     @State private var confirmationMessage: String?
     @State private var showClearAllConfirmation = false
+    @State private var saveFailed = false
 
     private var openItems: [ShoppingItem] {
         items.filter { !$0.isChecked }
@@ -37,6 +38,7 @@ struct ShoppingListView: View {
         .background(AppColors.backgroundPrimary.ignoresSafeArea())
         .navigationTitle("Einkaufsliste")
         .navigationBarTitleDisplayMode(.inline)
+        .saveErrorAlert($saveFailed)
         .toolbar { toolbarContent }
         .safeAreaInset(edge: .bottom) {
             addRow
@@ -201,7 +203,13 @@ struct ShoppingListView: View {
         for index in offsets {
             modelContext.delete(source[index])
         }
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+        } catch {
+            // Nicht gespeichert: Löschen zurücknehmen und Bescheid geben.
+            modelContext.rollback()
+            saveFailed = true
+        }
     }
 }
 

@@ -19,6 +19,7 @@ struct CategoryEditorSheet: View {
     @State private var newSubcategoryName = ""
     /// Neue Unterkategorien werden erst beim Speichern angelegt.
     @State private var pendingSubcategoryNames: [String] = []
+    @State private var saveFailed = false
 
     /// Eine handverlesene Auswahl passender Symbole.
     private let iconChoices = [
@@ -104,6 +105,7 @@ struct CategoryEditorSheet: View {
             }
             .navigationTitle(isNewCategory ? "Neue Kategorie" : "Kategorie ergänzen")
             .navigationBarTitleDisplayMode(.inline)
+            .saveErrorAlert($saveFailed)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") { dismiss() }
@@ -151,7 +153,14 @@ struct CategoryEditorSheet: View {
         // Optionales Array sicher ergänzen (kann nach iCloud-Sync nil sein).
         target.subcategories = (target.subcategories ?? []) + newSubcategories
 
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+        } catch {
+            // Nicht gespeichert: Änderungen zurücknehmen und Bescheid geben.
+            modelContext.rollback()
+            saveFailed = true
+            return
+        }
         dismiss()
     }
 }
