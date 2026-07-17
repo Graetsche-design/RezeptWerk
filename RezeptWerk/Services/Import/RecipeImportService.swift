@@ -66,7 +66,8 @@ enum RecipeImportService {
                 RecipeStep(
                     text: draftStep.text.trimmingCharacters(in: .whitespacesAndNewlines),
                     sortIndex: index,
-                    timerSeconds: timerSeconds(fromMinutesText: draftStep.timerMinutesText)
+                    timerSeconds: timerSeconds(fromMinutesText: draftStep.timerMinutesText),
+                    imageData: draftStep.imageData
                 )
             }
 

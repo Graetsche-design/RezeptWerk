@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Die Zubereitungsschritte als nummerierte Liste im Kochbuch-Stil.
 struct StepsSectionView: View {
@@ -26,6 +27,16 @@ struct StepsSectionView: View {
                                 .font(AppTypography.body)
                                 .foregroundStyle(AppColors.textPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+
+                            // Optionales Schritt-Foto.
+                            if let data = step.imageData, let image = UIImage(data: data) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: 160)
+                                    .frame(maxWidth: .infinity)
+                                    .clipShape(RoundedRectangle(cornerRadius: AppRadius.small, style: .continuous))
+                            }
 
                             if let seconds = step.timerSeconds, seconds > 0 {
                                 InfoPill(

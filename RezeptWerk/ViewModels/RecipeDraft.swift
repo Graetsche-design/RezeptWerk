@@ -22,6 +22,8 @@ struct DraftStep: Identifiable {
     var text = ""
     /// Timer in Minuten als Text, Komma erlaubt („1,5“ = 90 Sekunden).
     var timerMinutesText = ""
+    /// Optionales Foto zu diesem Schritt (bereits komprimiert).
+    var imageData: Data?
 
     var isEmpty: Bool {
         text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -127,6 +129,7 @@ final class RecipeDraft {
         let existingSteps = recipe.sortedSteps.map { step in
             var draft = DraftStep()
             draft.text = step.text
+            draft.imageData = step.imageData
             if let seconds = step.timerSeconds, seconds > 0 {
                 draft.timerMinutesText = FormatHelpers.amountText(Double(seconds) / 60) ?? ""
             }

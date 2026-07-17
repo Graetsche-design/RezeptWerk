@@ -109,7 +109,11 @@ enum BackupService {
                 IngredientBackup(amount: $0.amount, unit: $0.unit, name: $0.name)
             },
             steps: recipe.sortedSteps.map {
-                StepBackup(text: $0.text, timerSeconds: $0.timerSeconds)
+                StepBackup(
+                    text: $0.text,
+                    timerSeconds: $0.timerSeconds,
+                    imageBase64: $0.imageData?.base64EncodedString()
+                )
             },
             imagesBase64: recipe.sortedImages.map { $0.data.base64EncodedString() },
             sausage: recipe.sausageDetails.map(backup(from:)),
@@ -184,7 +188,12 @@ enum BackupService {
             Ingredient(amount: item.amount, unit: item.unit, name: item.name, sortIndex: index)
         }
         recipe.steps = backup.steps.enumerated().map { index, item in
-            RecipeStep(text: item.text, sortIndex: index, timerSeconds: item.timerSeconds)
+            RecipeStep(
+                text: item.text,
+                sortIndex: index,
+                timerSeconds: item.timerSeconds,
+                imageData: item.imageBase64.flatMap { Data(base64Encoded: $0) }
+            )
         }
         recipe.images = backup.imagesBase64.enumerated().compactMap { index, base64 in
             guard let data = Data(base64Encoded: base64) else { return nil }

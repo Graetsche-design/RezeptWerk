@@ -22,7 +22,12 @@ struct BackupServiceTests {
 
         let recipe = Recipe(title: "Roundtrip-Wurst")
         recipe.ingredients = [Ingredient(amount: 250, unit: "g", name: "Mehl")]
-        recipe.steps = [RecipeStep(text: "Rühren", sortIndex: 0, timerSeconds: 90)]
+        recipe.steps = [RecipeStep(
+            text: "Rühren",
+            sortIndex: 0,
+            timerSeconds: 90,
+            imageData: Data("SCHRITTBILD".utf8)
+        )]
         let note = CookingNote(text: "Sehr gut!")
         note.recipe = recipe
         context.insert(recipe)
@@ -38,6 +43,7 @@ struct BackupServiceTests {
         let kopie = all.first { $0.sortedCookingNotes.isEmpty == false && $0 !== recipe }
         #expect(kopie?.sortedIngredients.first?.amount == 250)
         #expect(kopie?.sortedSteps.first?.timerSeconds == 90)
+        #expect(kopie?.sortedSteps.first?.imageData == Data("SCHRITTBILD".utf8))
         #expect(kopie?.sortedCookingNotes.first?.text == "Sehr gut!")
     }
 

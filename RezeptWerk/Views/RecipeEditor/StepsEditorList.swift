@@ -1,7 +1,9 @@
 import SwiftUI
+import UIKit
 
 /// Bearbeitbare Schrittliste im Editor — jeder Schritt mit mehrzeiligem
-/// Textfeld und optionalem Timer (in Minuten, Komma erlaubt: „1,5“ = 90 s).
+/// Textfeld, optionalem Timer (in Minuten, Komma erlaubt: „1,5“ = 90 s)
+/// und optionalem Foto.
 struct StepsEditorList: View {
 
     @Bindable var draft: RecipeDraft
@@ -35,6 +37,38 @@ struct StepsEditorList: View {
                 }
                 .padding(.leading, 24 + AppSpacing.m)
                 .font(AppTypography.secondary)
+
+                // Optionales Schritt-Foto: Vorschau mit Entfernen-Knopf —
+                // oder ein Knopf zum Auswählen (Foto kommt bereits
+                // komprimiert aus dem PhotoPickerButton).
+                HStack(spacing: AppSpacing.s) {
+                    if let data = step.imageData, let image = UIImage(data: data) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 72, height: 72)
+                            .clipShape(RoundedRectangle(cornerRadius: AppRadius.small, style: .continuous))
+
+                        Button {
+                            step.imageData = nil
+                        } label: {
+                            Image(systemName: "minus.circle.fill")
+                                .foregroundStyle(AppColors.textSecondary.opacity(0.55))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Schritt-Foto entfernen")
+                    } else {
+                        PhotoPickerButton(maxSelection: 1, onPicked: { datas in
+                            step.imageData = datas.first
+                        }) {
+                            Label("Foto zum Schritt", systemImage: "photo")
+                                .font(AppTypography.secondary)
+                                .foregroundStyle(AppColors.copper)
+                        }
+                    }
+                    Spacer()
+                }
+                .padding(.leading, 24 + AppSpacing.m)
             }
             .padding(.vertical, AppSpacing.xs)
         }

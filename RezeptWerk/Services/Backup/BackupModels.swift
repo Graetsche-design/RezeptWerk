@@ -65,6 +65,9 @@ struct IngredientBackup: Codable {
 struct StepBackup: Codable {
     var text: String
     var timerSeconds: Int?
+    /// Schritt-Foto als Base64. Optional, damit ältere Backups (ohne
+    /// dieses Feld) weiterhin gelesen werden können.
+    var imageBase64: String?
 }
 
 struct SausageBackup: Codable {
