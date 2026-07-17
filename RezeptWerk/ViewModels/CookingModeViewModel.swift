@@ -125,6 +125,15 @@ final class CookingModeViewModel {
         let endDate = Date.now.addingTimeInterval(Double(timerRemainingSeconds))
         timerEndDate = endDate
 
+        // Mitteilung planen: So klingelt der Timer auch, wenn die App in
+        // den Hintergrund wandert oder das iPhone gesperrt wird.
+        TimerNotificationService.requestAuthorizationIfNeeded()
+        TimerNotificationService.schedule(
+            endDate: endDate,
+            recipeTitle: recipe.title,
+            stepText: currentStep?.text ?? ""
+        )
+
         timerTask = Task {
             while !Task.isCancelled && timerIsRunning {
                 let remaining = max(0, Int(ceil(endDate.timeIntervalSinceNow)))
@@ -153,6 +162,8 @@ final class CookingModeViewModel {
         timerEndDate = nil
         timerTask?.cancel()
         timerTask = nil
+        // Geplante Timer-Mitteilung zurückziehen.
+        TimerNotificationService.cancel()
     }
 
     func resetTimer() {
