@@ -36,9 +36,19 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   Zwischenablage. Alles mündet in einer **Import-Vorschau** mit
   Originaltext und Korrektur im Editor vor dem Speichern.
 - **Kochmodus**: Vollbild, immer dunkel (blendfrei am Herd), ein Schritt
-  pro Seite, einstellbare Großschrift, abhakbare Zutaten, Timer mit
-  Fortschrittsring und Haptik, Bildschirm bleibt an, Abschluss-Seite
-  mit Bewertung und optionaler Koch-Notiz.
+  pro Seite (mit Schritt-Foto, falls vorhanden), einstellbare Großschrift,
+  abhakbare Zutaten, Timer mit Fortschrittsring und Haptik — der auch
+  **außerhalb der App klingelt** (lokale Mitteilung bei Hintergrund/
+  Sperrbildschirm), Bildschirm bleibt an, Abschluss-Seite mit Bewertung
+  und optionaler Koch-Notiz.
+- **Foto je Zubereitungsschritt**: im Editor pro Schritt wählbar
+  (komprimiert, extern gespeichert), sichtbar in Detailansicht und
+  Kochmodus, im Backup enthalten.
+- **Rezepte tauschen (.rezeptwerk)**: jedes Rezept als kleine Datei
+  teilen (WhatsApp, Mail, Forum) — Empfänger mit RezeptWerk tippen die
+  Datei an und bekommen das Rezept als Editor-Vorschau, inklusive Bildern
+  und Fachdaten. Bewertung, Favorit und Koch-Notizen bleiben privat.
+  Eigener Dateityp `de.rezeptwerk.app.recipe`, Empfang via `onOpenURL`.
 - **Koch-Notizen (Kochjournal)**: datierte Notizen pro Rezept („12.07.:
   nächstes Mal weniger Salz“) — auf der Kochmodus-Abschlussseite oder per
   „Hinzufügen“ in der Detailansicht; im Backup enthalten.
@@ -215,6 +225,8 @@ Rezepteapp/
     │   └── Settings/             SettingsView
     ├── Services/
     │   ├── Announcement/         AnnouncementService (Meldung an alle Nutzer)
+    │   ├── Share/                RecipeShareService (Rezept-Tausch .rezeptwerk)
+    │   ├── Notifications/        TimerNotificationService (Timer klingelt überall)
     │   ├── Backup/               BackupModels · BackupService · BackupFileDocument
     │   ├── ShoppingList/         ShoppingListService (Zutaten zusammenfassen)
     │   ├── Export/               RecipeExportService (Text + PDF via WebKit)
@@ -241,6 +253,8 @@ RezeptWerkShare.entitlements        App-Gruppe der Erweiterung
 RezeptWerkWidget/                   Homescreen-Widget (Zeitachse, Ansicht, Farben)
 RezeptWerkWidget-Info.plist         WidgetKit-Konfiguration des Widgets
 RezeptWerkWidget.entitlements       App-Gruppe des Widgets
+RezeptWerkTests/                    Unit-Tests (Swift Testing): Parser, Rechner,
+                                    Backup-Roundtrip, Einkaufsliste, Timer, Tausch
 ```
 
 ## Teilen-Erweiterung einrichten (einmalig)
@@ -350,10 +364,8 @@ Ausführlich in der [ANLEITUNG.md](ANLEITUNG.md), Abschnitt 5.
 
 ## Ideen für Version 2
 
-- Timer-Mitteilungen im Hintergrund (UserNotifications)
 - Reife-Tracker für Wurst & Schinken (Wiegen, Verlaufskurve, Erinnerungen)
-- Foto pro Zubereitungsschritt
 - Web-Parser für Seiten ohne strukturierte Daten (Readability-Heuristik)
 - Spotlight-Integration; weitere Widgets („Zuletzt gekocht“, Zufallsrezept)
-- Rezepte als Datei teilen (öffnet direkt die Import-Vorschau)
 - Siri/Kurzbefehle im Kochmodus („nächster Schritt“, freihändig)
+- Timer als Live-Aktivität im Sperrbildschirm/Dynamic Island

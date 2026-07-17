@@ -179,6 +179,42 @@ Der Simulator ist ein virtuelles iPhone auf deinem Mac.
 > **+ Capability → App Groups** → **`group.de.rezeptwerk.app`** ankreuzen —
 > genauso, wie du es bei der Teilen-Erweiterung gemacht hast.
 
+### Neu in Version 2.0: Tauschen, Timer-Klingeln, Schritt-Fotos
+
+**Rezepte tauschen:**
+1. Rezept öffnen → Teilen-Knopf → **„Als RezeptWerk-Datei teilen“** →
+   z. B. per WhatsApp, Mail oder als Forum-Anhang verschicken.
+2. Der Empfänger (mit RezeptWerk) tippt die Datei an — das Rezept öffnet
+   sich bei ihm als Vorschau im Editor: prüfen, anpassen, speichern.
+3. Deine Bewertung, dein Favoriten-Herz und deine Koch-Notizen werden
+   **nicht** mitgeschickt — geteilt wird nur das Rezept selbst.
+
+**Timer klingelt jetzt überall:**
+Beim allerersten Timer-Start fragt die App einmal um Erlaubnis für
+Mitteilungen. Danach klingelt der Schritt-Timer auch, wenn du kurz in
+eine andere App wechselst oder das iPhone sperrst. In der App selbst
+bleibt alles wie gewohnt (Anzeige + Vibration).
+
+**Foto je Schritt:**
+Im Editor hat jeder Schritt jetzt einen Knopf **„Foto zum Schritt“**.
+Das Bild erscheint in der Detailansicht und groß im Kochmodus —
+praktisch für „so muss der Teig aussehen“.
+
+### Git & Tests (für dich als Entwickler)
+
+Seit Version 2.0 hat das Projekt eine **Versionsverwaltung (Git)**:
+Jeder Arbeitsstand ist gesichert, nichts geht mehr verloren.
+- In Xcode siehst du die Historie unter **Integrate → Show Commits**
+  (bzw. im Navigator-Bereich „Source Control“).
+- Eigene Sicherungspunkte: Menü **Integrate → Commit** — Haken bei den
+  Dateien setzen, kurze Beschreibung eintippen, fertig.
+
+Außerdem gibt es **automatische Tests** (Ziel `RezeptWerkTests`):
+- In Xcode einfach **⌘U** drücken — alle Tests laufen im Simulator.
+- Im Terminal ginge `xcodebuild test …`, das braucht aber einmalig
+  `sudo xcode-select -s /Applications/Xcode.app` (Admin-Passwort) —
+  in Xcode per ⌘U ist es ohne alles möglich.
+
 ### iCloud-Synchronisierung (optional)
 iCloud ist anfangs **ausgeschaltet** — die App speichert lokal und läuft
 sofort. Wenn du deine Rezepte automatisch über mehrere Apple-Geräte
@@ -312,6 +348,7 @@ alle Nutzer Zeit, die Backup-Erinnerung zu sehen.
 | `RezeptWerk/Components` | Wiederverwendbare Bausteine (Karten, Sterne, Chips) |
 | `RezeptWerk/SampleData` | Standard-Kategorien und Beispielrezepte |
 | `RezeptWerkWidget/` | Das Homescreen-Widget (eigenes kleines Programm) |
+| `RezeptWerkTests/` | Automatische Tests (in Xcode mit ⌘U starten) |
 
 Willst du z. B. eine Farbe ändern? → `Theme/AppColors.swift` bzw. die
 Farb-Sets in `Assets.xcassets`. Eine neue Standard-Kategorie? →

@@ -106,6 +106,24 @@ Guten Appetit – und viel Freude beim Grillen, Wursten und Räuchern!
 
 ## 6. „Neue Funktionen" / What's New
 
+### Für Version 2.0
+
+```
+Version 2.0 macht RezeptWerk zum Teamplayer:
+
+🔄 REZEPTE TAUSCHEN
+Teile jedes Rezept als RezeptWerk-Datei – per WhatsApp, Mail oder im Forum. Wer die App hat, tippt die Datei an und bekommt das Rezept direkt hinein, mit Bildern und Fachdaten. Bewertung und Notizen bleiben privat.
+
+⏰ TIMER KLINGELT ÜBERALL
+Der Kochmodus-Timer meldet sich jetzt auch, wenn du kurz in einer anderen App bist oder das iPhone gesperrt hast.
+
+📷 FOTO JE SCHRITT
+Jeder Zubereitungsschritt kann jetzt ein eigenes Bild haben – im Editor hinzufügen, groß im Kochmodus sehen. „So muss der Teig aussehen!“
+
+Dazu: Zuverlässiger denn je – mit automatischen Tests und noch robusterem Speichern. Gut Wurst!
+```
+*(ca. 720 Zeichen — Limit 4000)*
+
 ### Für Version 1.5
 
 ```
