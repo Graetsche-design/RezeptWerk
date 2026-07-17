@@ -25,5 +25,46 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<!--
+	  Rezept-Tausch: RezeptWerk registriert die eigene Dateiendung
+	  „.rezeptwerk“. Wer so eine Datei antippt (Mail, WhatsApp, Dateien …),
+	  landet direkt in der Editor-Vorschau der App (siehe RecipeShareService
+	  und der onOpenURL-Handler in RootView).
+	-->
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>RezeptWerk-Rezept</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.rezeptwerk.app.recipe</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.rezeptwerk.app.recipe</string>
+			<key>UTTypeDescription</key>
+			<string>RezeptWerk-Rezept</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.json</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>rezeptwerk</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

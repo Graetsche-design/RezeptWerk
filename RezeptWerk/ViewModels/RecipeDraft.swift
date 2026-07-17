@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import SwiftData
 
 /// Eine Zutaten-Zeile im Editor (Mengen als Text, damit die Eingabe
 /// flüssig bleibt — geparst wird erst beim Speichern).
@@ -185,6 +186,81 @@ final class RecipeDraft {
             return draft
         }
         steps = parsedSteps.isEmpty ? [DraftStep()] : parsedSteps
+    }
+
+    /// Draft aus einer empfangenen `.rezeptwerk`-Datei (Rezept-Tausch).
+    /// Kategorien werden über den Namen wiederverwendet oder neu angelegt
+    /// (dieselbe Logik wie bei der Backup-Wiederherstellung).
+    init(backup: RecipeBackup, context: ModelContext) {
+        title = backup.title
+        servings = backup.servings
+        prepMinutesText = backup.prepMinutes.map(String.init) ?? ""
+        cookMinutesText = backup.cookMinutes.map(String.init) ?? ""
+        restMinutesText = backup.restMinutes.map(String.init) ?? ""
+        difficulty = Difficulty(rawValue: backup.difficultyRaw) ?? .medium
+        notes = backup.notes
+        sourceText = backup.sourceText
+        sourceURLText = backup.sourceURLString
+        tagNames = backup.tags
+        imageDatas = backup.imagesBase64.compactMap { Data(base64Encoded: $0) }
+
+        if let mask = backup.mealTypeMask {
+            suitableMealTypes = Set(MealType.allCases.filter { (mask & $0.bit) != 0 })
+        }
+
+        if let categoryName = backup.categoryName {
+            var cache: [String: RecipeCategory] = [:]
+            let resolved = BackupService.resolveCategory(
+                name: categoryName,
+                icon: backup.categoryIcon ?? "fork.knife",
+                cache: &cache,
+                context: context
+            )
+            category = resolved
+            if let subName = backup.subcategoryName {
+                subcategory = BackupService.resolveSubcategory(
+                    name: subName, in: resolved, context: context
+                )
+            }
+        }
+
+        let fileIngredients = backup.ingredients.map { item in
+            var draft = DraftIngredient()
+            draft.amountText = FormatHelpers.amountText(item.amount) ?? ""
+            draft.unit = item.unit
+            draft.name = item.name
+            return draft
+        }
+        ingredients = fileIngredients.isEmpty ? [DraftIngredient()] : fileIngredients
+
+        let fileSteps = backup.steps.map { item in
+            var draft = DraftStep()
+            draft.text = item.text
+            draft.imageData = item.imageBase64.flatMap { Data(base64Encoded: $0) }
+            if let seconds = item.timerSeconds, seconds > 0 {
+                draft.timerMinutesText = FormatHelpers.amountText(Double(seconds) / 60) ?? ""
+            }
+            return draft
+        }
+        steps = fileSteps.isEmpty ? [DraftStep()] : fileSteps
+
+        if let sausage = backup.sausage {
+            includeSausageDetails = true
+            meatWeightText = FormatHelpers.amountText(sausage.meatWeightKg) ?? ""
+            seasoningPerKg = sausage.seasoningPerKg
+            npsText = FormatHelpers.amountText(sausage.npsGramsPerKg) ?? ""
+            cutterAids = sausage.cutterAids
+            iceWaterText = FormatHelpers.amountText(sausage.iceWaterPercent) ?? ""
+            casing = sausage.casing
+            smokingMethod = SmokingMethod(rawValue: sausage.smokingMethodRaw) ?? .none
+            smokingTimeText = sausage.smokingTimeMinutes.map(String.init) ?? ""
+            smokingTempText = sausage.smokingTemperatureCelsius.map(String.init) ?? ""
+            scaldingTempText = sausage.scaldingTemperatureCelsius.map(String.init) ?? ""
+            coreTempText = sausage.coreTemperatureCelsius.map(String.init) ?? ""
+            curingDaysText = sausage.curingDays.map(String.init) ?? ""
+            dryingDaysText = sausage.dryingDays.map(String.init) ?? ""
+            safetyNotes = sausage.safetyNotes
+        }
     }
 
     // MARK: Bedienlogik

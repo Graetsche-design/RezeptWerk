@@ -15,6 +15,7 @@ struct RecipeExportView: View {
 
     @State private var pdfData: Data?
     @State private var pdfURL: URL?
+    @State private var shareFileURL: URL?
 
     var body: some View {
         NavigationStack {
@@ -36,6 +37,8 @@ struct RecipeExportView: View {
                 let data = await RecipeExportService.pdfData(for: recipe)
                 pdfData = data
                 pdfURL = RecipeExportService.writePDF(data, title: recipe.title)
+                // Tausch-Datei fürs Teilen mit anderen RezeptWerk-Nutzern.
+                shareFileURL = try? RecipeShareService.makeShareFile(for: recipe)
             }
         }
     }
@@ -77,6 +80,20 @@ struct RecipeExportView: View {
                 Label("Als Text teilen", systemImage: "text.alignleft")
             }
             .buttonStyle(.rwSecondary)
+
+            if let shareFileURL {
+                ShareLink(
+                    item: shareFileURL,
+                    preview: SharePreview(recipe.title, image: Image(systemName: "fork.knife.circle"))
+                ) {
+                    Label("Als RezeptWerk-Datei teilen", systemImage: "arrow.left.arrow.right")
+                }
+                .buttonStyle(.rwSecondary)
+
+                Text("Zum Tauschen: Wer RezeptWerk hat, tippt die Datei an und bekommt das Rezept direkt in die App — mit Bildern und Fachdaten. Bewertung, Favorit und deine Koch-Notizen bleiben privat.")
+                    .font(AppTypography.caption)
+                    .foregroundStyle(AppColors.textSecondary)
+            }
         }
         .padding(AppSpacing.screen)
         .background(AppColors.backgroundElevated)

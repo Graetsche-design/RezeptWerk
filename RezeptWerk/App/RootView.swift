@@ -20,6 +20,13 @@ struct RootView: View {
     /// geladen — siehe `AnnouncementService`.
     @State private var announcement: Announcement?
 
+    /// Über eine geöffnete `.rezeptwerk`-Datei empfangenes Rezept
+    /// (steuert das Editor-Sheet des Rezept-Tauschs).
+    @State private var receivedRecipe: ReceivedRecipeFile?
+
+    /// Zeigt den Hinweis, wenn eine geöffnete Datei nicht lesbar war.
+    @State private var showFileError = false
+
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
 
@@ -132,6 +139,28 @@ struct RootView: View {
         .sheet(item: $sharedImport) { pending in
             SharedImportView(pending: pending)
         }
+        // Rezept-Tausch: Eine angetippte .rezeptwerk-Datei landet hier.
+        .onOpenURL { url in
+            guard url.pathExtension.lowercased() == RecipeShareService.fileExtension else { return }
+            do {
+                let backup = try RecipeShareService.loadRecipe(from: url)
+                receivedRecipe = ReceivedRecipeFile(backup: backup)
+            } catch {
+                showFileError = true
+            }
+        }
+        .sheet(item: $receivedRecipe) { received in
+            // Der Editor ist die Vorschau: alles prüfen, anpassen, speichern.
+            RecipeEditorView(
+                recipe: nil,
+                prefilledDraft: RecipeDraft(backup: received.backup, context: modelContext)
+            )
+        }
+        .alert("Datei konnte nicht gelesen werden", isPresented: $showFileError) {
+            Button("Verstanden", role: .cancel) {}
+        } message: {
+            Text("Die Datei ist keine gültige RezeptWerk-Datei oder beschädigt.")
+        }
     }
 
     /// Hält den Bildschirm wach, wenn die Einstellung „Bildschirm immer an“
@@ -148,6 +177,12 @@ struct RootView: View {
         guard sharedImport == nil, let pending = SharedImportInbox.take() else { return }
         sharedImport = pending
     }
+}
+
+/// Hülle um ein empfangenes Rezept, damit `sheet(item:)` es anzeigen kann.
+private struct ReceivedRecipeFile: Identifiable {
+    let id = UUID()
+    let backup: RecipeBackup
 }
 
 #Preview {

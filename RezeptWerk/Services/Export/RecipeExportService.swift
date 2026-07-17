@@ -297,7 +297,8 @@ enum RecipeExportService {
     }
 
     /// Entfernt für Dateinamen ungeeignete Zeichen.
-    private static func sanitizedFileName(_ title: String) -> String {
+    /// `internal`, damit auch der Rezept-Datei-Tausch Dateinamen baut.
+    static func sanitizedFileName(_ title: String) -> String {
         let invalid = CharacterSet(charactersIn: "/\\:?%*|\"<>")
         let cleaned = title.components(separatedBy: invalid)
             .joined(separator: "-")

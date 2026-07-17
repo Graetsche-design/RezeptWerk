@@ -84,7 +84,9 @@ enum BackupService {
 
     // MARK: Recipe → Backup
 
-    private static func backup(from recipe: Recipe) -> RecipeBackup {
+    /// `internal`, damit der Rezept-Datei-Tausch (`RecipeShareService`)
+    /// denselben Konverter nutzen kann.
+    static func backup(from recipe: Recipe) -> RecipeBackup {
         RecipeBackup(
             title: recipe.title,
             servings: recipe.servings,
@@ -210,7 +212,9 @@ enum BackupService {
         }
     }
 
-    private static func resolveCategory(
+    /// `internal`, damit auch `RecipeDraft(backup:context:)` Kategorien
+    /// wiederverwenden statt duplizieren kann.
+    static func resolveCategory(
         name: String,
         icon: String,
         cache: inout [String: RecipeCategory],
@@ -225,7 +229,7 @@ enum BackupService {
         return category
     }
 
-    private static func resolveSubcategory(
+    static func resolveSubcategory(
         name: String,
         in category: RecipeCategory,
         context: ModelContext
