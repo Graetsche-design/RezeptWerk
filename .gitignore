@@ -1,0 +1,13 @@
+# macOS-Systemdateien
+**/.DS_Store
+
+# Persönliche Xcode-Zustände (Fensterlayout, zuletzt geöffnete Dateien …)
+**/xcuserdata/
+*.xcuserstate
+
+# Build-Artefakte
+DerivedData/
+build/
+
+# Lokale Werkzeug-Einstellungen
+.claude/settings.local.json

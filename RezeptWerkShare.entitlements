@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Gemeinsame App-Gruppe: Über sie reicht die Teilen-Erweiterung den
+	  geteilten Text/Link an die Haupt-App weiter. Muss in Xcode als
+	  Capability „App Groups“ aktiviert werden (für beide Ziele).
+	-->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.de.rezeptwerk.app</string>
+	</array>
+</dict>
+</plist>

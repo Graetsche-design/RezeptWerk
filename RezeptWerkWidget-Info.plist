@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Konfiguration des Homescreen-Widgets. Die übrigen Info.plist-Werte
+	  erzeugt Xcode automatisch (GENERATE_INFOPLIST_FILE = YES).
+	  Eine PrincipalClass braucht ein WidgetKit-Widget nicht — der Einstieg
+	  ist das @main-WidgetBundle in RezeptWerkWidget.swift.
+	-->
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.widgetkit-extension</string>
+	</dict>
+</dict>
+</plist>

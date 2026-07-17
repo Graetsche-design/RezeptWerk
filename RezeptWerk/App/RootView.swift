@@ -1,0 +1,156 @@
+import SwiftUI
+import UIKit
+
+/// Die Hauptnavigation der App.
+///
+/// Ein einziges `TabView` mit `.sidebarAdaptable`:
+/// - **iPhone**: klassische Tab-Leiste mit genau fünf Tabs
+///   („Kategorien“ ist dort über das Dashboard erreichbar).
+/// - **iPad**: komfortable Sidebar mit allen sechs Bereichen.
+struct RootView: View {
+
+    @State private var selectedTab: AppTab = .dashboard
+
+    /// Über die Teilen-Erweiterung geteilter Inhalt, der gerade verarbeitet
+    /// wird (steuert das Import-Sheet).
+    @State private var sharedImport: SharedImportInbox.Pending?
+
+    /// Meldung des Entwicklers an alle Nutzer (z. B. Update-Hinweis), die
+    /// als Banner über der App erscheint. Wird beim Start vom Server
+    /// geladen — siehe `AnnouncementService`.
+    @State private var announcement: Announcement?
+
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.modelContext) private var modelContext
+
+    @AppStorage(SettingsKeys.appearance)
+    private var appearanceRaw = AppearanceSetting.system.rawValue
+
+    @AppStorage(SettingsKeys.keepScreenOn)
+    private var keepScreenOn = false
+
+    private var appearance: AppearanceSetting {
+        AppearanceSetting(rawValue: appearanceRaw) ?? .system
+    }
+
+    /// Geräteklasse statt Size-Class: bleibt beim Drehen stabil, sodass
+    /// die Tab-Leiste auf dem iPhone nie in den „Mehr“-Überlauf rutscht.
+    private var isPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
+    }
+
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            Tab("Start", systemImage: "house.fill", value: AppTab.dashboard) {
+                DashboardView()
+            }
+
+            Tab("Rezepte", systemImage: "book.closed.fill", value: AppTab.recipes) {
+                RecipeListView()
+            }
+
+            // Wochenplan und Kategorien bekommen nur auf dem iPad einen
+            // eigenen Sidebar-Eintrag — auf dem iPhone sind sie über das
+            // Dashboard erreichbar (mehr als fünf Tabs würden im „Mehr“-Menü
+            // verschwinden).
+            if isPad {
+                Tab("Wochenplan", systemImage: "calendar", value: AppTab.planner) {
+                    NavigationStack {
+                        WeekPlannerView()
+                            .navigationDestination(for: Recipe.self) { recipe in
+                                RecipeDetailView(recipe: recipe)
+                            }
+                    }
+                }
+
+                Tab("Einkaufsliste", systemImage: "cart", value: AppTab.shoppingList) {
+                    NavigationStack {
+                        ShoppingListView()
+                    }
+                }
+
+                Tab("Kategorien", systemImage: "square.grid.2x2.fill", value: AppTab.categories) {
+                    CategoriesView()
+                }
+            }
+
+            Tab("Favoriten", systemImage: "heart.fill", value: AppTab.favorites) {
+                FavoritesView()
+            }
+
+            Tab("Importieren", systemImage: "square.and.arrow.down.fill", value: AppTab.importHub) {
+                ImportHubView()
+            }
+
+            Tab("Einstellungen", systemImage: "gearshape.fill", value: AppTab.settings) {
+                SettingsView()
+            }
+        }
+        .tabViewStyle(.sidebarAdaptable)
+        .tint(AppColors.copper)
+        .preferredColorScheme(appearance.colorScheme)
+        .environment(\.switchTab, TabSwitchAction(switchTo: { selectedTab = $0 }))
+        // Hinweisfenster für Meldungen des Entwicklers (z. B. Update-Hinweis).
+        .overlay {
+            if let announcement {
+                AnnouncementOverlayView(announcement: announcement) {
+                    AnnouncementService.markDismissed(announcement)
+                    withAnimation(.easeOut(duration: 0.25)) {
+                        self.announcement = nil
+                    }
+                }
+                .transition(.opacity)
+            }
+        }
+        .task {
+            // Einmal pro Start nachsehen, ob eine Meldung vorliegt.
+            guard let pending = await AnnouncementService.fetchPending() else { return }
+            withAnimation(.spring(duration: 0.35)) {
+                announcement = pending
+            }
+        }
+        // Über die Teilen-Erweiterung geteilte Rezepte aufgreifen — und den
+        // Widget-Schnappschuss auffrischen (fängt auch Plan-Änderungen ab,
+        // die nicht über den Wochenplaner laufen, z. B. gelöschte Rezepte,
+        // Backup-Wiederherstellung oder iCloud-Änderungen).
+        .onAppear {
+            checkSharedInbox()
+            WidgetPlanSync.refresh(context: modelContext)
+            applyKeepScreenOn()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                checkSharedInbox()
+                WidgetPlanSync.refresh(context: modelContext)
+                applyKeepScreenOn()
+            }
+        }
+        // Greift sofort, wenn der Schalter in den Einstellungen umgelegt wird.
+        .onChange(of: keepScreenOn) { _, _ in
+            applyKeepScreenOn()
+        }
+        .sheet(item: $sharedImport) { pending in
+            SharedImportView(pending: pending)
+        }
+    }
+
+    /// Hält den Bildschirm wach, wenn die Einstellung „Bildschirm immer an“
+    /// aktiv ist (dritte bewusste UIKit-Stelle der App — SwiftUI bietet
+    /// dafür keine eigene API).
+    private func applyKeepScreenOn() {
+        UIApplication.shared.isIdleTimerDisabled = keepScreenOn
+    }
+
+    /// Prüft, ob die Teilen-Erweiterung etwas hinterlegt hat, und startet
+    /// die Verarbeitung. Wird beim Start und bei jeder Aktivierung aufgerufen.
+    private func checkSharedInbox() {
+        // Nur prüfen, wenn nicht schon ein geteilter Import läuft.
+        guard sharedImport == nil, let pending = SharedImportInbox.take() else { return }
+        sharedImport = pending
+    }
+}
+
+#Preview {
+    RootView()
+        .modelContainer(PreviewSupport.container)
+}

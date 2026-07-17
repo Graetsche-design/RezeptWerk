@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Berechtigungen für die iCloud-Synchronisierung (SwiftData + CloudKit).
+
+	  Diese Datei allein genügt NICHT — die iCloud-Capability muss einmalig
+	  in Xcode aktiviert werden (Signing & Capabilities → + Capability →
+	  iCloud → CloudKit → Container „iCloud.de.rezeptwerk.app“ ankreuzen).
+	  Erst dann stellt Apple den Container bereit. Bis dahin läuft die App
+	  ganz normal lokal (der iCloud-Schalter steht standardmäßig auf AUS).
+	-->
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.de.rezeptwerk.app</string>
+	</array>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<!--
+	  Gemeinsame App-Gruppe für die Teilen-Erweiterung (siehe RezeptWerkShare).
+	  In Xcode als Capability „App Groups“ aktivieren.
+	-->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.de.rezeptwerk.app</string>
+	</array>
+</dict>
+</plist>

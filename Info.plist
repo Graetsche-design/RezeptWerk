@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Nur der Start-Hintergrund wird hier festgelegt: ein dunkler Anthrazit,
+	  passend zum Splashscreen. Dadurch gibt es beim App-Start kein weißes
+	  Aufblitzen, sondern einen nahtlosen Übergang dunkel → dunkler Splash.
+
+	  Alle übrigen Info.plist-Werte erzeugt Xcode weiterhin automatisch
+	  (Build-Einstellung „Generate Info.plist File = YES“).
+	-->
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
+
+	<!--
+	  Hintergrund-Modus für die iCloud-Synchronisierung: CloudKit benötigt
+	  „remote-notification“, um Änderungen von anderen Geräten zu empfangen.
+	  Schadet nicht, wenn iCloud aus ist.
+	-->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+</dict>
+</plist>
