@@ -14,8 +14,9 @@ enum ModelContainerFactory {
     /// Der CloudKit-Container (muss zur iCloud-Capability in Xcode passen).
     static let cloudContainerID = "iCloud.de.rezeptwerk.app"
 
-    /// Alle SwiftData-Modelle der App.
-    private static var schema: Schema {
+    /// Alle SwiftData-Modelle der App. `internal`, damit die Unit-Tests
+    /// damit einen Wegwerf-Container im Arbeitsspeicher bauen können.
+    static var schema: Schema {
         Schema([
             Recipe.self,
             Ingredient.self,
