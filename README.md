@@ -114,7 +114,8 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 - **Einstellungen**: Erscheinungsbild, „Bildschirm immer an“ (Bildschirm
   wird nicht dunkel, solange die App geöffnet ist), Kochmodus-Schriftgröße,
   Beispielrezepte neu laden (eigene Rezepte bleiben unberührt),
-  Import-Tipps, App-Info.
+  Import-Tipps, App-Info — und der Bereich „Kochen mit ReiMa“ mit einer
+  kurzen Vorstellung der Webseite kochenmitreima.de samt Link dorthin.
 - **6 Beispielrezepte** inkl. Käsekrakauer mit komplettem Fachdaten-Block
   und Steak mit Schritt-Timern.
 

@@ -38,6 +38,7 @@ struct SettingsView: View {
                 dataSection
                 importTipsSection
                 aboutSection
+                websiteSection
             }
             .navigationTitle("Einstellungen")
             .confirmationDialog(
@@ -153,6 +154,27 @@ struct SettingsView: View {
             Text("RezeptWerk ist dein digitales Rezept-Werkzeug — fürs Kochen, Grillen, Wursten und Räuchern. Handwerklich gebaut, ohne Schnickschnack.")
                 .font(AppTypography.secondary)
                 .foregroundStyle(AppColors.textSecondary)
+        }
+    }
+
+    /// Die Webseite hinter RezeptWerk — kurze Vorstellung und Absprung.
+    private var websiteSection: some View {
+        Section {
+            Text("Leckeres aus der Küche von Mattes und Reini: ausführliche Rezepte zum Nachkochen — von bayerischer Hausmannskost über BBQ bis zur internationalen Küche — und spannendes Hintergrundwissen aus der Rubrik „Die Chemie des Kochens“.")
+                .font(AppTypography.secondary)
+                .foregroundStyle(AppColors.textSecondary)
+
+            if let url = URL(string: "https://kochenmitreima.de") {
+                Link(destination: url) {
+                    Label("kochenmitreima.de besuchen", systemImage: "safari")
+                        .font(AppTypography.body.weight(.medium))
+                }
+                .foregroundStyle(AppColors.copper)
+            }
+        } header: {
+            Text("Kochen mit ReiMa")
+        } footer: {
+            Text("Öffnet die Webseite in deinem Browser.")
         }
     }
 
