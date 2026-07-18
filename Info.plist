@@ -31,6 +31,16 @@
 	  landet direkt in der Editor-Vorschau der App (siehe RecipeShareService
 	  und der onOpenURL-Handler in RootView).
 	-->
+	<!--
+	  „In-place öffnen": Beim Antippen einer .rezeptwerk-Datei liest die
+	  App die Datei direkt an ihrem Ort (mit Sicherheits-Schranke, siehe
+	  RecipeShareService.loadRecipe), statt dass iOS erst eine Kopie in
+	  den App-Ordner legt — solche Kopien würden sich sonst unsichtbar
+	  ansammeln. Behebt außerdem die Xcode-Warnung „doesn't declare
+	  whether it supports opening them in place".
+	-->
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
