@@ -215,6 +215,22 @@ struct DashboardView: View {
             ) {
                 WurstRechnerView()
             }
+
+            toolCard(
+                title: "Pökel-Rechner",
+                subtitle: "Lake ansetzen: NPS-Menge & Pökelzeit",
+                icon: "drop.fill"
+            ) {
+                PoekelRechnerView()
+            }
+
+            toolCard(
+                title: "Umrechner",
+                subtitle: "Cups, Unzen & Fahrenheit umrechnen",
+                icon: "arrow.left.arrow.right"
+            ) {
+                UmrechnerView()
+            }
         }
     }
 

@@ -15,6 +15,7 @@ enum HelpContent {
         weekPlanner,
         shoppingList,
         sausage,
+        tools,
         categories,
         shareExport,
         iCloud,
@@ -188,6 +189,26 @@ enum HelpContent {
                 "Eigener Sicherheits- & Hygiene-Hinweis.",
             ]),
             .tip("Wiege Nitritpökelsalz grammgenau ab und halte die Kühlkette ein. Die Sicherheits- und Hygienehinweise werden in der Detailansicht hervorgehoben – nimm sie ernst."),
+        ]
+    )
+
+    // MARK: 8b. Werkzeuge
+
+    private static let tools = HelpTopic(
+        title: "Werkzeuge",
+        icon: "wrench.and.screwdriver",
+        summary: "Kerntemperaturen, Wurst-Rechner, Pökel-Rechner, Umrechner.",
+        blocks: [
+            .paragraph("Auf der Startseite findest du unter „Werkzeuge“ vier Offline-Helfer für Küche, Grill und Räucherkammer."),
+            .heading("Kerntemperaturen"),
+            .paragraph("Eine durchsuchbare Nachschlagetabelle mit Gar-Temperaturen für Rind, Schwein, Geflügel, Lamm & Wild, Fisch sowie Wurst & Räuchern."),
+            .heading("Wurst-Rechner"),
+            .paragraph("Für die Wurstherstellung: Fleisch-Mix aus mehreren Sorten eingeben, Zutaten in Gramm je Kilogramm pflegen – alle Mengen werden live hochgerechnet. Mit Vorlagen für Brühwurst, Rohwurst und Rohschinken. Der Stand lässt sich als richtiges Rezept speichern."),
+            .heading("Pökel-Rechner"),
+            .paragraph("Fürs Nasspökeln: Fleischgewicht, Wassermenge und Lakenstärke eingeben – die App rechnet die NPS-Menge für die Lake aus und schätzt die Pökelzeit nach der dicksten Stelle des Fleischs, samt Hinweis zum Durchbrennen. Deine Eingaben werden gemerkt."),
+            .heading("Umrechner"),
+            .paragraph("Rechnet amerikanische Rezept-Angaben in deutsche Maße um: Cups, Esslöffel und Teelöffel zutatengenau in Gramm, Unzen und Pfund in Gramm, Grad Fahrenheit in Celsius – dazu die Gasherd-Stufen als Orientierung."),
+            .tip("Alle Richtwerte in den Werkzeugen sind bewährte Anhaltspunkte – maßgeblich bleibt deine eigene, erprobte Rezeptur."),
         ]
     )
 

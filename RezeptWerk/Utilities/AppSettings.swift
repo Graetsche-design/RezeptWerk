@@ -19,6 +19,13 @@ enum SettingsKeys {
     static let sausageCalculatorRows = "tools.sausageCalculator.rows"
     /// Gemerkte Fleischliste des Wurst-Rechners (JSON).
     static let sausageCalculatorMeats = "tools.sausageCalculator.meats"
+
+    // Gemerkte Eingaben des Pökel-Rechners (als Text, deutsche Kommas).
+    static let brineMeatKg = "tools.brineCalculator.meatKg"
+    static let brineWaterLiters = "tools.brineCalculator.waterLiters"
+    static let brineStrengthPercent = "tools.brineCalculator.strengthPercent"
+    static let brineSugarPerLiter = "tools.brineCalculator.sugarPerLiter"
+    static let brineThicknessCm = "tools.brineCalculator.thicknessCm"
 }
 
 /// Erscheinungsbild der App.

@@ -59,7 +59,13 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   Vorlagen für Brühwurst/Rohwurst/Rohschinken, Listen werden gemerkt).
   Der Rechner-Stand lässt sich **als Rezept speichern** — inklusive
   berechneter Zutatenliste und Fachdaten, einsortiert in
-  „Wurst & Räuchern“.
+  „Wurst & Räuchern“. Dazu der **Pökel-Rechner** fürs Nasspökeln
+  (Lakenstärke mit Schnellwahl 6/8/10/12 %, NPS-Menge in Gramm, optional
+  Zucker, Pökelzeit-Faustformel nach Fleischdicke plus
+  Durchbrennen-Hinweis; Eingaben werden gemerkt) und der
+  **Maß-Umrechner** (Cups/EL/TL zutatengenau in Gramm über
+  Dichte-Richtwerte, Unzen/Pfund in Gramm, °F ↔ °C samt
+  Gasherd-Stufen-Referenz).
 - **Homescreen-Widget** „Heute auf dem Wochenplan“ (klein + mittel):
   zeigt die heute geplanten Mahlzeiten im RezeptWerk-Look; wechselt um
   Mitternacht selbstständig auf den nächsten Tag. Eigenes Target
