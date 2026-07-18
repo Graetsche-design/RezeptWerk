@@ -17,6 +17,10 @@ struct CookingModeView: View {
     /// Optionale Notiz von der Abschlussseite („Wie ist es gelaufen?“).
     @State private var finishNoteText = ""
 
+    /// Zeigt den Hinweis, wenn der Abschluss (Notiz, „zuletzt gekocht“)
+    /// nicht gespeichert werden konnte.
+    @State private var saveFailed = false
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
@@ -64,6 +68,7 @@ struct CookingModeView: View {
         .sensoryFeedback(trigger: viewModel.timerDidFinish) { _, didFinish in
             didFinish ? .success : nil
         }
+        .saveErrorAlert($saveFailed)
         .onAppear {
             // Bildschirm wachhalten — die zweite bewusste UIKit-Stelle
             // der App (SwiftUI bietet dafür keine eigene API).
@@ -149,10 +154,8 @@ struct CookingModeView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .animation(.easeInOut(duration: 0.25), value: viewModel.stepIndex)
-        // Deckt auch das Wischen ab (nicht nur die Buttons).
-        .onChange(of: viewModel.stepIndex) {
-            viewModel.prepareTimerForCurrentStep()
-        }
+        // Den Timer stellt das ViewModel selbst um — bei jeder Änderung
+        // von `stepIndex`, egal ob per Button oder Wischen (didSet).
     }
 
     /// Abschluss-Seite nach dem letzten Schritt.
@@ -191,8 +194,14 @@ struct CookingModeView: View {
                 .frame(maxWidth: 320)
 
                 Button {
-                    viewModel.finishCooking(in: modelContext, noteText: finishNoteText)
-                    dismiss()
+                    // Nur schließen, wenn das Speichern geklappt hat —
+                    // sonst bleibt die Seite (samt Notiz) offen und der
+                    // Hinweis erklärt das Problem.
+                    if viewModel.finishCooking(in: modelContext, noteText: finishNoteText) {
+                        dismiss()
+                    } else {
+                        saveFailed = true
+                    }
                 } label: {
                     Label("Fertig", systemImage: "checkmark")
                 }

@@ -7,11 +7,18 @@ import Foundation
 @MainActor
 struct RecipeShareServiceTests {
 
+    /// Hält die Wegwerf-Container bis zum Prozessende am Leben:
+    /// `mainContext` referenziert seinen Container nicht stark — ohne
+    /// diesen Anker würde er am Funktionsende freigegeben und schon das
+    /// nächste `insert` stürzt in SwiftData ab (Verhalten seit OS 26.5).
+    private static var lebendeContainer: [ModelContainer] = []
+
     private func makeContext() throws -> ModelContext {
         let container = try ModelContainer(
             for: ModelContainerFactory.schema,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
+        Self.lebendeContainer.append(container)
         return container.mainContext
     }
 

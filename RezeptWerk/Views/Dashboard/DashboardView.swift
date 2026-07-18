@@ -115,12 +115,11 @@ struct DashboardView: View {
     }
 
     /// Einstieg in den Wochenplan — zeigt die heute geplanten Mahlzeiten.
+    /// (Das `navigationDestination(for: Recipe.self)` des Dashboard-Stacks
+    /// gilt auch hier — keine eigene Registrierung nötig.)
     private var plannerCard: some View {
         NavigationLink {
             WeekPlannerView()
-                .navigationDestination(for: Recipe.self) { recipe in
-                    RecipeDetailView(recipe: recipe)
-                }
         } label: {
             HStack(spacing: AppSpacing.m) {
                 Image(systemName: "calendar")

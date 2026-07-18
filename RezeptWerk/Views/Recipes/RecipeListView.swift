@@ -18,6 +18,9 @@ struct RecipeListView: View {
     @State private var recipeToEdit: Recipe?
     @State private var recipeToDelete: Recipe?
 
+    /// Zeigt den Hinweis, wenn das Löschen nicht gespeichert werden konnte.
+    @State private var deleteFailed = false
+
     private var filteredRecipes: [Recipe] {
         filter.apply(to: allRecipes, searchText: searchText)
     }
@@ -50,8 +53,9 @@ struct RecipeListView: View {
                     titleVisibility: .visible
                 ) {
                     Button("„\(recipeToDelete?.title ?? "")“ löschen", role: .destructive) {
-                        if let recipe = recipeToDelete {
-                            RecipeImportService.delete(recipe, in: modelContext)
+                        if let recipe = recipeToDelete,
+                           !RecipeImportService.delete(recipe, in: modelContext) {
+                            deleteFailed = true
                         }
                         recipeToDelete = nil
                     }
@@ -59,6 +63,7 @@ struct RecipeListView: View {
                         recipeToDelete = nil
                     }
                 }
+                .saveErrorAlert($deleteFailed)
         }
     }
 

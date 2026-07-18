@@ -212,9 +212,7 @@ enum BackupService {
         }
     }
 
-    /// `internal`, damit auch `RecipeDraft(backup:context:)` Kategorien
-    /// wiederverwenden statt duplizieren kann.
-    static func resolveCategory(
+    private static func resolveCategory(
         name: String,
         icon: String,
         cache: inout [String: RecipeCategory],
@@ -229,7 +227,7 @@ enum BackupService {
         return category
     }
 
-    static func resolveSubcategory(
+    private static func resolveSubcategory(
         name: String,
         in category: RecipeCategory,
         context: ModelContext

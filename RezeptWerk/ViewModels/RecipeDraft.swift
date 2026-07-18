@@ -51,6 +51,18 @@ final class RecipeDraft {
     var title = ""
     var category: RecipeCategory?
     var subcategory: RecipeSubcategory?
+
+    /// Kategorie aus einer empfangenen `.rezeptwerk`-Datei, die es auf
+    /// diesem Gerät noch nicht gibt. Sie wird NICHT sofort angelegt,
+    /// sondern nur vorgemerkt und erst beim Speichern erzeugt
+    /// (`RecipeImportService.save`) — so bleibt Abbrechen gefahrlos.
+    var pendingCategoryName: String?
+    /// SF-Symbol zur vorgemerkten Kategorie.
+    var pendingCategoryIcon: String?
+    /// Unterkategorie aus einer empfangenen Datei, die erst beim Speichern
+    /// angelegt wird (in `category` bzw. der vorgemerkten Kategorie).
+    var pendingSubcategoryName: String?
+
     var servings = 4
 
     /// Zeiten als Text (nur Ziffern), leer = keine Angabe.
@@ -189,8 +201,9 @@ final class RecipeDraft {
     }
 
     /// Draft aus einer empfangenen `.rezeptwerk`-Datei (Rezept-Tausch).
-    /// Kategorien werden über den Namen wiederverwendet oder neu angelegt
-    /// (dieselbe Logik wie bei der Backup-Wiederherstellung).
+    /// Vorhandene Kategorien werden über den Namen wiederverwendet;
+    /// unbekannte Kategorien/Unterkategorien werden nur **vorgemerkt** und
+    /// erst beim Speichern angelegt — Abbrechen hinterlässt keine Spuren.
     init(backup: RecipeBackup, context: ModelContext) {
         title = backup.title
         servings = backup.servings
@@ -209,18 +222,24 @@ final class RecipeDraft {
         }
 
         if let categoryName = backup.categoryName {
-            var cache: [String: RecipeCategory] = [:]
-            let resolved = BackupService.resolveCategory(
-                name: categoryName,
-                icon: backup.categoryIcon ?? "fork.knife",
-                cache: &cache,
-                context: context
-            )
-            category = resolved
-            if let subName = backup.subcategoryName {
-                subcategory = BackupService.resolveSubcategory(
-                    name: subName, in: resolved, context: context
-                )
+            let existing = (try? context.fetch(FetchDescriptor<RecipeCategory>())) ?? []
+            if let match = existing.first(where: {
+                $0.name.lowercased() == categoryName.lowercased()
+            }) {
+                category = match
+                if let subName = backup.subcategoryName {
+                    if let subMatch = match.sortedSubcategories.first(where: {
+                        $0.name.lowercased() == subName.lowercased()
+                    }) {
+                        subcategory = subMatch
+                    } else {
+                        pendingSubcategoryName = subName
+                    }
+                }
+            } else {
+                pendingCategoryName = categoryName
+                pendingCategoryIcon = backup.categoryIcon ?? "fork.knife"
+                pendingSubcategoryName = backup.subcategoryName
             }
         }
 
@@ -294,6 +313,11 @@ final class RecipeDraft {
         if let subcategory, subcategory.category !== category {
             self.subcategory = nil
         }
+        // Der Nutzer hat selbst gewählt — eine aus der empfangenen Datei
+        // vorgemerkte Kategorie/Unterkategorie verfällt damit.
+        pendingCategoryName = nil
+        pendingCategoryIcon = nil
+        pendingSubcategoryName = nil
         if category?.isSausageSmokingCategory == true {
             includeSausageDetails = true
         }

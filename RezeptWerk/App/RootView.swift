@@ -144,17 +144,18 @@ struct RootView: View {
             guard url.pathExtension.lowercased() == RecipeShareService.fileExtension else { return }
             do {
                 let backup = try RecipeShareService.loadRecipe(from: url)
-                receivedRecipe = ReceivedRecipeFile(backup: backup)
+                // Den Editor-Entwurf genau EINMAL hier bauen — nicht im
+                // Sheet-Inhalt, der bei jedem Neuzeichnen erneut liefe.
+                receivedRecipe = ReceivedRecipeFile(
+                    draft: RecipeDraft(backup: backup, context: modelContext)
+                )
             } catch {
                 showFileError = true
             }
         }
         .sheet(item: $receivedRecipe) { received in
             // Der Editor ist die Vorschau: alles prüfen, anpassen, speichern.
-            RecipeEditorView(
-                recipe: nil,
-                prefilledDraft: RecipeDraft(backup: received.backup, context: modelContext)
-            )
+            RecipeEditorView(recipe: nil, prefilledDraft: received.draft)
         }
         .alert("Datei konnte nicht gelesen werden", isPresented: $showFileError) {
             Button("Verstanden", role: .cancel) {}
@@ -179,10 +180,11 @@ struct RootView: View {
     }
 }
 
-/// Hülle um ein empfangenes Rezept, damit `sheet(item:)` es anzeigen kann.
+/// Hülle um den fertigen Editor-Entwurf eines empfangenen Rezepts, damit
+/// `sheet(item:)` ihn anzeigen kann.
 private struct ReceivedRecipeFile: Identifiable {
     let id = UUID()
-    let backup: RecipeBackup
+    let draft: RecipeDraft
 }
 
 #Preview {

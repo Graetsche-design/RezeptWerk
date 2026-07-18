@@ -14,7 +14,14 @@ final class CookingModeViewModel {
     let recipe: Recipe
 
     /// Index des aktuellen Schritts. `steps.count` = Abschluss-Seite.
-    var stepIndex = 0
+    /// Bei jedem Wechsel — egal ob über die Buttons oder durch Wischen im
+    /// Pager (Binding) — wird der Timer auf den neuen Schritt gestellt.
+    var stepIndex = 0 {
+        didSet {
+            guard oldValue != stepIndex else { return }
+            prepareTimerForCurrentStep()
+        }
+    }
 
     /// Im Zutaten-Blatt abgehakte Zutaten.
     var checkedIngredients: Set<PersistentIdentifier> = []
@@ -60,13 +67,11 @@ final class CookingModeViewModel {
     func goToNextStep() {
         guard stepIndex < totalSteps else { return }
         stepIndex += 1
-        prepareTimerForCurrentStep()
     }
 
     func goToPreviousStep() {
         guard stepIndex > 0 else { return }
         stepIndex -= 1
-        prepareTimerForCurrentStep()
     }
 
     // MARK: Zutaten abhaken
@@ -176,7 +181,11 @@ final class CookingModeViewModel {
 
     /// Merkt sich, dass das Rezept gekocht wurde (für „Zuletzt gekocht“) —
     /// und legt bei nicht-leerem Text eine datierte Koch-Notiz an.
-    func finishCooking(in context: ModelContext, noteText: String = "") {
+    /// Gibt `false` zurück, wenn das Speichern fehlschlägt: Die Änderung
+    /// wird zurückgenommen, damit die Notiz nicht still verloren geht —
+    /// die View zeigt dann den Hinweis und bleibt offen.
+    @discardableResult
+    func finishCooking(in context: ModelContext, noteText: String = "") -> Bool {
         pauseTimer()
         recipe.lastCookedAt = .now
 
@@ -187,6 +196,12 @@ final class CookingModeViewModel {
             context.insert(note)
         }
 
-        try? context.save()
+        do {
+            try context.save()
+            return true
+        } catch {
+            context.rollback()
+            return false
+        }
     }
 }

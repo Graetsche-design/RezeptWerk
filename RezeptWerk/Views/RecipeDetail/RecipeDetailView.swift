@@ -90,8 +90,13 @@ struct RecipeDetailView: View {
         }
         .confirmationDialog("Rezept löschen?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("„\(recipe.title)“ löschen", role: .destructive) {
-                RecipeImportService.delete(recipe, in: modelContext)
-                dismiss()
+                // Nur schließen, wenn das Löschen geklappt hat — sonst
+                // erklärt der Speicherfehler-Hinweis das Problem.
+                if RecipeImportService.delete(recipe, in: modelContext) {
+                    dismiss()
+                } else {
+                    saveFailed = true
+                }
             }
             Button("Abbrechen", role: .cancel) {}
         } message: {

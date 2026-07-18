@@ -36,9 +36,15 @@ enum RecipeImportService {
         recipe.sourceURLString = draft.sourceURLText.trimmingCharacters(in: .whitespaces)
 
         // Kategorie — die Unterkategorie muss zur Kategorie passen.
-        recipe.category = draft.category
-        if let subcategory = draft.subcategory, subcategory.category === draft.category {
+        // Aus einer empfangenen Datei vorgemerkte, hier noch unbekannte
+        // Kategorien/Unterkategorien (`RecipeDraft.pendingCategoryName`)
+        // werden erst jetzt — beim Speichern — wirklich angelegt.
+        let category = draft.category ?? makePendingCategory(for: draft, in: context)
+        recipe.category = category
+        if let subcategory = draft.subcategory, subcategory.category === category {
             recipe.subcategory = subcategory
+        } else if let category, let subName = draft.pendingSubcategoryName {
+            recipe.subcategory = resolveSubcategory(named: subName, in: category)
         } else {
             recipe.subcategory = nil
         }
@@ -109,12 +115,61 @@ enum RecipeImportService {
 
     /// Löscht ein Rezept samt Zutaten, Schritten, Bildern und Fachdaten
     /// (cascade) — die Tags bleiben für andere Rezepte erhalten.
-    static func delete(_ recipe: Recipe, in context: ModelContext) {
+    /// Gibt `false` zurück, wenn das Speichern fehlschlägt; die Löschung
+    /// wird dann zurückgenommen, damit nichts still verloren geht.
+    @discardableResult
+    static func delete(_ recipe: Recipe, in context: ModelContext) -> Bool {
         context.delete(recipe)
-        try? context.save()
+        do {
+            try context.save()
+            return true
+        } catch {
+            context.rollback()
+            return false
+        }
     }
 
     // MARK: Helfer
+
+    /// Legt die im Draft vorgemerkte Kategorie an (Rezept-Tausch) — oder
+    /// verwendet eine inzwischen vorhandene gleichen Namens, z. B. wenn sie
+    /// zwischenzeitlich per iCloud dazugekommen ist.
+    private static func makePendingCategory(
+        for draft: RecipeDraft,
+        in context: ModelContext
+    ) -> RecipeCategory? {
+        guard let name = draft.pendingCategoryName else { return nil }
+
+        let existing = (try? context.fetch(FetchDescriptor<RecipeCategory>())) ?? []
+        if let match = existing.first(where: { $0.name.lowercased() == name.lowercased() }) {
+            return match
+        }
+
+        let category = RecipeCategory(
+            name: name,
+            iconName: draft.pendingCategoryIcon ?? "fork.knife",
+            sortIndex: existing.count,
+            isBuiltIn: false
+        )
+        context.insert(category)
+        return category
+    }
+
+    /// Verwendet eine vorhandene Unterkategorie gleichen Namens oder legt
+    /// sie neu an (gleiches Muster wie bei der Backup-Wiederherstellung).
+    private static func resolveSubcategory(
+        named name: String,
+        in category: RecipeCategory
+    ) -> RecipeSubcategory {
+        if let existing = category.sortedSubcategories.first(where: {
+            $0.name.lowercased() == name.lowercased()
+        }) {
+            return existing
+        }
+        let subcategory = RecipeSubcategory(name: name, sortIndex: category.sortedSubcategories.count)
+        category.subcategories = (category.subcategories ?? []) + [subcategory]
+        return subcategory
+    }
 
     /// „1,5“ Minuten → 90 Sekunden.
     private static func timerSeconds(fromMinutesText text: String) -> Int? {

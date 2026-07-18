@@ -164,7 +164,7 @@ struct RecipeEditorView: View {
     }
 
     private var categorySection: some View {
-        Section("Kategorie") {
+        Section {
             // Auswahl über die stabile `PersistentIdentifier` statt über das
             // @Model-Objekt — robuste Variante (siehe RecipeFilterSheet).
             Picker("Kategorie", selection: categorySelection) {
@@ -182,6 +182,21 @@ struct RecipeEditorView: View {
                         Text(subcategory.name).tag(Optional(subcategory.persistentModelID))
                     }
                 }
+            }
+        } header: {
+            Text("Kategorie")
+        } footer: {
+            // Hinweis auf Kategorien aus einer empfangenen Rezept-Datei,
+            // die es hier noch nicht gibt — sie entstehen erst beim
+            // Speichern (Abbrechen legt nichts an).
+            if let pendingName = draft.pendingCategoryName {
+                if let pendingSub = draft.pendingSubcategoryName {
+                    Text("Die Kategorie „\(pendingName)“ (mit Unterkategorie „\(pendingSub)“) aus der empfangenen Datei wird beim Speichern neu angelegt.")
+                } else {
+                    Text("Die Kategorie „\(pendingName)“ aus der empfangenen Datei wird beim Speichern neu angelegt.")
+                }
+            } else if let pendingSub = draft.pendingSubcategoryName, let category = draft.category {
+                Text("Die Unterkategorie „\(pendingSub)“ aus der empfangenen Datei wird beim Speichern in „\(category.name)“ angelegt.")
             }
         }
     }
@@ -204,6 +219,9 @@ struct RecipeEditorView: View {
             set: { newID in
                 let subcategories = draft.category?.sortedSubcategories ?? []
                 draft.subcategory = subcategories.first { $0.persistentModelID == newID }
+                // Eigene Wahl ersetzt eine ggf. vorgemerkte Unterkategorie
+                // aus einer empfangenen Datei.
+                draft.pendingSubcategoryName = nil
             }
         )
     }
@@ -334,6 +352,10 @@ struct RecipeEditorView: View {
             onSaved?(saved)
             dismiss()
         } catch {
+            // Halb angewendete Änderungen zurücknehmen (gleiches Muster wie
+            // an den übrigen abgesicherten Speicherstellen). Der Draft
+            // bleibt erhalten — erneutes Speichern funktioniert weiterhin.
+            modelContext.rollback()
             showSaveError = true
         }
     }
