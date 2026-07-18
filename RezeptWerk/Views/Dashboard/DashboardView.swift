@@ -108,6 +108,9 @@ struct DashboardView: View {
 
                 categoriesSection
                     .padding(.horizontal, AppSpacing.screen)
+
+                forumCard
+                    .padding(.horizontal, AppSpacing.screen)
             }
             .padding(.top, AppSpacing.l)
             .padding(.bottom, AppSpacing.xxl)
@@ -251,6 +254,43 @@ struct DashboardView: View {
             .card(padding: AppSpacing.l)
         }
         .buttonStyle(.plain)
+    }
+
+    /// Absprung zum Forum „Kochen mit ReiMa“ — als Ausklang des Dashboards
+    /// (gleicher Bauplan wie die übrigen Karten; der Pfeil nach außen
+    /// zeigt: hier öffnet sich der Browser).
+    private var forumCard: some View {
+        Group {
+            if let url = URL(string: "https://kochenmitreima.de") {
+                Link(destination: url) {
+                    HStack(spacing: AppSpacing.m) {
+                        Image(systemName: "globe")
+                            .font(.system(size: 20, weight: .medium))
+                            .foregroundStyle(.white)
+                            .frame(width: 42, height: 42)
+                            .background(AppColors.copperGradient, in: Circle())
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Kochen mit ReiMa")
+                                .font(AppTypography.cardTitle)
+                                .foregroundStyle(AppColors.textPrimary)
+
+                            Text("Unser Forum: Rezepte & Küchenwissen")
+                                .font(AppTypography.caption)
+                                .foregroundStyle(AppColors.textSecondary)
+                        }
+
+                        Spacer(minLength: 0)
+
+                        Image(systemName: "arrow.up.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(AppColors.textSecondary.opacity(0.6))
+                    }
+                    .card(padding: AppSpacing.l)
+                }
+                .buttonStyle(.plain)
+            }
+        }
     }
 
     private var categoriesSection: some View {
