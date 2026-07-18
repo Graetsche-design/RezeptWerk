@@ -15,25 +15,30 @@ enum VolumeUnit: String, CaseIterable, Identifiable {
     case cup
     case tablespoon
     case teaspoon
+    case fluidOunce
     case milliliter
 
     var id: String { rawValue }
 
+    /// Kurzes Kürzel — so, wie es in US-Rezepten steht (passt in die
+    /// Segment-Auswahl, ohne umzubrechen).
     var label: String {
         switch self {
-        case .cup: "Cup (US)"
-        case .tablespoon: "EL"
-        case .teaspoon: "TL"
+        case .cup: "Cup"
+        case .tablespoon: "tbsp"
+        case .teaspoon: "tsp"
+        case .fluidOunce: "fl oz"
         case .milliliter: "ml"
         }
     }
 
-    /// Milliliter je Einheit (US-Cup; EL/TL nach deutscher Konvention).
+    /// Milliliter je Einheit (US-Maße; tbsp/tsp entsprechen EL/TL).
     var milliliters: Double {
         switch self {
         case .cup: 236.59
         case .tablespoon: 15
         case .teaspoon: 5
+        case .fluidOunce: 29.5735
         case .milliliter: 1
         }
     }

@@ -23,6 +23,16 @@ struct UmrechnerTests {
         #expect(abs(UmrechnerData.grams(fromOunces: 16) - UmrechnerData.grams(fromPounds: 1)) < 0.01)
     }
 
+    @Test func fluessigeUnzeWasserErgibtRundDreissigGramm() {
+        let wasser = UmrechnerData.ingredients.first { $0.name == "Wasser" }!
+        let gramm = UmrechnerData.grams(amount: 1, unit: .fluidOunce, ingredient: wasser)
+        // 1 fl oz = 29,5735 ml; Wasser mit Dichte 1 → ebenso viele Gramm.
+        #expect(abs(gramm - 29.5735) < 0.001)
+        // 8 fl oz sind genau ein US-Cup (Rundungstoleranz der Cup-Konstante).
+        let cup = UmrechnerData.grams(amount: 1, unit: .cup, ingredient: wasser)
+        #expect(abs(UmrechnerData.grams(amount: 8, unit: .fluidOunce, ingredient: wasser) - cup) < 0.1)
+    }
+
     @Test func fahrenheitCelsiusRoundtrip() {
         #expect(abs(UmrechnerData.celsius(fromFahrenheit: 212) - 100) < 0.001)
         #expect(abs(UmrechnerData.celsius(fromFahrenheit: 32) - 0) < 0.001)

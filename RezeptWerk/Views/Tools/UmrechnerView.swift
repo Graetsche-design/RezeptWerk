@@ -79,7 +79,7 @@ struct UmrechnerView: View {
 
     // MARK: Eingabe
 
-    /// Eingabefeld + (im Volumen-Modus) Einheit und Zutat.
+    /// Eingabefeld + (im Volumen-Modus) Einheiten-Segmente und Zutat.
     private var inputSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.m) {
             SectionHeaderView(title: "Eingabe")
@@ -99,17 +99,33 @@ struct UmrechnerView: View {
                         .font(AppTypography.body.weight(.semibold))
 
                     if mode == .volume {
-                        Picker("Einheit", selection: $selectedUnit) {
-                            ForEach(VolumeUnit.allCases) { unit in
-                                Text(unit.label).tag(unit)
-                            }
-                        }
-                        .labelsHidden()
+                        Text(selectedUnit.label)
+                            .font(AppTypography.caption)
+                            .foregroundStyle(AppColors.textSecondary)
+                            .frame(width: 44, alignment: .leading)
                     }
                 }
                 .padding(.vertical, AppSpacing.s)
 
                 if mode == .volume {
+                    Divider()
+                        .overlay(AppColors.separator.opacity(0.6))
+
+                    // Einheit in einer eigenen Zeile — alle Kürzel auf
+                    // einen Blick, nichts bricht mehr um.
+                    Picker("Einheit", selection: $selectedUnit) {
+                        ForEach(VolumeUnit.allCases) { unit in
+                            Text(unit.label).tag(unit)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.vertical, AppSpacing.s)
+
+                    Text("Cup (US) = 236,6 ml · tbsp = EL (15 ml) · tsp = TL (5 ml) · fl oz = 29,6 ml")
+                        .font(AppTypography.caption)
+                        .foregroundStyle(AppColors.textSecondary)
+                        .padding(.bottom, AppSpacing.s)
+
                     Divider()
                         .overlay(AppColors.separator.opacity(0.6))
 
