@@ -5,9 +5,13 @@ import UIKit
 /// Der Kochmodus: Vollbild, ruhig, dunkel — gemacht für die Arbeit am Herd.
 ///
 /// - Ein Schritt pro Seite, sehr große Schrift (Größe in den Einstellungen).
-/// - Wischen oder große Buttons zum Blättern.
+/// - Wischen oder große Buttons zum Blättern — oder freihändig per Siri
+///   („Nächster Schritt in RezeptWerk“, siehe `CookingIntents`).
+/// - Vorlesen des Schritts über das Lautsprecher-Symbol, auf Wunsch
+///   automatisch bei jedem Schrittwechsel.
 /// - Zutaten jederzeit als Blatt von unten.
-/// - Timer, wenn der Schritt einen hat.
+/// - Timer, wenn der Schritt einen hat — mehrere laufen parallel weiter,
+///   auch beim Blättern; die Leiste oben zeigt die Timer anderer Schritte.
 /// - Der Bildschirm bleibt an, solange der Kochmodus offen ist.
 struct CookingModeView: View {
 
@@ -30,8 +34,14 @@ struct CookingModeView: View {
     @AppStorage(SettingsKeys.keepScreenOn)
     private var keepScreenOn = false
 
-    init(recipe: Recipe) {
-        _viewModel = State(initialValue: CookingModeViewModel(recipe: recipe))
+    /// Jeden neuen Schritt automatisch vorlesen (Einstellungen → Kochmodus).
+    @AppStorage(SettingsKeys.cookingAutoRead)
+    private var autoRead = false
+
+    /// - Parameter servings: Portionen, für die gekocht wird (Portionsrechner
+    ///   oder Wochenplan). `nil` oder 0 = wie im Rezept.
+    init(recipe: Recipe, servings: Int? = nil) {
+        _viewModel = State(initialValue: CookingModeViewModel(recipe: recipe, servings: servings))
     }
 
     private var fontScale: Double {
@@ -42,6 +52,11 @@ struct CookingModeView: View {
         VStack(spacing: 0) {
             header
             progressBar
+
+            if !viewModel.otherActiveTimers.isEmpty {
+                activeTimersStrip
+            }
+
             stepPager
 
             if viewModel.hasTimer && !viewModel.isOnFinishPage {
@@ -64,23 +79,91 @@ struct CookingModeView: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
-        // Haptisches Signal, wenn der Timer abläuft.
-        .sensoryFeedback(trigger: viewModel.timerDidFinish) { _, didFinish in
-            didFinish ? .success : nil
+        // Haptisches Signal, wenn irgendein Timer abläuft.
+        .sensoryFeedback(trigger: viewModel.finishedTimerCount) { old, new in
+            new > old ? .success : nil
         }
         .saveErrorAlert($saveFailed)
         .onAppear {
             // Bildschirm wachhalten — die zweite bewusste UIKit-Stelle
             // der App (SwiftUI bietet dafür keine eigene API).
             UIApplication.shared.isIdleTimerDisabled = true
+            // Für Siri-Kurzbefehle („Nächster Schritt in RezeptWerk“).
+            ActiveCookingSession.shared.register(viewModel)
+            if autoRead {
+                readCurrentStep()
+            }
         }
         .onDisappear {
             // Zurück auf die allgemeine Einstellung (nicht stumpf AUS) —
             // sonst würde das Schließen des Kochmodus den Schalter
             // „Bildschirm immer an“ aus den Einstellungen aushebeln.
             UIApplication.shared.isIdleTimerDisabled = keepScreenOn
-            viewModel.pauseTimer()
+            viewModel.pauseAllTimers()
+            SpeechService.shared.stop()
+            ActiveCookingSession.shared.unregister(viewModel)
         }
+        .onChange(of: viewModel.stepIndex) { _, _ in
+            // Hat Siri geblättert, spricht Siri den Schritt selbst.
+            if ActiveCookingSession.shared.takeSuppressAutoRead() { return }
+            if autoRead {
+                readCurrentStep()
+            } else {
+                // Eine laufende Ansage gehört zum alten Schritt.
+                SpeechService.shared.stop()
+            }
+        }
+    }
+
+    /// Liest den aktuellen Schritt (oder den Abschluss) vor.
+    private func readCurrentStep() {
+        SpeechService.shared.speak(CookingSpeech.announcement(for: viewModel))
+    }
+
+    // MARK: Timer-Leiste
+
+    /// Timer anderer Schritte, die laufen oder gerade abgelaufen sind —
+    /// antippen springt zum Schritt.
+    private var activeTimersStrip: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: AppSpacing.s) {
+                ForEach(viewModel.otherActiveTimers) { timer in
+                    Button {
+                        viewModel.stepIndex = timer.stepIndex
+                    } label: {
+                        HStack(spacing: AppSpacing.xs) {
+                            Image(systemName: timer.didFinish ? "bell.fill" : "timer")
+                            Text(timer.didFinish
+                                 ? "Schritt \(timer.stepIndex + 1): fertig!"
+                                 : "Schritt \(timer.stepIndex + 1) · \(FormatHelpers.timerText(seconds: timer.remainingSeconds))")
+                                .monospacedDigit()
+                        }
+                        .font(AppTypography.cookingMeta(scale: fontScale * 0.85).weight(.semibold))
+                        .foregroundStyle(timer.didFinish ? .white : AppColors.copper)
+                        .padding(.horizontal, AppSpacing.m)
+                        .padding(.vertical, AppSpacing.s)
+                        .background(
+                            timer.didFinish
+                                ? AnyShapeStyle(AppColors.copper)
+                                : AnyShapeStyle(AppColors.backgroundElevated),
+                            in: Capsule()
+                        )
+                        .overlay(
+                            Capsule().strokeBorder(
+                                timer.didFinish ? Color.clear : AppColors.copper.opacity(0.6),
+                                lineWidth: 1
+                            )
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(timer.didFinish
+                                        ? "Timer von Schritt \(timer.stepIndex + 1) abgelaufen"
+                                        : "Timer von Schritt \(timer.stepIndex + 1) läuft, zum Schritt springen")
+                }
+            }
+            .padding(.horizontal, AppSpacing.screen)
+        }
+        .padding(.top, AppSpacing.s)
     }
 
     // MARK: Kopfzeile
@@ -106,6 +189,22 @@ struct CookingModeView: View {
                 .lineLimit(1)
 
             Spacer()
+
+            // Vorlesen — nochmal tippen stoppt.
+            Button {
+                SpeechService.shared.toggle(CookingSpeech.announcement(for: viewModel))
+            } label: {
+                let speaking = SpeechService.shared.isSpeaking
+                Image(systemName: speaking ? "speaker.wave.2.fill" : "speaker.wave.2")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(speaking ? .white : AppColors.copper)
+                    .frame(width: 44, height: 44)
+                    .background(
+                        speaking ? AnyShapeStyle(AppColors.copper) : AnyShapeStyle(AppColors.backgroundElevated),
+                        in: Circle()
+                    )
+            }
+            .accessibilityLabel(SpeechService.shared.isSpeaking ? "Vorlesen stoppen" : "Schritt vorlesen")
 
             Button {
                 showIngredients = true

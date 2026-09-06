@@ -14,6 +14,9 @@ struct SettingsView: View {
     @AppStorage(SettingsKeys.keepScreenOn)
     private var keepScreenOn = false
 
+    @AppStorage(SettingsKeys.cookingAutoRead)
+    private var cookingAutoRead = false
+
     @Environment(\.modelContext) private var modelContext
 
     @Query private var allRecipes: [Recipe]
@@ -108,10 +111,13 @@ struct SettingsView: View {
                 ))
                 .foregroundStyle(AppColors.textPrimary)
                 .padding(.vertical, AppSpacing.xs)
+
+            Toggle("Schritte automatisch vorlesen", isOn: $cookingAutoRead)
+                .tint(AppColors.copper)
         } header: {
             Text("Kochmodus")
         } footer: {
-            Text("So groß erscheint der Text im Kochmodus (Vorschau verkleinert).")
+            Text("So groß erscheint der Text im Kochmodus (Vorschau verkleinert). Mit „automatisch vorlesen“ spricht RezeptWerk jeden neuen Schritt beim Blättern — vorlesen geht jederzeit auch über das Lautsprecher-Symbol im Kochmodus. Freihändig mit Siri: „Nächster Schritt in RezeptWerk“, „Schritt vorlesen in RezeptWerk“, „Timer starten in RezeptWerk“.")
         }
     }
 

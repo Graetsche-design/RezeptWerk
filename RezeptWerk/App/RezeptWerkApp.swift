@@ -1,3 +1,4 @@
+import AppIntents
 import SwiftUI
 import SwiftData
 
@@ -31,6 +32,10 @@ struct RezeptWerkApp: App {
         // entstanden sein können (mehrfache Kategorien/Beispielrezepte).
         DeduplicationService.run(context: container.mainContext)
 
+        // Spotlight-Index für die iOS-Suche aufbauen (Bilder und
+        // Indizierung laufen im Hintergrund).
+        SpotlightIndexService.reindexAll(context: container.mainContext)
+
         // Sync-Status ab dem Start beobachten, damit die Einstellungen ihn
         // anzeigen können (nur sinnvoll, wenn iCloud aktiv ist). Der Monitor
         // stößt außerdem nach jedem Cloud-Import das Aufräumen von
@@ -38,6 +43,10 @@ struct RezeptWerkApp: App {
         if iCloudEnabled {
             CloudSyncMonitor.shared.start(container: container)
         }
+
+        // Siri-Kurzbefehle für den Kochmodus beim System anmelden
+        // (siehe `CookingIntents`).
+        RezeptWerkShortcuts.updateAppShortcutParameters()
     }
 
     var body: some Scene {

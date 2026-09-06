@@ -16,6 +16,8 @@ struct RecipeListView: View {
     @State private var showFilterSheet = false
     @State private var showNewRecipeEditor = false
     @State private var recipeToEdit: Recipe?
+    /// Rezept, von dem gerade eine Kopie im Editor angelegt wird.
+    @State private var recipeToDuplicate: Recipe?
     @State private var recipeToDelete: Recipe?
 
     /// Zeigt den Hinweis, wenn das Löschen nicht gespeichert werden konnte.
@@ -43,6 +45,9 @@ struct RecipeListView: View {
                 }
                 .sheet(item: $recipeToEdit) { recipe in
                     RecipeEditorView(recipe: recipe)
+                }
+                .sheet(item: $recipeToDuplicate) { recipe in
+                    RecipeEditorView(recipe: nil, prefilledDraft: RecipeDraft(duplicating: recipe))
                 }
                 .confirmationDialog(
                     "Rezept löschen?",
@@ -118,7 +123,8 @@ struct RecipeListView: View {
         }
     }
 
-    /// Karte mit Navigation und Kontextmenü (Favorit, Bearbeiten, Löschen).
+    /// Karte mit Navigation und Kontextmenü (Favorit, Bearbeiten,
+    /// Duplizieren, Löschen).
     private func recipeLink<Card: View>(_ recipe: Recipe, @ViewBuilder card: () -> Card) -> some View {
         NavigationLink(value: recipe) {
             card()
@@ -138,6 +144,11 @@ struct RecipeListView: View {
                 recipeToEdit = recipe
             } label: {
                 Label("Bearbeiten", systemImage: "pencil")
+            }
+            Button {
+                recipeToDuplicate = recipe
+            } label: {
+                Label("Duplizieren", systemImage: "doc.on.doc")
             }
             Button(role: .destructive) {
                 recipeToDelete = recipe

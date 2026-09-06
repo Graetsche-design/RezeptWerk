@@ -20,6 +20,11 @@ struct PlanMealSheet: View {
     @State private var onlySuitable = false
     @State private var saveFailed = false
 
+    /// Portionen für den neuen Eintrag — wird gemerkt, weil die Zahl meist
+    /// dem Haushalt entspricht. 0 = wie im Rezept.
+    @AppStorage(SettingsKeys.plannerServings)
+    private var plannerServings = 0
+
     /// Such-gefilterte, nach Eignung sortierte Rezeptliste.
     /// Für die gewählte Mahlzeit geeignete Rezepte stehen oben.
     private var displayedRecipes: [Recipe] {
@@ -63,7 +68,21 @@ struct PlanMealSheet: View {
                     .tint(AppColors.copper)
                     .font(AppTypography.secondary)
                     .padding(.horizontal, AppSpacing.screen)
-                    .padding(.bottom, AppSpacing.m)
+                    .padding(.bottom, AppSpacing.s)
+
+                // Portionen: Kochmodus und Einkaufsliste rechnen später damit.
+                Stepper(value: $plannerServings, in: 0...50) {
+                    Label(
+                        plannerServings > 0
+                            ? "\(plannerServings) Portionen"
+                            : "Portionen wie im Rezept",
+                        systemImage: "person.2"
+                    )
+                    .font(AppTypography.secondary)
+                    .foregroundStyle(AppColors.textPrimary)
+                }
+                .padding(.horizontal, AppSpacing.screen)
+                .padding(.bottom, AppSpacing.m)
 
                 Divider()
 
@@ -122,11 +141,9 @@ struct PlanMealSheet: View {
                                             .font(AppTypography.caption.weight(.semibold))
                                             .foregroundStyle(AppColors.copper)
                                     }
-                                    if let category = recipe.category?.name {
-                                        Text(category)
-                                            .font(AppTypography.caption)
-                                            .foregroundStyle(AppColors.textSecondary)
-                                    }
+                                    Text(rowDetails(for: recipe))
+                                        .font(AppTypography.caption)
+                                        .foregroundStyle(AppColors.textSecondary)
                                 }
                             }
 
@@ -146,6 +163,14 @@ struct PlanMealSheet: View {
         }
     }
 
+    /// „Hauptgerichte · 4 Portionen“ — die Rezept-Portionen stehen dabei,
+    /// damit „Portionen wie im Rezept“ greifbar bleibt.
+    private func rowDetails(for recipe: Recipe) -> String {
+        [recipe.category?.name, "\(recipe.servings) Portionen"]
+            .compactMap { $0 }
+            .joined(separator: " · ")
+    }
+
     private func plan(_ recipe: Recipe) {
         let normalizedDay = calendar.startOfDay(for: date)
         // sortIndex = bisherige Anzahl gleicher Mahlzeit an dem Tag.
@@ -158,7 +183,8 @@ struct PlanMealSheet: View {
             date: normalizedDay,
             mealType: mealType,
             recipe: recipe,
-            sortIndex: existing.count
+            sortIndex: existing.count,
+            servings: plannerServings
         )
         modelContext.insert(meal)
         do {

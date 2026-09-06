@@ -3,6 +3,78 @@
 Die Versionsgeschichte der App. Die passenden „Was ist neu“-Texte für
 App Store Connect stehen in `AppStore-Texte.md`.
 
+## Version 2.2 (in Arbeit)
+
+**Neue Funktionen**
+
+- **Portionen im Wochenplan**: Beim Einplanen lässt sich die Portionszahl
+  einstellen — „wie im Rezept“ oder eine feste Zahl, die gemerkt wird,
+  weil sie meist dem Haushalt entspricht. Am geplanten Gericht steht die
+  Zahl in einer Kapsel und lässt sich antippen und ändern. Wer ein
+  Gericht aus dem Plan öffnet, bekommt den Portionsrechner gleich passend
+  eingestellt.
+- **Portionen wirken jetzt überall**: Das Zutaten-Blatt im Kochmodus und
+  „Zur Einkaufsliste“ rechnen mit den Portionen aus dem Portionsrechner;
+  „Aus Wochenplan übernehmen“ rechnet jedes Gericht auf seine geplanten
+  Portionen um. Vorher galten dort immer die Originalmengen des Rezepts.
+- **Einkaufsliste teilen**: Das Teilen-Symbol in der Einkaufsliste
+  schickt die offenen Einträge als Text an WhatsApp, Nachrichten, Mail
+  oder die Erinnerungen-App.
+- **Rezept duplizieren**: „Mehr → Duplizieren“ in der Rezeptansicht (und
+  im Schnellmenü der Rezeptliste) öffnet den Editor mit einer Kopie samt
+  Bildern, Tags und Fachdaten — für Varianten wie „Chili-Krakauer“ aus
+  „Käsekrakauer“. Bewertung und Favorit beginnen bei null, das Original
+  bleibt unberührt.
+- **Mehrere Timer gleichzeitig** im Kochmodus: Ein gestarteter Timer
+  läuft weiter, wenn du weiterblätterst — Nudeln, Soße und Ofen parallel.
+  Timer anderer Schritte erscheinen als Leiste oben (antippen springt zum
+  Schritt), jeder klingelt für sich, auch bei gesperrtem Gerät. Pausierte
+  Timer behalten ihre Restzeit.
+- **Freihändig kochen**: Das Lautsprecher-Symbol im Kochmodus liest den
+  aktuellen Schritt vor; auf Wunsch liest die App jeden neuen Schritt
+  automatisch (Einstellungen → Kochmodus). Und Siri steuert den offenen
+  Kochmodus: „Nächster Schritt in RezeptWerk“, „Vorheriger Schritt …“,
+  „Schritt vorlesen …“, „Timer starten …“ — Siri liest den Schritt vor.
+- **Spotlight**: Rezepte über die iOS-Suche finden — Titel, Kategorie,
+  Tags und Zutaten sind indiziert, mit Titelbild; ein Tipp auf den
+  Treffer öffnet das Rezept direkt.
+- **Hilfe aktualisiert**: Rezepte finden, Rezept anlegen, Kochmodus,
+  Wochenplan, Einkaufsliste und Einstellungen erklären die neuen
+  Möglichkeiten.
+
+**Technik**
+
+- `PlannedMeal.servings` (0 = wie im Rezept; additive Migration) mit
+  `effectiveServings`/`scaleFactor`; `Recipe.scaleFactor(forServings:)`
+  als gemeinsame Umrechnung für Portionsrechner, Kochmodus und
+  Einkaufsliste; `CookingModeViewModel(recipe:servings:)`;
+  `ShoppingListService.add(recipe:servings:)` und `shareText(items:)`;
+  `RecipeDraft(duplicating:)`; neues `MealServingsSheet`.
+- Aus dem Wochenplan wird über den Planeintrag navigiert
+  (`navigationDestination(for: PlannedMeal.self)` in Dashboard- und
+  iPad-Stack), damit die Detailansicht die geplanten Portionen kennt.
+- Kochmodus-Timer als `StepTimer` je Schritt
+  (`CookingModeViewModel.timers`) mit einer gemeinsamen Tick-Schleife;
+  die bisherigen Zugriffe (`timerRemainingSeconds`, `toggleTimer()` …)
+  bleiben als Stellvertreter für den aktuellen Schritt erhalten.
+  `TimerNotificationService` plant je Schritt eine eigene Mitteilung.
+- `SpeechService` (AVSpeechSynthesizer, deutsche Stimme, über die
+  Medien-Lautstärke mit Ducking). Siri-Kurzbefehle als App Intents in
+  `App/CookingIntents.swift` (`AppShortcutsProvider`); sie wirken über
+  `ActiveCookingSession` auf den geöffneten Kochmodus, `CookingSpeech`
+  baut die gesprochenen Texte. Die Info.plist weist Deutsch als
+  App-Sprache aus (`CFBundleLocalizations`), damit Siri die deutschen
+  Sätze zuordnet.
+- `SpotlightIndexService` (CoreSpotlight): Kennzeichner ist die kodierte
+  `PersistentIdentifier`; Neuaufbau beim Start, nach
+  Backup-Wiederherstellung und Beispiel-Neuladen, einzelne Rezepte beim
+  Speichern/Löschen — Bildverkleinerung und Indizierung im Hintergrund.
+  `RootView` öffnet Treffer über
+  `onContinueUserActivity(CSSearchableItemActionType)`.
+- Unit-Tests von 47 auf 73 erweitert (Portionsumrechnung, Wochenplan-
+  Portionen, Teilen-Text, Duplizieren, parallele Timer, Siri-Steuerung
+  und Sprachtexte, Spotlight-Kennzeichner und -Inhalte).
+
 ## Version 2.1 (Juli 2026)
 
 **Neue Funktionen**

@@ -20,7 +20,23 @@ struct RecipeDetailView: View {
     @State private var saveFailed = false
 
     /// Angezeigte Portionen für den Portionsrechner (0 = noch nicht gesetzt).
+    /// Wirkt auch auf den Kochmodus und „Zur Einkaufsliste“.
     @State private var displayedServings = 0
+
+    /// Öffnet den Editor mit einer Kopie des Rezepts („Duplizieren“).
+    @State private var showDuplicateEditor = false
+    /// Titel der gespeicherten Kopie — gemeldet wird erst, wenn der Editor
+    /// zu ist (sonst kollidiert der Hinweis mit der Sheet-Animation).
+    @State private var pendingDuplicateTitle: String?
+    @State private var duplicateSavedTitle: String?
+
+    /// - Parameter initialServings: Portionen, mit denen der Portionsrechner
+    ///   startet (z. B. die geplanten aus dem Wochenplan). `nil` = wie im
+    ///   Rezept.
+    init(recipe: Recipe, initialServings: Int? = nil) {
+        self.recipe = recipe
+        _displayedServings = State(initialValue: initialServings ?? 0)
+    }
 
     var body: some View {
         ScrollView {
@@ -85,8 +101,20 @@ struct RecipeDetailView: View {
         .sheet(isPresented: $showAddNote) {
             AddCookingNoteSheet(recipe: recipe)
         }
+        .sheet(isPresented: $showDuplicateEditor, onDismiss: {
+            if let title = pendingDuplicateTitle {
+                pendingDuplicateTitle = nil
+                duplicateSavedTitle = title
+            }
+        }) {
+            RecipeEditorView(
+                recipe: nil,
+                prefilledDraft: RecipeDraft(duplicating: recipe),
+                onSaved: { copy in pendingDuplicateTitle = copy.title }
+            )
+        }
         .fullScreenCover(isPresented: $showCookingMode) {
-            CookingModeView(recipe: recipe)
+            CookingModeView(recipe: recipe, servings: displayedServings)
         }
         .confirmationDialog("Rezept löschen?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("„\(recipe.title)“ löschen", role: .destructive) {
@@ -112,6 +140,17 @@ struct RecipeDetailView: View {
             Button("Prima", role: .cancel) {}
         } message: {
             Text(shoppingConfirmation ?? "")
+        }
+        .alert(
+            "Kopie gespeichert",
+            isPresented: Binding(
+                get: { duplicateSavedTitle != nil },
+                set: { if !$0 { duplicateSavedTitle = nil } }
+            )
+        ) {
+            Button("Prima", role: .cancel) {}
+        } message: {
+            Text("„\(duplicateSavedTitle ?? "")“ ist jetzt ein eigenes Rezept — ganz oben in der Rezeptliste und auf der Startseite unter „Zuletzt hinzugefügt“.")
         }
         .onAppear {
             if displayedServings == 0 {
@@ -334,13 +373,27 @@ struct RecipeDetailView: View {
                     Label("Bearbeiten", systemImage: "pencil")
                 }
                 Button {
+                    showDuplicateEditor = true
+                } label: {
+                    Label("Duplizieren", systemImage: "doc.on.doc")
+                }
+                Button {
                     showExport = true
                 } label: {
                     Label("Teilen & Export", systemImage: "square.and.arrow.up")
                 }
                 Button {
-                    let count = ShoppingListService.add(recipe: recipe, to: modelContext)
-                    shoppingConfirmation = "\(count) Zutaten zur Einkaufsliste hinzugefügt."
+                    // Die Mengen kommen für die im Portionsrechner
+                    // eingestellten Portionen an.
+                    let count = ShoppingListService.add(
+                        recipe: recipe,
+                        servings: displayedServings,
+                        to: modelContext
+                    )
+                    let isScaled = displayedServings > 0 && displayedServings != recipe.servings
+                    shoppingConfirmation = isScaled
+                        ? "\(count) Zutaten für \(displayedServings) Portionen zur Einkaufsliste hinzugefügt."
+                        : "\(count) Zutaten zur Einkaufsliste hinzugefügt."
                 } label: {
                     Label("Zur Einkaufsliste", systemImage: "cart.badge.plus")
                 }

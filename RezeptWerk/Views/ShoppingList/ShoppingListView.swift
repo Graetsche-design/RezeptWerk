@@ -155,6 +155,18 @@ struct ShoppingListView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        // Die offene Liste als Text verschicken — WhatsApp, Nachrichten,
+        // Mail oder die Erinnerungen-App nehmen sie über das Teilen-Menü an.
+        ToolbarItem(placement: .topBarTrailing) {
+            ShareLink(
+                item: ShoppingListService.shareText(items: items),
+                subject: Text("Einkaufsliste")
+            ) {
+                Label("Liste teilen", systemImage: "square.and.arrow.up")
+            }
+            .disabled(openItems.isEmpty)
+        }
+
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
                 Button {

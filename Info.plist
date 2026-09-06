@@ -17,6 +17,29 @@
 	</dict>
 
 	<!--
+	  RezeptWerk spricht Deutsch — alle Texte stehen direkt im Code. Damit
+	  Siri die deutschen Kurzbefehl-Sätze („Nächster Schritt in RezeptWerk“,
+	  siehe CookingIntents) der App zuordnet, weist die App Deutsch als
+	  Sprache aus.
+	-->
+	<key>CFBundleDevelopmentRegion</key>
+	<string>de</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>de</string>
+	</array>
+
+	<!--
+	  Spotlight: Ein angetippter Suchtreffer erreicht die App als
+	  Fortsetzung dieser System-Aktivität (siehe SpotlightIndexService und
+	  der onContinueUserActivity-Handler in RootView).
+	-->
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>com.apple.corespotlightitem</string>
+	</array>
+
+	<!--
 	  Hintergrund-Modus für die iCloud-Synchronisierung: CloudKit benötigt
 	  „remote-notification“, um Änderungen von anderen Geräten zu empfangen.
 	  Schadet nicht, wenn iCloud aus ist.

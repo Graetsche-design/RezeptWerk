@@ -54,6 +54,8 @@ enum HelpContent {
         blocks: [
             .heading("Suchen"),
             .paragraph("Tippe oben in das Suchfeld. Gesucht wird in Titel, Zutaten, Tags und Notizen – du findest also auch ein Rezept, wenn du nur eine Zutat im Kopf hast."),
+            .heading("Über die iOS-Suche (Spotlight)"),
+            .paragraph("Auch ohne die App zu öffnen: Wische auf dem Homescreen nach unten und tippe einen Rezeptnamen, eine Zutat oder einen Tag in die Suche – deine RezeptWerk-Rezepte erscheinen als Treffer mit Bild, ein Tipp öffnet das Rezept direkt."),
             .heading("Filtern & sortieren"),
             .steps([
                 "Öffne den Tab „Rezepte“.",
@@ -63,7 +65,7 @@ enum HelpContent {
             ]),
             .heading("Favoriten"),
             .paragraph("Tippe in einem Rezept auf das Herz – es erscheint dann im Tab „Favoriten“ und im Karussell auf der Startseite."),
-            .tip("Tippe in der Rezeptliste lange auf eine Karte – ein Schnellmenü bietet Favorit, Bearbeiten und Löschen."),
+            .tip("Tippe in der Rezeptliste lange auf eine Karte – ein Schnellmenü bietet Favorit, Bearbeiten, Duplizieren und Löschen."),
         ]
     )
 
@@ -88,6 +90,8 @@ enum HelpContent {
                 "Tags, Notizen und Quelle (Text und/oder Link).",
                 "Wurst & Räuchern: Fachdaten (siehe eigenes Thema).",
             ]),
+            .heading("Variante anlegen (duplizieren)"),
+            .paragraph("Eine Abwandlung – etwa „Chili-Krakauer“ aus „Käsekrakauer“ – legst du über „Mehr → Duplizieren“ in der Rezeptansicht an (oder im Schnellmenü der Rezeptliste). Der Editor öffnet sich mit einer Kopie samt Bildern, Tags und Fachdaten; Bewertung und Favorit beginnen bei null. Passe an, was anders ist, und speichere – das Original bleibt unberührt."),
             .tip("Nur der Titel ist Pflicht – alles andere kannst du nach und nach ergänzen. Mengen mit Komma (z. B. „1,5“) sind erlaubt."),
         ]
     )
@@ -126,10 +130,16 @@ enum HelpContent {
             .bullets([
                 "Ein Schritt pro Seite in sehr großer Schrift.",
                 "Weiter und Zurück über die Buttons oder durch Wischen.",
-                "Das Listen-Symbol oben rechts zeigt die Zutaten zum Abhaken.",
+                "Das Listen-Symbol oben rechts zeigt die Zutaten zum Abhaken – mit den Mengen für die Portionen, die du vorher im Portionsrechner eingestellt hast (oder die im Wochenplan zum Gericht gehören).",
                 "Hat ein Schritt einen Timer, erscheint er automatisch – mit Start/Pause und Signal am Ende.",
+                "Mehrere Timer gleichzeitig: Blättere ruhig weiter – ein gestarteter Timer läuft weiter. Timer anderer Schritte siehst du als Leiste oben (antippen springt zum Schritt); jeder klingelt für sich, auch bei gesperrtem Gerät.",
                 "Der Bildschirm bleibt an, solange der Kochmodus offen ist.",
                 "Am Ende kannst du das Rezept gleich bewerten.",
+            ]),
+            .heading("Freihändig: Vorlesen & Siri"),
+            .bullets([
+                "Das Lautsprecher-Symbol oben liest den aktuellen Schritt vor – nochmal tippen stoppt. Unter Einstellungen → Kochmodus kannst du einschalten, dass jeder neue Schritt automatisch vorgelesen wird.",
+                "Mit Siri, ohne das Gerät anzufassen: „Nächster Schritt in RezeptWerk“, „Vorheriger Schritt in RezeptWerk“, „Schritt vorlesen in RezeptWerk“ und „Timer starten in RezeptWerk“. Siri antwortet und liest den Schritt vor – solange der Kochmodus geöffnet ist.",
             ]),
             .tip("Die Schriftgröße im Kochmodus stellst du unter Einstellungen → Kochmodus ein (Normal, Groß, Sehr groß)."),
         ]
@@ -145,10 +155,14 @@ enum HelpContent {
             .paragraph("Den Wochenplan öffnest du auf dem iPhone über die Karte „Wochenplan“ auf der Startseite, auf dem iPad über die Seitenleiste."),
             .steps([
                 "Wähle einen Tag und tippe auf „Gericht planen“.",
-                "Wähle die Mahlzeit (Frühstück, Mittag, Abend, Snack) und ein Rezept.",
+                "Wähle die Mahlzeit (Frühstück, Mittag, Abend, Snack).",
+                "Stelle die Portionen ein: „wie im Rezept“ oder eine feste Zahl – die wird gemerkt, weil sie meist deinem Haushalt entspricht.",
+                "Tippe auf ein Rezept – fertig.",
                 "Mit den Pfeilen ‹ › blätterst du durch die Wochen, „Heute“ springt zurück.",
                 "Zum Entfernen tippst du beim geplanten Gericht auf das Minus-Symbol.",
             ]),
+            .heading("Portionen"),
+            .paragraph("Beim geplanten Gericht steht die Portionszahl in einer kleinen Kapsel – antippen ändert sie. Öffnest du das Gericht aus dem Plan, startet der Portionsrechner gleich mit dieser Zahl, und Kochmodus wie Einkaufsliste rechnen die Mengen entsprechend um."),
             .tip("Markiere bei deinen Rezepten unter „Geeignet für“, zu welchen Mahlzeiten sie passen. Beim Einplanen werden passende Rezepte dann oben mit „Geeignet“-Hinweis angezeigt."),
         ]
     )
@@ -162,10 +176,11 @@ enum HelpContent {
         blocks: [
             .paragraph("Die Einkaufsliste erreichst du über die Startseite, den iPad-Tab, den Wochenplan oder das Menü in einem Rezept."),
             .bullets([
-                "„Aus Wochenplan übernehmen“ sammelt alle Zutaten der geplanten Woche – gleiche Zutaten werden zusammengefasst (z. B. 2× 200 g Mehl → 400 g Mehl).",
-                "In einem Rezept fügst du über „Mehr → Zur Einkaufsliste“ dessen Zutaten hinzu.",
+                "„Aus Wochenplan übernehmen“ sammelt alle Zutaten der geplanten Woche – jedes Gericht mit seinen geplanten Portionen. Gleiche Zutaten werden zusammengefasst (z. B. 2× 200 g Mehl → 400 g Mehl).",
+                "In einem Rezept fügst du über „Mehr → Zur Einkaufsliste“ dessen Zutaten hinzu – umgerechnet auf die Portionen, die du vorher im Portionsrechner eingestellt hast.",
                 "Eigene Einträge tippst du unten ein, z. B. „2 Zwiebeln“.",
                 "Tippen hakt einen Eintrag ab, Wischen löscht ihn.",
+                "Das Teilen-Symbol oben rechts schickt die offenen Einträge als Text an WhatsApp, Nachrichten, Mail oder die Erinnerungen-App – praktisch, wenn jemand anderes einkauft.",
                 "Über das Menü oben kannst du erledigte oder alle Einträge löschen.",
             ]),
         ]
@@ -287,7 +302,7 @@ enum HelpContent {
         blocks: [
             .bullets([
                 "Erscheinungsbild: Automatisch, Hell oder Dunkel.",
-                "Kochmodus: Schriftgröße (Normal, Groß, Sehr groß) mit Live-Vorschau.",
+                "Kochmodus: Schriftgröße (Normal, Groß, Sehr groß) mit Live-Vorschau und „Schritte automatisch vorlesen“.",
                 "iCloud-Synchronisierung und Backup (siehe eigene Themen).",
                 "Deine Daten: Speicherort, Rezeptanzahl, Beispielrezepte neu laden.",
                 "Import-Tipps und App-Info.",

@@ -1,5 +1,6 @@
 import Testing
 import SwiftData
+import Foundation
 @testable import RezeptWerk
 
 /// Tests fürs Zusammenfassen der Einkaufsliste.
@@ -71,5 +72,84 @@ struct ShoppingListServiceTests {
         #expect(items.first?.amount == 2)
         #expect(items.first?.name == "Zwiebeln")
         #expect(items.first?.isManual == true)
+    }
+
+    // MARK: Portionen
+
+    @Test func rezeptMengenWerdenAufPortionenUmgerechnet() throws {
+        let context = try makeContext()
+        let recipe = Recipe(title: "Pfannkuchen")
+        recipe.servings = 4
+        recipe.ingredients = [
+            Ingredient(amount: 200, unit: "g", name: "Mehl", sortIndex: 0),
+            Ingredient(amount: nil, unit: "", name: "Salz", sortIndex: 1),
+        ]
+        context.insert(recipe)
+        try context.save()
+
+        let count = ShoppingListService.add(recipe: recipe, servings: 6, to: context)
+        #expect(count == 2)
+
+        let items = try context.fetch(FetchDescriptor<ShoppingItem>())
+        #expect(items.first { $0.name == "Mehl" }?.amount == 300)
+        // Zutaten ohne Menge bleiben ohne Menge.
+        #expect(items.first { $0.name == "Salz" }?.amount == nil)
+    }
+
+    @Test func ohnePortionsangabeBleibenDieRezeptmengen() throws {
+        let context = try makeContext()
+        let recipe = Recipe(title: "Suppe")
+        recipe.servings = 4
+        recipe.ingredients = [Ingredient(amount: 1, unit: "l", name: "Brühe")]
+        context.insert(recipe)
+        try context.save()
+
+        ShoppingListService.add(recipe: recipe, to: context)
+        ShoppingListService.add(recipe: recipe, servings: 0, to: context)
+
+        let items = try context.fetch(FetchDescriptor<ShoppingItem>())
+        #expect(items.count == 1)
+        #expect(items.first?.amount == 2)
+    }
+
+    @Test func wochenplanRechnetGeplantePortionenUm() throws {
+        let context = try makeContext()
+        let recipe = Recipe(title: "Gulasch")
+        recipe.servings = 2
+        recipe.ingredients = [Ingredient(amount: 100, unit: "g", name: "Zwiebeln")]
+        context.insert(recipe)
+
+        let today = Calendar.current.startOfDay(for: .now)
+        // Einmal für 4 Portionen (×2) und einmal „wie im Rezept“ (×1).
+        context.insert(PlannedMeal(date: today, mealType: .dinner, recipe: recipe, servings: 4))
+        context.insert(PlannedMeal(date: today, mealType: .lunch, recipe: recipe))
+        try context.save()
+
+        let count = ShoppingListService.addCurrentWeek(to: context)
+        #expect(count == 2)
+
+        let items = try context.fetch(FetchDescriptor<ShoppingItem>())
+        #expect(items.count == 1)
+        #expect(items.first?.amount == 300)
+    }
+
+    // MARK: Teilen
+
+    @Test func teilenTextEnthaeltNurOffeneEintraege() throws {
+        let context = try makeContext()
+        ShoppingListService.add(entries: [
+            .init(amount: 400, unit: "g", name: "Mehl"),
+            .init(amount: 2, unit: "", name: "Zwiebeln"),
+            .init(amount: nil, unit: "", name: "Salz"),
+        ], to: context)
+        let items = try context.fetch(FetchDescriptor<ShoppingItem>())
+        items.first { $0.name == "Zwiebeln" }?.isChecked = true
+
+        let text = ShoppingListService.shareText(items: items)
+        #expect(text.hasPrefix("Einkaufsliste"))
+        #expect(text.contains("• 400 g Mehl"))
+        #expect(text.contains("• Salz"))
+        #expect(!text.contains("Zwiebeln"))
+        #expect(text.hasSuffix("— geteilt aus RezeptWerk"))
     }
 }

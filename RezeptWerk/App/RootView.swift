@@ -1,3 +1,4 @@
+import CoreSpotlight
 import SwiftUI
 import UIKit
 
@@ -26,6 +27,10 @@ struct RootView: View {
 
     /// Zeigt den Hinweis, wenn eine geöffnete Datei nicht lesbar war.
     @State private var showFileError = false
+
+    /// Über die iOS-Suche (Spotlight) angetipptes Rezept (steuert das
+    /// Detail-Sheet).
+    @State private var spotlightRecipe: Recipe?
 
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
@@ -66,6 +71,13 @@ struct RootView: View {
                         WeekPlannerView()
                             .navigationDestination(for: Recipe.self) { recipe in
                                 RecipeDetailView(recipe: recipe)
+                            }
+                            // Geplantes Gericht → Detailansicht mit den
+                            // geplanten Portionen.
+                            .navigationDestination(for: PlannedMeal.self) { meal in
+                                if let recipe = meal.recipe {
+                                    RecipeDetailView(recipe: recipe, initialServings: meal.effectiveServings)
+                                }
                             }
                     }
                 }
@@ -161,6 +173,26 @@ struct RootView: View {
             Button("Verstanden", role: .cancel) {}
         } message: {
             Text("Die Datei ist keine gültige RezeptWerk-Datei oder beschädigt.")
+        }
+        // Spotlight: Ein angetippter Suchtreffer öffnet das Rezept.
+        .onContinueUserActivity(CSSearchableItemActionType) { activity in
+            guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String,
+                  let recipe = SpotlightIndexService.recipe(
+                    forSpotlightIdentifier: identifier,
+                    context: modelContext
+                  )
+            else { return }
+            spotlightRecipe = recipe
+        }
+        .sheet(item: $spotlightRecipe) { recipe in
+            NavigationStack {
+                RecipeDetailView(recipe: recipe)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Fertig") { spotlightRecipe = nil }
+                        }
+                    }
+            }
         }
     }
 

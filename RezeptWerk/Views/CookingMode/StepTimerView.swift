@@ -33,6 +33,10 @@ struct StepTimerView: View {
                     Label("Zeit abgelaufen!", systemImage: "bell.fill")
                         .font(AppTypography.cookingMeta(scale: fontScale).weight(.semibold))
                         .foregroundStyle(AppColors.copper)
+                } else if viewModel.timerIsRunning {
+                    Text("Läuft weiter, auch wenn du blätterst")
+                        .font(AppTypography.cookingMeta(scale: fontScale * 0.9))
+                        .foregroundStyle(AppColors.textSecondary)
                 } else {
                     Text("Timer für diesen Schritt")
                         .font(AppTypography.cookingMeta(scale: fontScale * 0.9))

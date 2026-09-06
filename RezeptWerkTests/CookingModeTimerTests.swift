@@ -47,4 +47,73 @@ struct CookingModeTimerTests {
         vm.timerRemainingSeconds = 75
         #expect(abs(vm.timerProgress - 0.25) < 0.001)
     }
+
+    // MARK: Mehrere Timer
+
+    private func makeParallelViewModel() -> CookingModeViewModel {
+        let recipe = Recipe(title: "Parallel")
+        recipe.steps = [
+            RecipeStep(text: "Nudeln kochen", sortIndex: 0, timerSeconds: 60),
+            RecipeStep(text: "Soße einkochen", sortIndex: 1, timerSeconds: 30),
+            RecipeStep(text: "Anrichten", sortIndex: 2),
+        ]
+        return CookingModeViewModel(recipe: recipe)
+    }
+
+    @Test func laufenderTimerUeberlebtDasBlaettern() {
+        let vm = makeParallelViewModel()
+        vm.toggleTimer()
+        vm.goToNextStep()
+
+        // Schritt 1 läuft weiter, Schritt 2 hat einen eigenen, ruhenden Timer.
+        #expect(vm.timers[0]?.isRunning == true)
+        #expect(vm.hasTimer)
+        #expect(!vm.timerIsRunning)
+        #expect(vm.otherActiveTimers.map(\.stepIndex) == [0])
+    }
+
+    @Test func mehrereTimerLaufenGleichzeitig() {
+        let vm = makeParallelViewModel()
+        vm.toggleTimer()
+        vm.goToNextStep()
+        vm.toggleTimer()
+        vm.goToNextStep()
+
+        #expect(!vm.hasTimer)
+        #expect(vm.hasRunningTimers)
+        #expect(vm.otherActiveTimers.map(\.stepIndex) == [0, 1])
+
+        vm.pauseAllTimers()
+        #expect(!vm.hasRunningTimers)
+        // Pausierte Timer behalten ihre Restzeit statt zu verschwinden.
+        #expect((59...60).contains(vm.timers[0]?.remainingSeconds ?? -1))
+        #expect(vm.otherActiveTimers.isEmpty)
+    }
+
+    @Test func zurueckblaetternZeigtDenLaufendenTimer() {
+        let vm = makeParallelViewModel()
+        vm.toggleTimer()
+        vm.goToNextStep()
+        vm.goToPreviousStep()
+
+        #expect(vm.timerIsRunning)
+        #expect(vm.otherActiveTimers.isEmpty)
+    }
+
+    @Test func abgelaufenerTimerZaehltHoch() async throws {
+        let recipe = Recipe(title: "Kurz")
+        recipe.steps = [RecipeStep(text: "Warten", sortIndex: 0, timerSeconds: 1)]
+        let vm = CookingModeViewModel(recipe: recipe)
+        vm.toggleTimer()
+
+        try await Task.sleep(for: .seconds(1.6))
+        #expect(vm.timerDidFinish)
+        #expect(!vm.timerIsRunning)
+        #expect(vm.timerRemainingSeconds == 0)
+        #expect(vm.finishedTimerCount == 1)
+
+        vm.resetTimer()
+        #expect(!vm.timerDidFinish)
+        #expect(vm.timerRemainingSeconds == 1)
+    }
 }

@@ -36,4 +36,26 @@ enum ImageCompressor {
         }
         return resized.jpegData(compressionQuality: 0.8)
     }
+
+    /// Kleines Vorschaubild (z. B. für Spotlight): längste Kante höchstens
+    /// `maxDimension` Punkte, als JPEG. Darf im Hintergrund laufen.
+    static func thumbnail(_ data: Data, maxDimension: CGFloat) -> Data? {
+        guard let image = UIImage(data: data) else { return nil }
+        let largestSide = max(image.size.width, image.size.height)
+        guard largestSide > 0 else { return nil }
+
+        let scale = min(1, maxDimension / largestSide)
+        let newSize = CGSize(
+            width: image.size.width * scale,
+            height: image.size.height * scale
+        )
+
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1
+        let renderer = UIGraphicsImageRenderer(size: newSize, format: format)
+        let resized = renderer.image { _ in
+            image.draw(in: CGRect(origin: .zero, size: newSize))
+        }
+        return resized.jpegData(compressionQuality: 0.7)
+    }
 }

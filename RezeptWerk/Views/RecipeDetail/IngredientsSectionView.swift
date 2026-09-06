@@ -10,10 +10,10 @@ struct IngredientsSectionView: View {
     let recipe: Recipe
     @Binding var displayedServings: Int
 
-    /// Umrechnungsfaktor: angezeigte Portionen ÷ Original-Portionen.
+    /// Umrechnungsfaktor: angezeigte Portionen ÷ Original-Portionen —
+    /// dieselbe Rechnung wie in Kochmodus und Einkaufsliste.
     private var factor: Double {
-        guard recipe.servings > 0, displayedServings > 0 else { return 1 }
-        return Double(displayedServings) / Double(recipe.servings)
+        recipe.scaleFactor(forServings: displayedServings)
     }
 
     var body: some View {

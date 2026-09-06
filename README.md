@@ -21,12 +21,16 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 - **Rezeptübersicht**: Kartenliste (iPhone) / Grid (iPad), Volltextsuche
   über Titel, Zutaten, Tags, Notizen und Kategorie; Filter nach Kategorie,
   Unterkategorie, Tags, Schwierigkeit und Favoriten; Sortierung.
+- **Spotlight**: Rezepte über die iOS-Suche finden (Titel, Kategorie,
+  Tags, Zutaten, Titelbild) — der Treffer öffnet das Rezept direkt.
 - **Rezeptdetails**: Bild, Bewertung (antippbar), Info-Pills, Tags,
   Zutaten mit **Portionsrechner**, nummerierte Schritte, Notizen, Quelle
   (mit Link), Verwaltungsdaten („zuletzt gekocht“).
 - **Editor** in klaren Abschnitten — derselbe Editor dient für Neuanlage,
   Bearbeitung und Import-Korrektur. Mehrere Bilder (komprimiert), Tags mit
-  Wiederverwendung, Timer pro Schritt.
+  Wiederverwendung, Timer pro Schritt. **Duplizieren** (Detailansicht und
+  Schnellmenü der Rezeptliste) öffnet den Editor mit einer Kopie — für
+  Varianten; Bewertung und Favorit beginnen bei null.
 - **Wurst & Räuchern**: eigener Fachdaten-Block (Fleischmenge, Gewürze/kg,
   NPS g/kg, Kutterhilfsmittel, Schüttung, Darm/Kaliber, Räucherart/-zeit/
   -temperatur, Brüh- und Kerntemperatur, Reife- und Trocknungszeit,
@@ -37,10 +41,15 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   Originaltext und Korrektur im Editor vor dem Speichern.
 - **Kochmodus**: Vollbild, immer dunkel (blendfrei am Herd), ein Schritt
   pro Seite (mit Schritt-Foto, falls vorhanden), einstellbare Großschrift,
-  abhakbare Zutaten, Timer mit Fortschrittsring und Haptik — der auch
-  **außerhalb der App klingelt** (lokale Mitteilung bei Hintergrund/
-  Sperrbildschirm), Bildschirm bleibt an, Abschluss-Seite mit Bewertung
-  und optionaler Koch-Notiz.
+  abhakbare Zutaten (Mengen für die gewählten Portionen aus Portionsrechner
+  oder Wochenplan), Timer mit Fortschrittsring und Haptik — **mehrere
+  parallel** (laufen beim Blättern weiter, eine Leiste zeigt die Timer
+  anderer Schritte) und jeder klingelt auch **außerhalb der App** (lokale
+  Mitteilung bei Hintergrund/Sperrbildschirm), Bildschirm bleibt an,
+  Abschluss-Seite mit Bewertung und optionaler Koch-Notiz. **Freihändig**:
+  Schritt vorlesen per Lautsprecher-Symbol (oder automatisch bei jedem
+  Schrittwechsel) und Siri-Kurzbefehle („Nächster Schritt in RezeptWerk",
+  „Schritt vorlesen …", „Timer starten …").
 - **Foto je Zubereitungsschritt**: im Editor pro Schritt wählbar
   (komprimiert, extern gespeichert), sichtbar in Detailansicht und
   Kochmodus, im Backup enthalten.
@@ -80,12 +89,19 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   kann im Editor unter „Geeignet für" markiert werden, zu welchen
   Mahlzeiten es passt (Mehrfachauswahl); beim Einplanen werden passende
   Rezepte oben mit „Geeignet"-Badge angezeigt (plus Filter „Nur passende").
-- **Einkaufsliste**: Zutaten aus dem Wochenplan (laufende Woche) oder aus
-  einzelnen Rezepten übernehmen — gleiche Zutaten werden automatisch
-  zusammengefasst (2× „200 g Mehl" → „400 g Mehl"). Eigene Einträge
-  hinzufügen, abhaken, erledigte/alle löschen. Auf dem iPhone über die
-  Dashboard-Karte, auf dem iPad als Sidebar-Tab; auch aus dem Wochenplan
-  und der Rezept-Detailansicht erreichbar.
+  **Portionen je Planeintrag**: beim Einplanen „wie im Rezept" oder eine
+  feste, gemerkte Zahl; am Gericht als Kapsel antippbar und änderbar. Ein
+  aus dem Plan geöffnetes Rezept startet mit diesen Portionen — Kochmodus
+  und Einkaufsliste rechnen damit.
+- **Einkaufsliste**: Zutaten aus dem Wochenplan (laufende Woche, jedes
+  Gericht mit seinen geplanten Portionen) oder aus einzelnen Rezepten
+  (umgerechnet auf die Portionen im Portionsrechner) übernehmen — gleiche
+  Zutaten werden automatisch zusammengefasst (2× „200 g Mehl" →
+  „400 g Mehl"). Eigene Einträge hinzufügen, abhaken, erledigte/alle
+  löschen; die offene Liste als Text **teilen** (WhatsApp, Nachrichten,
+  Mail, Erinnerungen). Auf dem iPhone über die Dashboard-Karte, auf dem
+  iPad als Sidebar-Tab; auch aus dem Wochenplan und der
+  Rezept-Detailansicht erreichbar.
 - **iCloud-Synchronisierung** (optional, abschaltbar): echte automatische
   Sync über alle Geräte mit derselben Apple-ID (SwiftData + CloudKit).
   Standardmäßig AUS; einmalige Einrichtung der iCloud-Capability in Xcode
@@ -134,7 +150,7 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 | Minimum | iOS / iPadOS 18 |
 | Xcode | 16 oder neuer (entwickelt & getestet mit 26.5) |
 | Abhängigkeiten | **Keine** — nur Apple-Frameworks |
-| Frameworks | SwiftUI, SwiftData, PhotosUI, Vision (OCR), VisionKit (Scanner), PDFKit, UniformTypeIdentifiers |
+| Frameworks | SwiftUI, SwiftData, PhotosUI, Vision (OCR), VisionKit (Scanner), PDFKit, UniformTypeIdentifiers, AVFoundation (Sprachausgabe), AppIntents (Siri-Kurzbefehle), CoreSpotlight (iOS-Suche) |
 | Berechtigungen | Nur Kamera (Dokumentenscanner); Fotoauswahl braucht keine |
 
 Es gibt genau **zwei bewusste UIKit-Stellen** (kommentiert):
@@ -212,7 +228,8 @@ Rezepteapp/
     ├── App/                      RezeptWerkApp (@main, DB, Seeding) ·
     │                             RootView (Tabs/Sidebar) · AppTab ·
     │                             ModelContainerFactory (lokal/iCloud) ·
-    │                             WidgetPlanSync (Schnappschuss fürs Widget)
+    │                             WidgetPlanSync (Schnappschuss fürs Widget) ·
+    │                             ActiveCookingSession · CookingIntents (Siri)
     ├── Models/                   10 SwiftData-Modelle + Difficulty + SmokingMethod
     ├── ViewModels/               RecipeDraft · ImportViewModel · CookingModeViewModel
     ├── Views/
@@ -232,6 +249,8 @@ Rezepteapp/
     │   └── Settings/             SettingsView
     ├── Services/
     │   ├── Announcement/         AnnouncementService (Meldung an alle Nutzer)
+    │   ├── Speech/               SpeechService (Vorlesen im Kochmodus)
+    │   ├── Spotlight/            SpotlightIndexService (iOS-Suche)
     │   ├── Share/                RecipeShareService (Rezept-Tausch .rezeptwerk)
     │   ├── Notifications/        TimerNotificationService (Timer klingelt überall)
     │   ├── Backup/               BackupModels · BackupService · BackupFileDocument
@@ -373,6 +392,5 @@ Ausführlich in der [ANLEITUNG.md](ANLEITUNG.md), Abschnitt 5.
 
 - Reife-Tracker für Wurst & Schinken (Wiegen, Verlaufskurve, Erinnerungen)
 - Web-Parser für Seiten ohne strukturierte Daten (Readability-Heuristik)
-- Spotlight-Integration; weitere Widgets („Zuletzt gekocht“, Zufallsrezept)
-- Siri/Kurzbefehle im Kochmodus („nächster Schritt“, freihändig)
+- Weitere Widgets („Zuletzt gekocht“, Zufallsrezept)
 - Timer als Live-Aktivität im Sperrbildschirm/Dynamic Island
