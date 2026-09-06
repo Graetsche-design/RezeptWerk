@@ -17,6 +17,9 @@ App Store Connect stehen in `AppStore-Texte.md`.
   „Zur Einkaufsliste“ rechnen mit den Portionen aus dem Portionsrechner;
   „Aus Wochenplan übernehmen“ rechnet jedes Gericht auf seine geplanten
   Portionen um. Vorher galten dort immer die Originalmengen des Rezepts.
+- **Einkaufsliste teilen**: Das Teilen-Symbol in der Einkaufsliste
+  schickt die offenen Einträge als Text an WhatsApp, Nachrichten, Mail
+  oder die Erinnerungen-App.
 - **Hilfe aktualisiert**: Kochmodus, Wochenplan und Einkaufsliste
   erklären die neuen Möglichkeiten.
 
@@ -26,12 +29,13 @@ App Store Connect stehen in `AppStore-Texte.md`.
   `effectiveServings`/`scaleFactor`; `Recipe.scaleFactor(forServings:)`
   als gemeinsame Umrechnung für Portionsrechner, Kochmodus und
   Einkaufsliste; `CookingModeViewModel(recipe:servings:)`;
-  `ShoppingListService.add(recipe:servings:)`; neues `MealServingsSheet`.
+  `ShoppingListService.add(recipe:servings:)` und `shareText(items:)`;
+  neues `MealServingsSheet`.
 - Aus dem Wochenplan wird über den Planeintrag navigiert
   (`navigationDestination(for: PlannedMeal.self)` in Dashboard- und
   iPad-Stack), damit die Detailansicht die geplanten Portionen kennt.
-- Unit-Tests von 47 auf 55 erweitert (Portionsumrechnung,
-  Wochenplan-Portionen).
+- Unit-Tests von 47 auf 56 erweitert (Portionsumrechnung,
+  Wochenplan-Portionen, Teilen-Text).
 
 ## Version 2.1 (Juli 2026)
 

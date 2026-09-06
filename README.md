@@ -90,9 +90,10 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   (umgerechnet auf die Portionen im Portionsrechner) übernehmen — gleiche
   Zutaten werden automatisch zusammengefasst (2× „200 g Mehl" →
   „400 g Mehl"). Eigene Einträge hinzufügen, abhaken, erledigte/alle
-  löschen. Auf dem iPhone über die Dashboard-Karte, auf dem iPad als
-  Sidebar-Tab; auch aus dem Wochenplan und der Rezept-Detailansicht
-  erreichbar.
+  löschen; die offene Liste als Text **teilen** (WhatsApp, Nachrichten,
+  Mail, Erinnerungen). Auf dem iPhone über die Dashboard-Karte, auf dem
+  iPad als Sidebar-Tab; auch aus dem Wochenplan und der
+  Rezept-Detailansicht erreichbar.
 - **iCloud-Synchronisierung** (optional, abschaltbar): echte automatische
   Sync über alle Geräte mit derselben Apple-ID (SwiftData + CloudKit).
   Standardmäßig AUS; einmalige Einrichtung der iCloud-Capability in Xcode

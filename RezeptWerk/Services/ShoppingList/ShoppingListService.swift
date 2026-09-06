@@ -106,6 +106,25 @@ enum ShoppingListService {
         return processed
     }
 
+    // MARK: Teilen
+
+    /// Die offenen Einträge als Klartext — für WhatsApp, Nachrichten, Mail
+    /// oder die Erinnerungen-App über das System-Teilen-Menü. Abgehaktes
+    /// bleibt weg: Geteilt wird, was noch zu kaufen ist.
+    static func shareText(items: [ShoppingItem]) -> String {
+        let open = items
+            .filter { !$0.isChecked }
+            .sorted { $0.sortIndex < $1.sortIndex }
+
+        var lines = ["Einkaufsliste", ""]
+        for item in open {
+            lines.append("• " + item.displayText)
+        }
+        lines.append("")
+        lines.append("— geteilt aus RezeptWerk")
+        return lines.joined(separator: "\n")
+    }
+
     // MARK: Aufräumen
 
     static func clearChecked(in context: ModelContext) {

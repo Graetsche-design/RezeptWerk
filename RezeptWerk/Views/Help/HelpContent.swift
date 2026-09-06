@@ -170,6 +170,7 @@ enum HelpContent {
                 "In einem Rezept fügst du über „Mehr → Zur Einkaufsliste“ dessen Zutaten hinzu – umgerechnet auf die Portionen, die du vorher im Portionsrechner eingestellt hast.",
                 "Eigene Einträge tippst du unten ein, z. B. „2 Zwiebeln“.",
                 "Tippen hakt einen Eintrag ab, Wischen löscht ihn.",
+                "Das Teilen-Symbol oben rechts schickt die offenen Einträge als Text an WhatsApp, Nachrichten, Mail oder die Erinnerungen-App – praktisch, wenn jemand anderes einkauft.",
                 "Über das Menü oben kannst du erledigte oder alle Einträge löschen.",
             ]),
         ]

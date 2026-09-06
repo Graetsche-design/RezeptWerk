@@ -132,4 +132,24 @@ struct ShoppingListServiceTests {
         #expect(items.count == 1)
         #expect(items.first?.amount == 300)
     }
+
+    // MARK: Teilen
+
+    @Test func teilenTextEnthaeltNurOffeneEintraege() throws {
+        let context = try makeContext()
+        ShoppingListService.add(entries: [
+            .init(amount: 400, unit: "g", name: "Mehl"),
+            .init(amount: 2, unit: "", name: "Zwiebeln"),
+            .init(amount: nil, unit: "", name: "Salz"),
+        ], to: context)
+        let items = try context.fetch(FetchDescriptor<ShoppingItem>())
+        items.first { $0.name == "Zwiebeln" }?.isChecked = true
+
+        let text = ShoppingListService.shareText(items: items)
+        #expect(text.hasPrefix("Einkaufsliste"))
+        #expect(text.contains("• 400 g Mehl"))
+        #expect(text.contains("• Salz"))
+        #expect(!text.contains("Zwiebeln"))
+        #expect(text.hasSuffix("— geteilt aus RezeptWerk"))
+    }
 }
