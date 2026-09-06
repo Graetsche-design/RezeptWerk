@@ -3,6 +3,10 @@
 Alles fertig zum Einfügen in **App Store Connect**. Die Zeichen-Limits von
 Apple sind jeweils dabei. Preis: **0,99 € (Einmalkauf, keine In-App-Käufe).**
 
+Stand: **Update 2.1 → 2.5** (September 2026). Für dieses Update brauchst du
+die Abschnitte 4, 5, 6 (Version 2.5), 9 und 10; Name, Untertitel, Keywords
+und Kategorie bleiben wie bei 2.1.
+
 ---
 
 ## 1. App-Name (max. 30 Zeichen)
@@ -38,24 +42,32 @@ wurst,smoker,bbq,pökeln,rezeptbuch,kochbuch,brühwurst,rohwurst,dutchoven,schin
 ```
 *(97 Zeichen)*
 
-Austausch-Ideen je nach Schwerpunkt: `kerntemperatur`, `grillrezepte`,
-`pulledpork`, `nps`, `räucherofen`, `kalträuchern`.
+Für 2.5 unverändert. Wer lieber die neuen Alltagsfunktionen auffindbar
+machen will, tauscht `marinade,smoken` gegen `wochenplan,einkaufsliste`:
+
+```
+wurst,smoker,bbq,pökeln,rezeptbuch,kochbuch,brühwurst,dutchoven,schinken,wochenplan,einkaufsliste
+```
+*(97 Zeichen — dafür entfällt `rohwurst`)*
 
 ---
 
 ## 4. Werbetext / Promotional Text (max. 170 Zeichen, jederzeit änderbar)
 
 ```
-Dein digitales Werkzeug fürs Grillen, Wursten & Räuchern – mit Fachdaten wie NPS, Kaliber & Kerntemperatur. Offline, ohne Konto, mit Kochmodus & PDF-Export. Kein Abo.
+Neu in 2.5: dunkles Glut-Design, Portionen im Wochenplan, mehrere Timer, Vorlesen & Siri, Spotlight-Suche. Fürs Grillen, Wursten & Räuchern – offline, kein Abo.
 ```
-*(165 Zeichen)*
+*(160 Zeichen)*
 
 ---
 
 ## 5. Beschreibung (max. 4000 Zeichen)
 
+Aktualisiert für 2.5: neues Design, Werkzeuge, Wochenplan & Einkaufsliste,
+Kochmodus mit mehreren Timern, Siri und Spotlight.
+
 ```
-RezeptWerk ist dein digitales Rezept-Werkzeug – gebaut für alle, die mit Leidenschaft kochen, grillen, wursten und räuchern. Kein verspieltes Standard-Kochbuch, sondern ein sauberes, warmes Werkzeug im Handwerks-Look.
+RezeptWerk ist dein digitales Rezept-Werkzeug – gebaut für alle, die mit Leidenschaft kochen, grillen, wursten und räuchern. Kein verspieltes Standard-Kochbuch, sondern ein sauberes, warmes Werkzeug im Handwerks-Look: dunkel wie Räucherholz, mit glühendem Kupfer – blendfrei in der Küche.
 
 🔥 BESONDERS STARK FÜR WURST & RÄUCHERN
 Mit echten Fachdaten für Hobby-Metzger und Smoker-Fans:
@@ -64,36 +76,50 @@ Mit echten Fachdaten für Hobby-Metzger und Smoker-Fans:
 • Räucherart, -zeit und -temperatur (kalt/warm/heiß)
 • Brüh- und Kerntemperatur, Reife- und Trocknungszeit
 • Eigener Sicherheits- & Hygiene-Hinweis
-Diese Felder erscheinen nur dort, wo sie hingehören – normale Rezepte bleiben schlank und übersichtlich.
+Diese Felder erscheinen nur dort, wo sie hingehören – normale Rezepte bleiben schlank.
+
+🧰 WERKZEUGE FÜR GRILL UND WURSTKÜCHE
+• Wurst-Rechner: Fleisch-Mix aus mehreren Sorten, Zutaten je Kilogramm, alles live hochgerechnet – auf Knopfdruck als Rezept gespeichert
+• Pökel-Rechner fürs Nasspökeln: Lakenstärke, NPS-Menge und Pökelzeit
+• Kerntemperatur-Spickzettel für Rind, Schwein, Geflügel, Lamm & Wild, Fisch und Wurst
+• Maß-Umrechner: Cups, Unzen und Fahrenheit in deutsche Maße
 
 📖 ALLES FÜR DEINE REZEPTE
-• Schöne Rezeptkarten mit Bild, Bewertung, Tags und Kategorie
+• Schöne Rezeptkarten mit Bild, Bewertung, Tags und Kategorie – jede Kategorie in ihrer eigenen Farbe
 • 12 Kategorien von Fleisch über Grillen bis Getränke – eigene jederzeit ergänzbar
-• Schnelle Suche & Filter nach Kategorie, Tags, Schwierigkeit und Favoriten – und über die iOS-Suche (Spotlight)
+• Schnelle Suche & Filter – deine Rezepte erscheinen auch in der iOS-Suche (Spotlight)
 • Portionsrechner: Mengen rechnen sich automatisch um
-• Wochenplan mit Portionen je Gericht und Einkaufsliste, die gleiche Zutaten zusammenfasst und sich als Text teilen lässt
+• Rezepte duplizieren, um Varianten anzulegen
+• Koch-Notizen mit Datum: „Nächstes Mal weniger Salz“
+
+📅 WOCHENPLAN & EINKAUFSLISTE
+• Gerichte auf Tage und Mahlzeiten verteilen – mit Portionen je Gericht
+• Einkaufsliste aus dem Wochenplan oder einzelnen Rezepten, gleiche Zutaten werden zusammengefasst
+• Liste als Text teilen – an WhatsApp, Nachrichten, Mail oder Erinnerungen
+• Homescreen-Widget „Heute auf dem Wochenplan“
 
 👨‍🍳 KOCHMODUS
 Ein großer, ruhiger Schritt-für-Schritt-Modus fürs Kochen am Herd oder Grill:
-• Sehr gut lesbare Schrift (einstellbar)
+• Sehr gut lesbare Schrift (einstellbar), Foto je Schritt
 • Zutaten jederzeit zum Abhaken – umgerechnet auf deine Portionen
-• Timer pro Schritt – mehrere gleichzeitig, sie klingeln auch bei gesperrtem iPhone
-• Schritte vorlesen lassen oder per Siri blättern („Nächster Schritt in RezeptWerk“)
+• Mehrere Timer gleichzeitig – sie klingeln auch bei gesperrtem iPhone
+• Schritte vorlesen lassen oder per Siri blättern: „Nächster Schritt in RezeptWerk“
 • Der Bildschirm bleibt an
 
 📥 REZEPTE IMPORTIEREN
-Bring deine Rezepte mühelos hinein:
 • Foto abfotografieren oder scannen – der Text wird automatisch erkannt (OCR)
-• PDF einlesen
-• Webseiten-Link einfügen – Titel, Zutaten, Schritte und Bild werden übernommen
-• Text aus der Zwischenablage erkennen
+• PDF einlesen, Webseiten-Link einfügen oder Text aus der Zwischenablage erkennen
+• Direkt aus Safari & Co. über das Teilen-Menü
 Vor dem Speichern siehst du immer eine Vorschau und kannst alles in Ruhe korrigieren.
+
+🔄 TEILEN & TAUSCHEN
+• Rezepte als hochwertiges PDF im Kochbuch-Layout oder als Text teilen
+• Rezepte als RezeptWerk-Datei tauschen – per WhatsApp, Mail oder im Forum; wer die App hat, tippt die Datei an und hat das Rezept
 
 ☁️ DEINE DATEN GEHÖREN DIR
 • Alles wird lokal auf deinem Gerät gespeichert
 • Optionale iCloud-Synchronisierung über all deine Apple-Geräte
 • Backup als Datei – sichere es in Google Drive, iCloud Drive oder Dropbox
-• Rezepte als hochwertiges PDF teilen oder exportieren
 • Kein Konto, keine Anmeldung, keine Werbung, kein Tracking
 
 ✅ FAIR & EHRLICH
@@ -103,21 +129,22 @@ Optimiert für iPhone und iPad.
 
 Guten Appetit – und viel Freude beim Grillen, Wursten und Räuchern!
 ```
+*(ca. 3.300 Zeichen — Limit 4000)*
 
 ---
 
 ## 6. „Neue Funktionen" / What's New
 
-### Für Version 2.5
+### Für Version 2.5 (Update von 2.1)
 
 ```
-Version 2.5 sieht neu aus, denkt in Portionen – und hört aufs Wort:
+Version 2.5 sieht neu aus, denkt in Portionen – und hört aufs Wort.
 
 🌑 NEUES DESIGN „DUNKLE GLUT“
-RezeptWerk ist jetzt durchgehend dunkel – Anthrazit wie Räucherholz, dazu glühendes Kupfer. Blendfrei in der Küche, und jede Kategorie hat ihren eigenen Farbton.
+RezeptWerk ist jetzt durchgehend dunkel – Anthrazit wie Räucherholz, dazu glühendes Kupfer. Blendfrei in der Küche, jede Kategorie in ihrer eigenen Farbe, und das Dashboard zeigt zwei große Schnellzugriffe und die Werkzeuge als kompakte Kacheln.
 
 👨‍👩‍👧‍👦 PORTIONEN ÜBERALL
-Beim Einplanen im Wochenplan legst du fest, für wie viele du kochst. Kochmodus und Einkaufsliste rechnen automatisch mit – und der Portionsrechner im Rezept wirkt jetzt bis in die Einkaufsliste.
+Beim Einplanen im Wochenplan legst du fest, für wie viele du kochst – die Zahl steht am Gericht und lässt sich antippen. Kochmodus und Einkaufsliste rechnen mit, und der Portionsrechner im Rezept wirkt jetzt bis in die Einkaufsliste.
 
 🛒 EINKAUFSLISTE TEILEN
 Schick die offene Liste als Text an WhatsApp, Nachrichten, Mail oder Erinnerungen – praktisch, wenn jemand anderes einkauft.
@@ -125,23 +152,18 @@ Schick die offene Liste als Text an WhatsApp, Nachrichten, Mail oder Erinnerunge
 📋 REZEPT DUPLIZIEREN
 Aus „Käsekrakauer“ wird mit einem Tipp „Chili-Krakauer“: Kopie im Editor anpassen, fertig. Das Original bleibt unberührt.
 
-⏱ MEHRERE TIMER
-Nudeln, Soße und Ofen gleichzeitig: Timer laufen weiter, wenn du weiterblätterst, und klingeln jeder für sich – auch bei gesperrtem iPhone.
+⏱ MEHRERE TIMER GLEICHZEITIG
+Nudeln, Soße und Ofen parallel: Ein gestarteter Timer läuft weiter, wenn du weiterblätterst. Timer anderer Schritte siehst du als Leiste oben, jeder klingelt für sich – auch bei gesperrtem iPhone.
 
 🗣 FREIHÄNDIG KOCHEN
-Lass dir den Schritt vorlesen oder sag einfach „Hey Siri, nächster Schritt in RezeptWerk“ – auch „Schritt vorlesen“ und „Timer starten“ gehen per Siri.
+Lass dir den Schritt vorlesen – auf Wunsch automatisch beim Blättern – oder sag „Hey Siri, nächster Schritt in RezeptWerk“. Auch „Schritt vorlesen“, „vorheriger Schritt“ und „Timer starten“ gehen per Siri.
 
 🔍 SPOTLIGHT
 Tippe auf dem Homescreen in die Suche – deine Rezepte erscheinen mit Bild und öffnen sich direkt.
 
-Dazu aus 2.1: Pökel-Rechner fürs Nasspökeln, Maß-Umrechner (Cups, Unzen, Fahrenheit) und der Link zu kochenmitreima.de.
-
-Gut Wurst!
+Außerdem erklärt die In-App-Anleitung alle neuen Funktionen. Gut Wurst!
 ```
-*(ca. 1.150 Zeichen — Limit 4000)*
-
-> Der Text setzt voraus, dass Version 2.1 nicht separat im App Store
-> erschienen ist — sonst den Absatz „Dazu aus 2.1“ streichen.
+*(ca. 1.550 Zeichen — Limit 4000)*
 
 ### Für Version 2.0
 
@@ -213,6 +235,45 @@ Willkommen bei RezeptWerk! Die erste Version ist da – mit allem fürs Kochen, 
   Pages oder eine einfache Notion-Seite.)
 - **Support-URL:** eine Kontaktseite oder E-Mail genügt.
 - **Datenschutz-„Nutrition Label":** Wähle „Es werden keine Daten erfasst".
-- **Screenshots:** je 1 Set für iPhone (6,7") und iPad (12,9") – zeig
+- **Screenshots:** je 1 Set für iPhone (6,7"/6,9") und iPad (13") – zeig
   Dashboard, ein Wurstrezept mit Fachdaten, den Kochmodus und den Import.
+
+---
+
+## 9. Hinweise für die App-Prüfung (Review Notes, Feld „Notes")
+
+App Review liest am liebsten Englisch — der Text ist fertig zum Einfügen:
+
 ```
+RezeptWerk is a German-language recipe app for cooking, grilling, sausage making and smoking. No account or login is required; the app ships with sample recipes, so every feature can be tested right away.
+
+What is new in 2.5 and how to test it:
+- Siri / App Shortcuts: open any recipe, tap "Kochmodus starten" (start cooking mode), then say "Nächster Schritt in RezeptWerk" ("next step in RezeptWerk"). The shortcuts act on the open cooking mode only; without it Siri replies that the cooking mode is not open. Other phrases: "Vorheriger Schritt in RezeptWerk", "Schritt vorlesen in RezeptWerk", "Timer starten in RezeptWerk".
+- Read aloud: the speaker button in the cooking mode uses the system speech synthesizer (no microphone access, no permission required).
+- Spotlight: recipes are indexed on launch; search for "Krakauer" in iOS search to open the sample recipe.
+- Multiple timers: in cooking mode, start a step timer and swipe to the next step – the timer keeps running and is shown in the strip at the top.
+
+Permissions: local notifications are used only for cooking timers (requested on first timer start); the camera is used only by the document scanner in the import section. iCloud sync is optional and off by default – otherwise all data stays on the device. The app does not collect any data.
+```
+
+---
+
+## 10. Checkliste: Update 2.1 → 2.5 in App Store Connect
+
+1. **Neue Version anlegen:** „2.5“. In Xcode ist `MARKETING_VERSION` schon
+   2.5; die **Build-Nummer** (`CURRENT_PROJECT_VERSION`) vor dem Hochladen
+   erhöhen (z. B. auf 2) — jeder Upload braucht eine höhere Nummer.
+2. **„Neue Funktionen“** aus Abschnitt 6 einfügen.
+3. **Werbetext** (Abschnitt 4) und **Beschreibung** (Abschnitt 5)
+   aktualisieren — beide beschreiben jetzt das dunkle Design.
+4. **Screenshots neu aufnehmen** — Pflicht: Das Design ist komplett
+   dunkel, die alten hellen Screenshots passen nicht mehr. Motive:
+   Dashboard, Käsekrakauer mit Fachdaten, Kochmodus mit laufendem Timer und
+   Timer-Leiste, Wochenplan mit Portionen, Einkaufsliste. Je ein Set
+   iPhone 6,9" (z. B. iPhone 17 Pro Max) und iPad 13".
+5. **App-Datenschutz** bleibt „Es werden keine Daten erfasst“ — Siri,
+   Spotlight und Vorlesen erfassen nichts, es gibt keine neuen
+   Berechtigungen (Mitteilungen und Kamera gab es schon).
+6. **Exportbestimmungen:** keine eigene Verschlüsselung → „Nein“.
+7. **Altersfreigabe, Kategorie, Preis:** unverändert.
+8. **Review-Hinweise** (Abschnitt 9) ins Feld „Notes“ einfügen.
