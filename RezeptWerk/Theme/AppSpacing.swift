@@ -33,11 +33,11 @@ enum AppSpacing {
 enum AppRadius {
 
     /// Karten und große Flächen.
-    static let card: CGFloat = 18
+    static let card: CGFloat = 22
 
     /// Buttons.
     static let button: CGFloat = 14
 
-    /// Kleine Elemente: Thumbnails, Eingabefelder.
-    static let small: CGFloat = 10
+    /// Kleine Elemente: Thumbnails, Eingabefelder, Symbol-Quadrate.
+    static let small: CGFloat = 12
 }

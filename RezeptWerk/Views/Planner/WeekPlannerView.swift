@@ -143,7 +143,7 @@ struct WeekPlannerView: View {
                 if isToday {
                     Text("Heute")
                         .font(AppTypography.caption.weight(.bold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(AppColors.backgroundPrimary)
                         .padding(.horizontal, AppSpacing.s)
                         .padding(.vertical, 3)
                         .background(AppColors.copper, in: Capsule())

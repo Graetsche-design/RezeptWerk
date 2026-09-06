@@ -4,25 +4,27 @@ import UIKit
 /// Zentraler Einstiegspunkt ins Designsystem.
 ///
 /// Hier liegt alles, was die App EINMAL global konfiguriert:
-/// - die Serifenschrift in den Navigationsleisten,
-/// - der warme Standard-Hintergrund für alle Bildschirme.
+/// - die Serifenschrift (und Cremefarbe) in den Navigationsleisten,
+/// - der dunkle Standard-Hintergrund für alle Bildschirme, auf Wunsch mit
+///   Glut-Schein.
 enum AppTheme {
 
     /// Konfiguriert die Navigationsleisten der ganzen App mit der
-    /// Serifenschrift, damit auch System-Titel zum Kochbuch-Look passen.
+    /// Titelschrift, damit auch System-Titel zum Kochbuch-Look passen.
     ///
     /// Hinweis: Das ist eine der zwei bewussten UIKit-Stellen der App —
     /// SwiftUI bietet (Stand iOS 18/26) keine Möglichkeit, die Schrift der
     /// Navigationsleiste direkt zu setzen. Der Aufruf erfolgt einmalig beim
     /// App-Start in `RezeptWerkApp`.
     static func configureNavigationBarAppearance() {
-        let largeTitleFont = UIFont.preferredSerifFont(style: .largeTitle, weight: .bold)
-        let titleFont = UIFont.preferredSerifFont(style: .headline, weight: .semibold)
+        let largeTitleFont = AppTypography.uiDisplayFont(style: .largeTitle, weight: .bold)
+        let titleFont = AppTypography.uiDisplayFont(style: .headline, weight: .semibold)
+        let titleColor = UIColor(AppColors.textPrimary)
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
-        appearance.largeTitleTextAttributes = [.font: largeTitleFont]
-        appearance.titleTextAttributes = [.font: titleFont]
+        appearance.largeTitleTextAttributes = [.font: largeTitleFont, .foregroundColor: titleColor]
+        appearance.titleTextAttributes = [.font: titleFont, .foregroundColor: titleColor]
 
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
@@ -30,32 +32,37 @@ enum AppTheme {
     }
 }
 
-private extension UIFont {
-    /// Liefert die New-York-Serifenschrift im gewünschten Text-Style —
-    /// inklusive Dynamic-Type-Skalierung.
-    static func preferredSerifFont(style: UIFont.TextStyle, weight: UIFont.Weight) -> UIFont {
-        let baseSize = UIFont.preferredFont(forTextStyle: style).pointSize
-        let systemFont = UIFont.systemFont(ofSize: baseSize, weight: weight)
-        guard let serifDescriptor = systemFont.fontDescriptor.withDesign(.serif) else {
-            return systemFont
-        }
-        return UIFont(descriptor: serifDescriptor, size: baseSize)
-    }
-}
-
 // MARK: - Bildschirm-Hintergrund
 
-/// Legt den warmen Pergament-Hintergrund hinter einen kompletten Bildschirm.
+/// Legt den dunklen Grund hinter einen kompletten Bildschirm — optional mit
+/// einem weichen Glut-Schein an einer Ecke (Dashboard, Detailansicht) oder
+/// oben (Kochmodus).
 private struct ScreenBackgroundModifier: ViewModifier {
+    var glowAt: UnitPoint?
+
     func body(content: Content) -> some View {
         content
-            .background(AppColors.backgroundPrimary.ignoresSafeArea())
+            .background {
+                ZStack {
+                    AppColors.backgroundPrimary
+                    if let glowAt {
+                        RadialGradient(
+                            colors: [AppColors.copper.opacity(0.32), .clear],
+                            center: glowAt,
+                            startRadius: 0,
+                            endRadius: 340
+                        )
+                    }
+                }
+                .ignoresSafeArea()
+            }
     }
 }
 
 extension View {
-    /// Standard-Hintergrund für alle Bildschirme der App.
-    func screenBackground() -> some View {
-        modifier(ScreenBackgroundModifier())
+    /// Standard-Hintergrund für alle Bildschirme; `glowAt` setzt den
+    /// Glut-Schein, z. B. `.topTrailing` auf dem Dashboard.
+    func screenBackground(glowAt: UnitPoint? = nil) -> some View {
+        modifier(ScreenBackgroundModifier(glowAt: glowAt))
     }
 }

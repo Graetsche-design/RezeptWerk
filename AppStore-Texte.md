@@ -111,7 +111,10 @@ Guten Appetit – und viel Freude beim Grillen, Wursten und Räuchern!
 ### Für Version 2.5
 
 ```
-Version 2.5 denkt in Portionen – und hört aufs Wort:
+Version 2.5 sieht neu aus, denkt in Portionen – und hört aufs Wort:
+
+🌑 NEUES DESIGN „DUNKLE GLUT“
+RezeptWerk ist jetzt durchgehend dunkel – Anthrazit wie Räucherholz, dazu glühendes Kupfer. Blendfrei in der Küche, und jede Kategorie hat ihren eigenen Farbton.
 
 👨‍👩‍👧‍👦 PORTIONEN ÜBERALL
 Beim Einplanen im Wochenplan legst du fest, für wie viele du kochst. Kochmodus und Einkaufsliste rechnen automatisch mit – und der Portionsrechner im Rezept wirkt jetzt bis in die Einkaufsliste.

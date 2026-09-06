@@ -29,7 +29,7 @@ struct HelpTopicDetailView: View {
                 .font(.system(size: 24, weight: .medium))
                 .foregroundStyle(AppColors.copper)
                 .frame(width: 52, height: 52)
-                .background(AppColors.wood.opacity(0.16), in: Circle())
+                .background(AppColors.copper.opacity(0.18), in: Circle())
 
             Text(topic.title)
                 .font(AppTypography.recipeTitle)

@@ -1,53 +1,78 @@
 import SwiftUI
 
 /// Die zwei großen Schnellzugriffe auf dem Dashboard:
-/// „Neues Rezept“ und „Importieren“.
+/// „Neues Rezept“ als glühende Kupfer-Kachel, „Importieren“ als dunkle
+/// Kachel mit Kupfer-Kontur.
 struct QuickActionButtons: View {
     let onNewRecipe: () -> Void
     let onImport: () -> Void
 
     var body: some View {
         HStack(spacing: AppSpacing.m) {
-            actionCard(
-                icon: "square.and.pencil",
-                title: "Neues Rezept",
-                subtitle: "Selbst anlegen",
-                action: onNewRecipe
-            )
-            actionCard(
-                icon: "square.and.arrow.down",
-                title: "Importieren",
-                subtitle: "Foto, PDF, Web …",
-                action: onImport
-            )
+            Button(action: onNewRecipe) {
+                tile(
+                    icon: "square.and.pencil",
+                    title: "Neues Rezept",
+                    subtitle: "Selbst anlegen",
+                    isPrimary: true
+                )
+            }
+            .buttonStyle(.plain)
+
+            Button(action: onImport) {
+                tile(
+                    icon: "square.and.arrow.down",
+                    title: "Importieren",
+                    subtitle: "Foto, PDF, Web …",
+                    isPrimary: false
+                )
+            }
+            .buttonStyle(.plain)
         }
     }
 
-    private func actionCard(
-        icon: String,
-        title: String,
-        subtitle: String,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: AppSpacing.s) {
+    private func tile(icon: String, title: String, subtitle: String, isPrimary: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            if isPrimary {
                 Image(systemName: icon)
-                    .font(.system(size: 20, weight: .medium))
+                    .font(.system(size: 19, weight: .medium))
                     .foregroundStyle(.white)
-                    .frame(width: 42, height: 42)
-                    .background(AppColors.copperGradient, in: Circle())
-
-                Text(title)
-                    .font(AppTypography.cardTitle)
-                    .foregroundStyle(AppColors.textPrimary)
-
-                Text(subtitle)
-                    .font(AppTypography.caption)
-                    .foregroundStyle(AppColors.textSecondary)
+                    .frame(width: 40, height: 40)
+                    .background(.white.opacity(0.22), in: Circle())
+            } else {
+                IconBadge(systemName: icon, size: 40)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .card(padding: AppSpacing.l)
+
+            Spacer(minLength: AppSpacing.m)
+
+            Text(title)
+                .font(AppTypography.cardTitle)
+                .foregroundStyle(isPrimary ? Color.white : AppColors.textPrimary)
+
+            Text(subtitle)
+                .font(AppTypography.caption)
+                .foregroundStyle(isPrimary ? Color.white.opacity(0.85) : AppColors.textSecondary)
+                .padding(.top, 3)
         }
-        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(minHeight: 108)
+        .padding(AppSpacing.l)
+        .background(
+            isPrimary
+                ? AnyShapeStyle(AppColors.copperGradient)
+                : AnyShapeStyle(AppColors.backgroundElevated)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: AppRadius.card, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: AppRadius.card, style: .continuous)
+                .strokeBorder(
+                    isPrimary ? Color.clear : AppColors.copper.opacity(0.4),
+                    lineWidth: 1
+                )
+        )
+        .shadow(
+            color: isPrimary ? AppColors.glowShadow : AppColors.cardShadow,
+            radius: 14, x: 0, y: 8
+        )
     }
 }

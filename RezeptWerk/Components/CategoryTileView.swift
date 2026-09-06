@@ -1,16 +1,17 @@
 import SwiftUI
 
-/// Kachel einer Kategorie — Icon im Holzkreis, Name, Rezeptanzahl.
+/// Kachel einer Kategorie — Symbol im Kreis in der Farbe der Kategorie,
+/// Name, Rezeptanzahl.
 struct CategoryTileView: View {
     let category: RecipeCategory
 
     var body: some View {
         HStack(spacing: AppSpacing.m) {
-            Image(systemName: category.iconName)
-                .font(.system(size: 20, weight: .medium))
-                .foregroundStyle(AppColors.copper)
-                .frame(width: 46, height: 46)
-                .background(AppColors.wood.opacity(0.16), in: Circle())
+            IconBadge(
+                systemName: category.iconName,
+                size: 46,
+                tint: AppColors.categoryTint(iconName: category.iconName)
+            )
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(category.name)

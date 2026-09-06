@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Begrüßung auf dem Dashboard — Tageszeit-abhängig, mit Datum,
-/// im ruhigen Kochbuch-Stil.
+/// Begrüßung auf dem Dashboard — Tageszeit-abhängig, mit Datum; der Gruß
+/// glüht im Kupfer-Gold-Verlauf.
 struct DashboardGreetingHeader: View {
 
     private var greeting: String {
@@ -23,12 +23,12 @@ struct DashboardGreetingHeader: View {
             Text(dateText)
                 .font(AppTypography.label)
                 .textCase(.uppercase)
-                .kerning(1.2)
+                .kerning(1.4)
                 .foregroundStyle(AppColors.textSecondary)
 
             Text(greeting)
                 .font(AppTypography.screenTitle)
-                .foregroundStyle(AppColors.textPrimary)
+                .foregroundStyle(AppColors.titleGradient)
 
             Text("Was kochen wir heute?")
                 .font(AppTypography.secondary)

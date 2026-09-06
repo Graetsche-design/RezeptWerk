@@ -7,6 +7,13 @@ App Store Connect stehen in `AppStore-Texte.md`.
 
 **Neue Funktionen**
 
+- **Neues Design „Dunkle Glut“**: Die App ist jetzt durchgehend dunkel —
+  Anthrazit wie Räucherholz, dunkle Karten mit feiner Kontur, Creme-Text
+  und glühendes Kupfer als Akzent (Verläufe mit Leuchtschatten, Glut-Schein
+  im Hintergrund). Jede Kategorie hat ihren eigenen Farbton, Symbole
+  sitzen in getönten Kreisen, das Dashboard zeigt zwei große
+  Schnellzugriffe und die Werkzeuge als kompakte Kacheln, der laufende
+  Timer glüht. Die Einstellung „Erscheinungsbild“ entfällt.
 - **Portionen im Wochenplan**: Beim Einplanen lässt sich die Portionszahl
   einstellen — „wie im Rezept“ oder eine feste Zahl, die gemerkt wird,
   weil sie meist dem Haushalt entspricht. Am geplanten Gericht steht die
@@ -44,6 +51,12 @@ App Store Connect stehen in `AppStore-Texte.md`.
 
 **Technik**
 
+- Design „Dunkle Glut“ zentral: Asset-Katalog (Hell = Dunkel),
+  `AppColors` (Verläufe, `categoryTint`, Farbtöne), `CardStyles`
+  (`glowCard`), `ButtonStyles`, `AppTheme` (`screenBackground(glowAt:)`,
+  Creme-Titel in der Navigationsleiste), neue Komponente `IconBadge`;
+  `RootView` erzwingt `preferredColorScheme(.dark)`. `AppTypography` nutzt
+  „Instrument Serif“ automatisch, sobald die Schrift im Bundle liegt.
 - `PlannedMeal.servings` (0 = wie im Rezept; additive Migration) mit
   `effectiveServings`/`scaleFactor`; `Recipe.scaleFactor(forServings:)`
   als gemeinsame Umrechnung für Portionsrechner, Kochmodus und

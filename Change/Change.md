@@ -2,6 +2,11 @@ Version 2.5 Coming soon
 
 **Neue Funktionen**
 
+- **Neues Design „Dunkle Glut“**: Die App ist jetzt durchgehend dunkel —
+    Anthrazit wie Räucherholz, dunkle Karten, Creme-Text und glühendes
+    Kupfer als Akzent. Jede Kategorie hat ihren eigenen Farbton, das
+    Dashboard zeigt zwei große Schnellzugriffe und die Werkzeuge als
+    kompakte Kacheln. Blendfrei in der Küche, ohne Umschalten.
 - **Portionen im Wochenplan**: Beim Einplanen die Portionszahl einstellen
     („wie im Rezept“ oder eine feste Zahl, die gemerkt wird); am geplanten
     Gericht steht sie in einer Kapsel und lässt sich antippen und ändern.

@@ -80,7 +80,7 @@ struct ImportHubView: View {
                 .font(.system(size: 22, weight: .medium))
                 .foregroundStyle(AppColors.copper)
                 .frame(width: 52, height: 52)
-                .background(AppColors.wood.opacity(0.16), in: Circle())
+                .background(AppColors.copper.opacity(0.18), in: Circle())
 
             VStack(alignment: .leading, spacing: AppSpacing.xs) {
                 Text(title)

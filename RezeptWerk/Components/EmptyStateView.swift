@@ -12,7 +12,7 @@ struct EmptyStateView: View {
         VStack(spacing: AppSpacing.l) {
             Image(systemName: icon)
                 .font(.system(size: 44, weight: .light))
-                .foregroundStyle(AppColors.wood.opacity(0.7))
+                .foregroundStyle(AppColors.copper.opacity(0.7))
 
             VStack(spacing: AppSpacing.s) {
                 Text(title)

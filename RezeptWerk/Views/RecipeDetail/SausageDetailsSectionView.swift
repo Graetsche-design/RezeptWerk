@@ -104,11 +104,11 @@ struct SausageDetailsSectionView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppSpacing.l)
-        .background(AppColors.copper.opacity(0.10))
+        .background(AppColors.copper.opacity(0.14))
         .clipShape(RoundedRectangle(cornerRadius: AppRadius.card, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: AppRadius.card, style: .continuous)
-                .strokeBorder(AppColors.copper.opacity(0.35), lineWidth: 1)
+                .strokeBorder(AppColors.copper.opacity(0.4), lineWidth: 1)
         )
     }
 }

@@ -76,15 +76,7 @@ struct StepTimerView: View {
 
             Spacer(minLength: 0)
         }
-        .padding(AppSpacing.l)
-        .background(AppColors.backgroundElevated)
-        .clipShape(RoundedRectangle(cornerRadius: AppRadius.card, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: AppRadius.card, style: .continuous)
-                .strokeBorder(
-                    viewModel.timerDidFinish ? AppColors.copper : AppColors.separator,
-                    lineWidth: viewModel.timerDidFinish ? 2 : 1
-                )
-        )
+        // Läuft der Timer oder ist er abgelaufen, glüht die Karte.
+        .glowCard(isActive: viewModel.timerIsRunning || viewModel.timerDidFinish)
     }
 }
