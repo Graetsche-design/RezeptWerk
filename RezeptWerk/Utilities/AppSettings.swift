@@ -15,6 +15,9 @@ enum SettingsKeys {
     /// (Standard: aus). Der Kochmodus hält den Bildschirm immer wach —
     /// unabhängig von dieser Einstellung.
     static let keepScreenOn = "settings.keepScreenOn"
+    /// Kochmodus: jeden neuen Schritt beim Blättern automatisch vorlesen
+    /// (Standard: aus).
+    static let cookingAutoRead = "settings.cookingAutoRead"
     /// Gemerkte Portionszahl beim Einplanen im Wochenplan
     /// (0 = wie im Rezept).
     static let plannerServings = "planner.servings"

@@ -1,3 +1,4 @@
+import AppIntents
 import SwiftUI
 import SwiftData
 
@@ -38,6 +39,10 @@ struct RezeptWerkApp: App {
         if iCloudEnabled {
             CloudSyncMonitor.shared.start(container: container)
         }
+
+        // Siri-Kurzbefehle für den Kochmodus beim System anmelden
+        // (siehe `CookingIntents`).
+        RezeptWerkShortcuts.updateAppShortcutParameters()
     }
 
     var body: some Scene {

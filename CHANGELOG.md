@@ -30,8 +30,13 @@ App Store Connect stehen in `AppStore-Texte.md`.
   Timer anderer Schritte erscheinen als Leiste oben (antippen springt zum
   Schritt), jeder klingelt für sich, auch bei gesperrtem Gerät. Pausierte
   Timer behalten ihre Restzeit.
-- **Hilfe aktualisiert**: Rezept anlegen, Kochmodus, Wochenplan und
-  Einkaufsliste erklären die neuen Möglichkeiten.
+- **Freihändig kochen**: Das Lautsprecher-Symbol im Kochmodus liest den
+  aktuellen Schritt vor; auf Wunsch liest die App jeden neuen Schritt
+  automatisch (Einstellungen → Kochmodus). Und Siri steuert den offenen
+  Kochmodus: „Nächster Schritt in RezeptWerk“, „Vorheriger Schritt …“,
+  „Schritt vorlesen …“, „Timer starten …“ — Siri liest den Schritt vor.
+- **Hilfe aktualisiert**: Rezept anlegen, Kochmodus, Wochenplan,
+  Einkaufsliste und Einstellungen erklären die neuen Möglichkeiten.
 
 **Technik**
 
@@ -49,8 +54,16 @@ App Store Connect stehen in `AppStore-Texte.md`.
   die bisherigen Zugriffe (`timerRemainingSeconds`, `toggleTimer()` …)
   bleiben als Stellvertreter für den aktuellen Schritt erhalten.
   `TimerNotificationService` plant je Schritt eine eigene Mitteilung.
-- Unit-Tests von 47 auf 62 erweitert (Portionsumrechnung, Wochenplan-
-  Portionen, Teilen-Text, Duplizieren, parallele Timer).
+- `SpeechService` (AVSpeechSynthesizer, deutsche Stimme, über die
+  Medien-Lautstärke mit Ducking). Siri-Kurzbefehle als App Intents in
+  `App/CookingIntents.swift` (`AppShortcutsProvider`); sie wirken über
+  `ActiveCookingSession` auf den geöffneten Kochmodus, `CookingSpeech`
+  baut die gesprochenen Texte. Die Info.plist weist Deutsch als
+  App-Sprache aus (`CFBundleLocalizations`), damit Siri die deutschen
+  Sätze zuordnet.
+- Unit-Tests von 47 auf 68 erweitert (Portionsumrechnung, Wochenplan-
+  Portionen, Teilen-Text, Duplizieren, parallele Timer, Siri-Steuerung
+  und Sprachtexte).
 
 ## Version 2.1 (Juli 2026)
 

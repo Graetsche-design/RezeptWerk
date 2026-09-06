@@ -5,7 +5,10 @@ import UIKit
 /// Der Kochmodus: Vollbild, ruhig, dunkel — gemacht für die Arbeit am Herd.
 ///
 /// - Ein Schritt pro Seite, sehr große Schrift (Größe in den Einstellungen).
-/// - Wischen oder große Buttons zum Blättern.
+/// - Wischen oder große Buttons zum Blättern — oder freihändig per Siri
+///   („Nächster Schritt in RezeptWerk“, siehe `CookingIntents`).
+/// - Vorlesen des Schritts über das Lautsprecher-Symbol, auf Wunsch
+///   automatisch bei jedem Schrittwechsel.
 /// - Zutaten jederzeit als Blatt von unten.
 /// - Timer, wenn der Schritt einen hat — mehrere laufen parallel weiter,
 ///   auch beim Blättern; die Leiste oben zeigt die Timer anderer Schritte.
@@ -30,6 +33,10 @@ struct CookingModeView: View {
 
     @AppStorage(SettingsKeys.keepScreenOn)
     private var keepScreenOn = false
+
+    /// Jeden neuen Schritt automatisch vorlesen (Einstellungen → Kochmodus).
+    @AppStorage(SettingsKeys.cookingAutoRead)
+    private var autoRead = false
 
     /// - Parameter servings: Portionen, für die gekocht wird (Portionsrechner
     ///   oder Wochenplan). `nil` oder 0 = wie im Rezept.
@@ -81,6 +88,11 @@ struct CookingModeView: View {
             // Bildschirm wachhalten — die zweite bewusste UIKit-Stelle
             // der App (SwiftUI bietet dafür keine eigene API).
             UIApplication.shared.isIdleTimerDisabled = true
+            // Für Siri-Kurzbefehle („Nächster Schritt in RezeptWerk“).
+            ActiveCookingSession.shared.register(viewModel)
+            if autoRead {
+                readCurrentStep()
+            }
         }
         .onDisappear {
             // Zurück auf die allgemeine Einstellung (nicht stumpf AUS) —
@@ -88,7 +100,24 @@ struct CookingModeView: View {
             // „Bildschirm immer an“ aus den Einstellungen aushebeln.
             UIApplication.shared.isIdleTimerDisabled = keepScreenOn
             viewModel.pauseAllTimers()
+            SpeechService.shared.stop()
+            ActiveCookingSession.shared.unregister(viewModel)
         }
+        .onChange(of: viewModel.stepIndex) { _, _ in
+            // Hat Siri geblättert, spricht Siri den Schritt selbst.
+            if ActiveCookingSession.shared.takeSuppressAutoRead() { return }
+            if autoRead {
+                readCurrentStep()
+            } else {
+                // Eine laufende Ansage gehört zum alten Schritt.
+                SpeechService.shared.stop()
+            }
+        }
+    }
+
+    /// Liest den aktuellen Schritt (oder den Abschluss) vor.
+    private func readCurrentStep() {
+        SpeechService.shared.speak(CookingSpeech.announcement(for: viewModel))
     }
 
     // MARK: Timer-Leiste
@@ -160,6 +189,22 @@ struct CookingModeView: View {
                 .lineLimit(1)
 
             Spacer()
+
+            // Vorlesen — nochmal tippen stoppt.
+            Button {
+                SpeechService.shared.toggle(CookingSpeech.announcement(for: viewModel))
+            } label: {
+                let speaking = SpeechService.shared.isSpeaking
+                Image(systemName: speaking ? "speaker.wave.2.fill" : "speaker.wave.2")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(speaking ? .white : AppColors.copper)
+                    .frame(width: 44, height: 44)
+                    .background(
+                        speaking ? AnyShapeStyle(AppColors.copper) : AnyShapeStyle(AppColors.backgroundElevated),
+                        in: Circle()
+                    )
+            }
+            .accessibilityLabel(SpeechService.shared.isSpeaking ? "Vorlesen stoppen" : "Schritt vorlesen")
 
             Button {
                 showIngredients = true

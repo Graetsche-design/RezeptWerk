@@ -44,7 +44,10 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   parallel** (laufen beim Blättern weiter, eine Leiste zeigt die Timer
   anderer Schritte) und jeder klingelt auch **außerhalb der App** (lokale
   Mitteilung bei Hintergrund/Sperrbildschirm), Bildschirm bleibt an,
-  Abschluss-Seite mit Bewertung und optionaler Koch-Notiz.
+  Abschluss-Seite mit Bewertung und optionaler Koch-Notiz. **Freihändig**:
+  Schritt vorlesen per Lautsprecher-Symbol (oder automatisch bei jedem
+  Schrittwechsel) und Siri-Kurzbefehle („Nächster Schritt in RezeptWerk",
+  „Schritt vorlesen …", „Timer starten …").
 - **Foto je Zubereitungsschritt**: im Editor pro Schritt wählbar
   (komprimiert, extern gespeichert), sichtbar in Detailansicht und
   Kochmodus, im Backup enthalten.
@@ -145,7 +148,7 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 | Minimum | iOS / iPadOS 18 |
 | Xcode | 16 oder neuer (entwickelt & getestet mit 26.5) |
 | Abhängigkeiten | **Keine** — nur Apple-Frameworks |
-| Frameworks | SwiftUI, SwiftData, PhotosUI, Vision (OCR), VisionKit (Scanner), PDFKit, UniformTypeIdentifiers |
+| Frameworks | SwiftUI, SwiftData, PhotosUI, Vision (OCR), VisionKit (Scanner), PDFKit, UniformTypeIdentifiers, AVFoundation (Sprachausgabe), AppIntents (Siri-Kurzbefehle) |
 | Berechtigungen | Nur Kamera (Dokumentenscanner); Fotoauswahl braucht keine |
 
 Es gibt genau **zwei bewusste UIKit-Stellen** (kommentiert):
@@ -223,7 +226,8 @@ Rezepteapp/
     ├── App/                      RezeptWerkApp (@main, DB, Seeding) ·
     │                             RootView (Tabs/Sidebar) · AppTab ·
     │                             ModelContainerFactory (lokal/iCloud) ·
-    │                             WidgetPlanSync (Schnappschuss fürs Widget)
+    │                             WidgetPlanSync (Schnappschuss fürs Widget) ·
+    │                             ActiveCookingSession · CookingIntents (Siri)
     ├── Models/                   10 SwiftData-Modelle + Difficulty + SmokingMethod
     ├── ViewModels/               RecipeDraft · ImportViewModel · CookingModeViewModel
     ├── Views/
@@ -243,6 +247,7 @@ Rezepteapp/
     │   └── Settings/             SettingsView
     ├── Services/
     │   ├── Announcement/         AnnouncementService (Meldung an alle Nutzer)
+    │   ├── Speech/               SpeechService (Vorlesen im Kochmodus)
     │   ├── Share/                RecipeShareService (Rezept-Tausch .rezeptwerk)
     │   ├── Notifications/        TimerNotificationService (Timer klingelt überall)
     │   ├── Backup/               BackupModels · BackupService · BackupFileDocument

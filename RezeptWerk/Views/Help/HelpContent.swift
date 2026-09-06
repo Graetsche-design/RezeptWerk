@@ -134,6 +134,11 @@ enum HelpContent {
                 "Der Bildschirm bleibt an, solange der Kochmodus offen ist.",
                 "Am Ende kannst du das Rezept gleich bewerten.",
             ]),
+            .heading("Freihändig: Vorlesen & Siri"),
+            .bullets([
+                "Das Lautsprecher-Symbol oben liest den aktuellen Schritt vor – nochmal tippen stoppt. Unter Einstellungen → Kochmodus kannst du einschalten, dass jeder neue Schritt automatisch vorgelesen wird.",
+                "Mit Siri, ohne das Gerät anzufassen: „Nächster Schritt in RezeptWerk“, „Vorheriger Schritt in RezeptWerk“, „Schritt vorlesen in RezeptWerk“ und „Timer starten in RezeptWerk“. Siri antwortet und liest den Schritt vor – solange der Kochmodus geöffnet ist.",
+            ]),
             .tip("Die Schriftgröße im Kochmodus stellst du unter Einstellungen → Kochmodus ein (Normal, Groß, Sehr groß)."),
         ]
     )
@@ -295,7 +300,7 @@ enum HelpContent {
         blocks: [
             .bullets([
                 "Erscheinungsbild: Automatisch, Hell oder Dunkel.",
-                "Kochmodus: Schriftgröße (Normal, Groß, Sehr groß) mit Live-Vorschau.",
+                "Kochmodus: Schriftgröße (Normal, Groß, Sehr groß) mit Live-Vorschau und „Schritte automatisch vorlesen“.",
                 "iCloud-Synchronisierung und Backup (siehe eigene Themen).",
                 "Deine Daten: Speicherort, Rezeptanzahl, Beispielrezepte neu laden.",
                 "Import-Tipps und App-Info.",
