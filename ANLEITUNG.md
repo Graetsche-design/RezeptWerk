@@ -200,6 +200,41 @@ Im Editor hat jeder Schritt jetzt einen Knopf **„Foto zum Schritt“**.
 Das Bild erscheint in der Detailansicht und groß im Kochmodus —
 praktisch für „so muss der Teig aussehen“.
 
+### Neu in Version 2.5: Portionen, Timer, Siri & Spotlight
+
+**Portionen im Wochenplan:**
+1. Wochenplan → **„Gericht planen“** → oben die Portionen einstellen
+   („wie im Rezept“ oder eine feste Zahl — die merkt sich die App).
+2. Am geplanten Gericht zeigt eine kleine Kapsel die Zahl; antippen
+   ändert sie.
+3. Öffnest du das Gericht aus dem Plan, steht der Portionsrechner schon
+   richtig — Kochmodus und Einkaufsliste rechnen damit.
+
+**Einkaufsliste teilen:** In der Einkaufsliste oben das Teilen-Symbol
+antippen — die offenen Einträge gehen als Text an WhatsApp, Nachrichten,
+Mail oder Erinnerungen.
+
+**Rezept duplizieren:** Rezept öffnen → **Mehr (…) → Duplizieren** — der
+Editor öffnet sich mit einer Kopie; anpassen, speichern, fertig. Das
+Original bleibt unberührt.
+
+**Mehrere Timer:** Timer starten und einfach weiterblättern — er läuft
+weiter. Timer anderer Schritte siehst du als Leiste oben im Kochmodus;
+antippen springt zum Schritt, und jeder klingelt für sich.
+
+**Vorlesen & Siri:**
+- Das Lautsprecher-Symbol oben im Kochmodus liest den Schritt vor
+  (nochmal tippen stoppt). Unter **Einstellungen → Kochmodus** gibt es
+  „Schritte automatisch vorlesen“.
+- Siri: „Nächster Schritt in RezeptWerk“, „Vorheriger Schritt in
+  RezeptWerk“, „Schritt vorlesen in RezeptWerk“, „Timer starten in
+  RezeptWerk“ — funktioniert, solange der Kochmodus offen ist. Siri kennt
+  die Befehle, sobald die App einmal auf dem Gerät gestartet wurde.
+
+**Spotlight:** Auf dem Homescreen nach unten wischen und einen
+Rezeptnamen, eine Zutat oder einen Tag eintippen — der Treffer öffnet
+das Rezept direkt.
+
 ### Git & Tests (für dich als Entwickler)
 
 Seit Version 2.0 hat das Projekt eine **Versionsverwaltung (Git)**:

@@ -1,7 +1,32 @@
-Version 2.1 Coming soon
+Version 2.5 Coming soon
 
 **Neue Funktionen**
 
+- **Portionen im Wochenplan**: Beim Einplanen die Portionszahl einstellen
+    („wie im Rezept“ oder eine feste Zahl, die gemerkt wird); am geplanten
+    Gericht steht sie in einer Kapsel und lässt sich antippen und ändern.
+    Wer ein Gericht aus dem Plan öffnet, bekommt den Portionsrechner gleich
+    passend eingestellt.
+- **Portionen wirken jetzt überall**: Kochmodus (Zutaten-Blatt) und „Zur
+    Einkaufsliste“ rechnen mit den Portionen aus dem Portionsrechner; „Aus
+    Wochenplan übernehmen“ rechnet jedes Gericht auf seine geplanten
+    Portionen um.
+- **Einkaufsliste teilen**: Das Teilen-Symbol schickt die offenen Einträge
+    als Text an WhatsApp, Nachrichten, Mail oder die Erinnerungen-App.
+- **Rezept duplizieren**: „Mehr → Duplizieren“ öffnet den Editor mit einer
+    Kopie samt Bildern, Tags und Fachdaten — für Varianten wie
+    „Chili-Krakauer“ aus „Käsekrakauer“. Bewertung und Favorit beginnen bei
+    null, das Original bleibt unberührt.
+- **Mehrere Timer gleichzeitig** im Kochmodus: Ein gestarteter Timer läuft
+    weiter, wenn du weiterblätterst — Nudeln, Soße und Ofen parallel. Timer
+    anderer Schritte erscheinen als Leiste oben (antippen springt zum
+    Schritt), jeder klingelt für sich, auch bei gesperrtem Gerät.
+- **Freihändig kochen**: Das Lautsprecher-Symbol im Kochmodus liest den
+    Schritt vor, auf Wunsch automatisch bei jedem Schrittwechsel. Und Siri
+    steuert den offenen Kochmodus: „Nächster Schritt in RezeptWerk“,
+    „Vorheriger Schritt …“, „Schritt vorlesen …“, „Timer starten …“.
+- **Spotlight**: Rezepte über die iOS-Suche finden — Titel, Kategorie, Tags
+    und Zutaten, mit Titelbild; ein Tipp öffnet das Rezept direkt.
 - **Pökel-Rechner** (Werkzeuge): fürs Nasspökeln — Fleischgewicht und
     Wassermenge eingeben (mit 40-%-Vorschlag), Lakenstärke per Schnellwahl
     (6/8/10/12 %) oder frei, optional Zucker. Ergebnis: NPS-Menge gesamt
@@ -16,8 +41,9 @@ Version 2.1 Coming soon
 - **„Kochen mit ReiMa“ verlinkt**: neue Karte auf der Startseite und
     eigener Bereich in den Einstellungen mit kurzer Vorstellung der
     Webseite — ein Tipp öffnet kochenmitreima.de im Browser.
-- **Hilfe-Thema „Werkzeuge“**: Die In-App-Anleitung erklärt jetzt alle
-    vier Werkzeuge (auch Kerntemperaturen und Wurst-Rechner).
+- **Hilfe aktualisiert**: Die In-App-Anleitung erklärt alle neuen
+    Möglichkeiten — vom Wochenplan mit Portionen bis Siri und Spotlight —
+    und alle vier Werkzeuge (auch Kerntemperaturen und Wurst-Rechner).
 - **Timer-Mitteilungen**: Der Kochmodus-Timer klingelt jetzt auch, wenn
     die App im Hintergrund ist oder das iPhone gesperrt wurde (lokale
     Mitteilung mit Ton; Erlaubnis wird beim ersten Timer-Start erfragt).
