@@ -130,6 +130,7 @@ enum HelpContent {
                 "Weiter und Zurück über die Buttons oder durch Wischen.",
                 "Das Listen-Symbol oben rechts zeigt die Zutaten zum Abhaken – mit den Mengen für die Portionen, die du vorher im Portionsrechner eingestellt hast (oder die im Wochenplan zum Gericht gehören).",
                 "Hat ein Schritt einen Timer, erscheint er automatisch – mit Start/Pause und Signal am Ende.",
+                "Mehrere Timer gleichzeitig: Blättere ruhig weiter – ein gestarteter Timer läuft weiter. Timer anderer Schritte siehst du als Leiste oben (antippen springt zum Schritt); jeder klingelt für sich, auch bei gesperrtem Gerät.",
                 "Der Bildschirm bleibt an, solange der Kochmodus offen ist.",
                 "Am Ende kannst du das Rezept gleich bewerten.",
             ]),

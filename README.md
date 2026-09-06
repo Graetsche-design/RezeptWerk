@@ -40,10 +40,11 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 - **Kochmodus**: Vollbild, immer dunkel (blendfrei am Herd), ein Schritt
   pro Seite (mit Schritt-Foto, falls vorhanden), einstellbare Großschrift,
   abhakbare Zutaten (Mengen für die gewählten Portionen aus Portionsrechner
-  oder Wochenplan), Timer mit Fortschrittsring und Haptik — der auch
-  **außerhalb der App klingelt** (lokale Mitteilung bei Hintergrund/
-  Sperrbildschirm), Bildschirm bleibt an, Abschluss-Seite mit Bewertung
-  und optionaler Koch-Notiz.
+  oder Wochenplan), Timer mit Fortschrittsring und Haptik — **mehrere
+  parallel** (laufen beim Blättern weiter, eine Leiste zeigt die Timer
+  anderer Schritte) und jeder klingelt auch **außerhalb der App** (lokale
+  Mitteilung bei Hintergrund/Sperrbildschirm), Bildschirm bleibt an,
+  Abschluss-Seite mit Bewertung und optionaler Koch-Notiz.
 - **Foto je Zubereitungsschritt**: im Editor pro Schritt wählbar
   (komprimiert, extern gespeichert), sichtbar in Detailansicht und
   Kochmodus, im Backup enthalten.

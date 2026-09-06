@@ -25,6 +25,11 @@ App Store Connect stehen in `AppStore-Texte.md`.
   Bildern, Tags und Fachdaten — für Varianten wie „Chili-Krakauer“ aus
   „Käsekrakauer“. Bewertung und Favorit beginnen bei null, das Original
   bleibt unberührt.
+- **Mehrere Timer gleichzeitig** im Kochmodus: Ein gestarteter Timer
+  läuft weiter, wenn du weiterblätterst — Nudeln, Soße und Ofen parallel.
+  Timer anderer Schritte erscheinen als Leiste oben (antippen springt zum
+  Schritt), jeder klingelt für sich, auch bei gesperrtem Gerät. Pausierte
+  Timer behalten ihre Restzeit.
 - **Hilfe aktualisiert**: Rezept anlegen, Kochmodus, Wochenplan und
   Einkaufsliste erklären die neuen Möglichkeiten.
 
@@ -39,8 +44,13 @@ App Store Connect stehen in `AppStore-Texte.md`.
 - Aus dem Wochenplan wird über den Planeintrag navigiert
   (`navigationDestination(for: PlannedMeal.self)` in Dashboard- und
   iPad-Stack), damit die Detailansicht die geplanten Portionen kennt.
-- Unit-Tests von 47 auf 58 erweitert (Portionsumrechnung, Wochenplan-
-  Portionen, Teilen-Text, Duplizieren).
+- Kochmodus-Timer als `StepTimer` je Schritt
+  (`CookingModeViewModel.timers`) mit einer gemeinsamen Tick-Schleife;
+  die bisherigen Zugriffe (`timerRemainingSeconds`, `toggleTimer()` …)
+  bleiben als Stellvertreter für den aktuellen Schritt erhalten.
+  `TimerNotificationService` plant je Schritt eine eigene Mitteilung.
+- Unit-Tests von 47 auf 62 erweitert (Portionsumrechnung, Wochenplan-
+  Portionen, Teilen-Text, Duplizieren, parallele Timer).
 
 ## Version 2.1 (Juli 2026)
 

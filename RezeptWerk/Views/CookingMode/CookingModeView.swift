@@ -7,7 +7,8 @@ import UIKit
 /// - Ein Schritt pro Seite, sehr große Schrift (Größe in den Einstellungen).
 /// - Wischen oder große Buttons zum Blättern.
 /// - Zutaten jederzeit als Blatt von unten.
-/// - Timer, wenn der Schritt einen hat.
+/// - Timer, wenn der Schritt einen hat — mehrere laufen parallel weiter,
+///   auch beim Blättern; die Leiste oben zeigt die Timer anderer Schritte.
 /// - Der Bildschirm bleibt an, solange der Kochmodus offen ist.
 struct CookingModeView: View {
 
@@ -44,6 +45,11 @@ struct CookingModeView: View {
         VStack(spacing: 0) {
             header
             progressBar
+
+            if !viewModel.otherActiveTimers.isEmpty {
+                activeTimersStrip
+            }
+
             stepPager
 
             if viewModel.hasTimer && !viewModel.isOnFinishPage {
@@ -66,9 +72,9 @@ struct CookingModeView: View {
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
-        // Haptisches Signal, wenn der Timer abläuft.
-        .sensoryFeedback(trigger: viewModel.timerDidFinish) { _, didFinish in
-            didFinish ? .success : nil
+        // Haptisches Signal, wenn irgendein Timer abläuft.
+        .sensoryFeedback(trigger: viewModel.finishedTimerCount) { old, new in
+            new > old ? .success : nil
         }
         .saveErrorAlert($saveFailed)
         .onAppear {
@@ -81,8 +87,54 @@ struct CookingModeView: View {
             // sonst würde das Schließen des Kochmodus den Schalter
             // „Bildschirm immer an“ aus den Einstellungen aushebeln.
             UIApplication.shared.isIdleTimerDisabled = keepScreenOn
-            viewModel.pauseTimer()
+            viewModel.pauseAllTimers()
         }
+    }
+
+    // MARK: Timer-Leiste
+
+    /// Timer anderer Schritte, die laufen oder gerade abgelaufen sind —
+    /// antippen springt zum Schritt.
+    private var activeTimersStrip: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: AppSpacing.s) {
+                ForEach(viewModel.otherActiveTimers) { timer in
+                    Button {
+                        viewModel.stepIndex = timer.stepIndex
+                    } label: {
+                        HStack(spacing: AppSpacing.xs) {
+                            Image(systemName: timer.didFinish ? "bell.fill" : "timer")
+                            Text(timer.didFinish
+                                 ? "Schritt \(timer.stepIndex + 1): fertig!"
+                                 : "Schritt \(timer.stepIndex + 1) · \(FormatHelpers.timerText(seconds: timer.remainingSeconds))")
+                                .monospacedDigit()
+                        }
+                        .font(AppTypography.cookingMeta(scale: fontScale * 0.85).weight(.semibold))
+                        .foregroundStyle(timer.didFinish ? .white : AppColors.copper)
+                        .padding(.horizontal, AppSpacing.m)
+                        .padding(.vertical, AppSpacing.s)
+                        .background(
+                            timer.didFinish
+                                ? AnyShapeStyle(AppColors.copper)
+                                : AnyShapeStyle(AppColors.backgroundElevated),
+                            in: Capsule()
+                        )
+                        .overlay(
+                            Capsule().strokeBorder(
+                                timer.didFinish ? Color.clear : AppColors.copper.opacity(0.6),
+                                lineWidth: 1
+                            )
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(timer.didFinish
+                                        ? "Timer von Schritt \(timer.stepIndex + 1) abgelaufen"
+                                        : "Timer von Schritt \(timer.stepIndex + 1) läuft, zum Schritt springen")
+                }
+            }
+            .padding(.horizontal, AppSpacing.screen)
+        }
+        .padding(.top, AppSpacing.s)
     }
 
     // MARK: Kopfzeile
