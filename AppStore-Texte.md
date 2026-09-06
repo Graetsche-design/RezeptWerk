@@ -69,14 +69,16 @@ Diese Felder erscheinen nur dort, wo sie hingehören – normale Rezepte bleiben
 📖 ALLES FÜR DEINE REZEPTE
 • Schöne Rezeptkarten mit Bild, Bewertung, Tags und Kategorie
 • 12 Kategorien von Fleisch über Grillen bis Getränke – eigene jederzeit ergänzbar
-• Schnelle Suche & Filter nach Kategorie, Tags, Schwierigkeit und Favoriten
+• Schnelle Suche & Filter nach Kategorie, Tags, Schwierigkeit und Favoriten – und über die iOS-Suche (Spotlight)
 • Portionsrechner: Mengen rechnen sich automatisch um
+• Wochenplan mit Portionen je Gericht und Einkaufsliste, die gleiche Zutaten zusammenfasst und sich als Text teilen lässt
 
 👨‍🍳 KOCHMODUS
 Ein großer, ruhiger Schritt-für-Schritt-Modus fürs Kochen am Herd oder Grill:
 • Sehr gut lesbare Schrift (einstellbar)
-• Zutaten jederzeit zum Abhaken
-• Timer pro Schritt
+• Zutaten jederzeit zum Abhaken – umgerechnet auf deine Portionen
+• Timer pro Schritt – mehrere gleichzeitig, sie klingeln auch bei gesperrtem iPhone
+• Schritte vorlesen lassen oder per Siri blättern („Nächster Schritt in RezeptWerk“)
 • Der Bildschirm bleibt an
 
 📥 REZEPTE IMPORTIEREN
@@ -105,6 +107,38 @@ Guten Appetit – und viel Freude beim Grillen, Wursten und Räuchern!
 ---
 
 ## 6. „Neue Funktionen" / What's New
+
+### Für Version 2.5
+
+```
+Version 2.5 denkt in Portionen – und hört aufs Wort:
+
+👨‍👩‍👧‍👦 PORTIONEN ÜBERALL
+Beim Einplanen im Wochenplan legst du fest, für wie viele du kochst. Kochmodus und Einkaufsliste rechnen automatisch mit – und der Portionsrechner im Rezept wirkt jetzt bis in die Einkaufsliste.
+
+🛒 EINKAUFSLISTE TEILEN
+Schick die offene Liste als Text an WhatsApp, Nachrichten, Mail oder Erinnerungen – praktisch, wenn jemand anderes einkauft.
+
+📋 REZEPT DUPLIZIEREN
+Aus „Käsekrakauer“ wird mit einem Tipp „Chili-Krakauer“: Kopie im Editor anpassen, fertig. Das Original bleibt unberührt.
+
+⏱ MEHRERE TIMER
+Nudeln, Soße und Ofen gleichzeitig: Timer laufen weiter, wenn du weiterblätterst, und klingeln jeder für sich – auch bei gesperrtem iPhone.
+
+🗣 FREIHÄNDIG KOCHEN
+Lass dir den Schritt vorlesen oder sag einfach „Hey Siri, nächster Schritt in RezeptWerk“ – auch „Schritt vorlesen“ und „Timer starten“ gehen per Siri.
+
+🔍 SPOTLIGHT
+Tippe auf dem Homescreen in die Suche – deine Rezepte erscheinen mit Bild und öffnen sich direkt.
+
+Dazu aus 2.1: Pökel-Rechner fürs Nasspökeln, Maß-Umrechner (Cups, Unzen, Fahrenheit) und der Link zu kochenmitreima.de.
+
+Gut Wurst!
+```
+*(ca. 1.150 Zeichen — Limit 4000)*
+
+> Der Text setzt voraus, dass Version 2.1 nicht separat im App Store
+> erschienen ist — sonst den Absatz „Dazu aus 2.1“ streichen.
 
 ### Für Version 2.0
 

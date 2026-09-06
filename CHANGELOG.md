@@ -3,7 +3,7 @@
 Die Versionsgeschichte der App. Die passenden „Was ist neu“-Texte für
 App Store Connect stehen in `AppStore-Texte.md`.
 
-## Version 2.2 (in Arbeit)
+## Version 2.5 (September 2026)
 
 **Neue Funktionen**
 

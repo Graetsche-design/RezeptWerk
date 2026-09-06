@@ -21,7 +21,7 @@ final class PlannedMeal {
     var createdAt: Date = Date.now
 
     /// Geplante Portionen. 0 = „wie im Rezept“ — der Standard, der auch
-    /// für Einträge aus Versionen vor 2.2 gilt, die diese Angabe noch
+    /// für Einträge aus Versionen vor 2.5 gilt, die diese Angabe noch
     /// nicht kannten (additive Migration).
     var servings: Int = 0
 
