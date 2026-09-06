@@ -67,6 +67,13 @@ struct RootView: View {
                             .navigationDestination(for: Recipe.self) { recipe in
                                 RecipeDetailView(recipe: recipe)
                             }
+                            // Geplantes Gericht → Detailansicht mit den
+                            // geplanten Portionen.
+                            .navigationDestination(for: PlannedMeal.self) { meal in
+                                if let recipe = meal.recipe {
+                                    RecipeDetailView(recipe: recipe, initialServings: meal.effectiveServings)
+                                }
+                            }
                     }
                 }
 

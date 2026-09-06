@@ -109,6 +109,14 @@ final class Recipe {
         (prepMinutes ?? 0) + (cookMinutes ?? 0) + (restMinutes ?? 0)
     }
 
+    /// Umrechnungsfaktor für eine abweichende Portionszahl — dieselbe
+    /// Rechnung für Portionsrechner, Kochmodus und Einkaufsliste.
+    /// `nil`, 0 oder die eigene Portionszahl ergeben 1 (nichts umrechnen).
+    func scaleFactor(forServings target: Int?) -> Double {
+        guard let target, target > 0, servings > 0, target != servings else { return 1 }
+        return Double(target) / Double(servings)
+    }
+
     var sortedIngredients: [Ingredient] {
         (ingredients ?? []).sorted { $0.sortIndex < $1.sortIndex }
     }

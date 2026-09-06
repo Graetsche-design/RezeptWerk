@@ -37,7 +37,8 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   Originaltext und Korrektur im Editor vor dem Speichern.
 - **Kochmodus**: Vollbild, immer dunkel (blendfrei am Herd), ein Schritt
   pro Seite (mit Schritt-Foto, falls vorhanden), einstellbare Großschrift,
-  abhakbare Zutaten, Timer mit Fortschrittsring und Haptik — der auch
+  abhakbare Zutaten (Mengen für die gewählten Portionen aus Portionsrechner
+  oder Wochenplan), Timer mit Fortschrittsring und Haptik — der auch
   **außerhalb der App klingelt** (lokale Mitteilung bei Hintergrund/
   Sperrbildschirm), Bildschirm bleibt an, Abschluss-Seite mit Bewertung
   und optionaler Koch-Notiz.
@@ -80,12 +81,18 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   kann im Editor unter „Geeignet für" markiert werden, zu welchen
   Mahlzeiten es passt (Mehrfachauswahl); beim Einplanen werden passende
   Rezepte oben mit „Geeignet"-Badge angezeigt (plus Filter „Nur passende").
-- **Einkaufsliste**: Zutaten aus dem Wochenplan (laufende Woche) oder aus
-  einzelnen Rezepten übernehmen — gleiche Zutaten werden automatisch
-  zusammengefasst (2× „200 g Mehl" → „400 g Mehl"). Eigene Einträge
-  hinzufügen, abhaken, erledigte/alle löschen. Auf dem iPhone über die
-  Dashboard-Karte, auf dem iPad als Sidebar-Tab; auch aus dem Wochenplan
-  und der Rezept-Detailansicht erreichbar.
+  **Portionen je Planeintrag**: beim Einplanen „wie im Rezept" oder eine
+  feste, gemerkte Zahl; am Gericht als Kapsel antippbar und änderbar. Ein
+  aus dem Plan geöffnetes Rezept startet mit diesen Portionen — Kochmodus
+  und Einkaufsliste rechnen damit.
+- **Einkaufsliste**: Zutaten aus dem Wochenplan (laufende Woche, jedes
+  Gericht mit seinen geplanten Portionen) oder aus einzelnen Rezepten
+  (umgerechnet auf die Portionen im Portionsrechner) übernehmen — gleiche
+  Zutaten werden automatisch zusammengefasst (2× „200 g Mehl" →
+  „400 g Mehl"). Eigene Einträge hinzufügen, abhaken, erledigte/alle
+  löschen. Auf dem iPhone über die Dashboard-Karte, auf dem iPad als
+  Sidebar-Tab; auch aus dem Wochenplan und der Rezept-Detailansicht
+  erreichbar.
 - **iCloud-Synchronisierung** (optional, abschaltbar): echte automatische
   Sync über alle Geräte mit derselben Apple-ID (SwiftData + CloudKit).
   Standardmäßig AUS; einmalige Einrichtung der iCloud-Capability in Xcode

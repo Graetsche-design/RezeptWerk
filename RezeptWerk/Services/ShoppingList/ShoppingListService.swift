@@ -7,6 +7,10 @@ import SwiftData
 /// Zutat mit gleicher Einheit ergibt einen Eintrag mit summierter Menge
 /// (z. B. 2 × „200 g Mehl“ → „400 g Mehl“). Es wird immer in vorhandene,
 /// noch **nicht abgehakte** Einträge gemischt.
+///
+/// Mengen kommen **umgerechnet** an: auf die Portionen aus dem
+/// Portionsrechner (einzelnes Rezept) bzw. die je Planeintrag gespeicherten
+/// Portionen (Wochenplan) — siehe `Recipe.scaleFactor(forServings:)`.
 @MainActor
 enum ShoppingListService {
 
@@ -19,18 +23,18 @@ enum ShoppingListService {
 
     // MARK: Hinzufügen
 
-    /// Fügt die Zutaten eines Rezepts hinzu. Gibt die Anzahl verarbeiteter
-    /// Zutaten zurück.
+    /// Fügt die Zutaten eines Rezepts hinzu — auf Wunsch umgerechnet auf
+    /// eine andere Portionszahl (`servings`; `nil` = wie im Rezept).
+    /// Gibt die Anzahl verarbeiteter Zutaten zurück.
     @discardableResult
-    static func add(recipe: Recipe, to context: ModelContext) -> Int {
-        let entries = recipe.sortedIngredients.map {
-            Entry(amount: $0.amount, unit: $0.unit, name: $0.name)
-        }
+    static func add(recipe: Recipe, servings: Int? = nil, to context: ModelContext) -> Int {
+        let entries = ingredientEntries(of: recipe, scaledBy: recipe.scaleFactor(forServings: servings))
         return add(entries: entries, to: context)
     }
 
     /// Fügt alle Zutaten der laufenden (Montags-)Woche aus dem Wochenplan
-    /// hinzu. Gibt die Anzahl verarbeiteter Zutaten zurück.
+    /// hinzu — jedes Gericht mit seinen geplanten Portionen. Gibt die
+    /// Anzahl verarbeiteter Zutaten zurück.
     @discardableResult
     static func addCurrentWeek(to context: ModelContext) -> Int {
         var calendar = Calendar.current
@@ -40,11 +44,9 @@ enum ShoppingListService {
         let meals = (try? context.fetch(FetchDescriptor<PlannedMeal>())) ?? []
         let entries = meals
             .filter { week.contains($0.date) }
-            .compactMap { $0.recipe }
-            .flatMap { recipe in
-                recipe.sortedIngredients.map {
-                    Entry(amount: $0.amount, unit: $0.unit, name: $0.name)
-                }
+            .flatMap { meal -> [Entry] in
+                guard let recipe = meal.recipe else { return [] }
+                return ingredientEntries(of: recipe, scaledBy: meal.scaleFactor)
             }
         return add(entries: entries, to: context)
     }
@@ -123,6 +125,14 @@ enum ShoppingListService {
     }
 
     // MARK: Helfer
+
+    /// Die Zutaten eines Rezepts als Einträge, Mengen mit `factor`
+    /// multipliziert (Zutaten ohne Menge bleiben ohne Menge).
+    private static func ingredientEntries(of recipe: Recipe, scaledBy factor: Double) -> [Entry] {
+        recipe.sortedIngredients.map {
+            Entry(amount: $0.amount.map { $0 * factor }, unit: $0.unit, name: $0.name)
+        }
+    }
 
     private static func mergeKey(name: String, unit: String) -> String {
         name.trimmingCharacters(in: .whitespaces).lowercased()

@@ -2,6 +2,9 @@ import SwiftUI
 
 /// Das Zutaten-Blatt im Kochmodus — zum Nachschauen und Abhaken,
 /// ohne den aktuellen Schritt zu verlassen.
+///
+/// Die Mengen sind auf die Portionen umgerechnet, für die gekocht wird
+/// (`CookingModeViewModel.servings`) — nicht zwingend die des Rezepts.
 struct CookingIngredientsSheet: View {
 
     let viewModel: CookingModeViewModel
@@ -13,6 +16,13 @@ struct CookingIngredientsSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
+                    if viewModel.isScaled {
+                        Text("Mengen umgerechnet (Original: \(viewModel.recipe.servings) Portionen)")
+                            .font(AppTypography.cookingMeta(scale: fontScale * 0.85))
+                            .foregroundStyle(AppColors.copper)
+                            .padding(.vertical, AppSpacing.m)
+                    }
+
                     ForEach(viewModel.recipe.sortedIngredients) { ingredient in
                         Button {
                             viewModel.toggleIngredient(ingredient)
@@ -26,7 +36,7 @@ struct CookingIngredientsSheet: View {
                                                      ? AppColors.copper
                                                      : AppColors.textSecondary)
 
-                                Text(ingredient.displayText())
+                                Text(ingredient.displayText(scaledBy: viewModel.scaleFactor))
                                     .font(AppTypography.cookingMeta(scale: fontScale))
                                     .foregroundStyle(AppColors.textPrimary)
                                     .strikethrough(viewModel.isChecked(ingredient))
@@ -47,7 +57,7 @@ struct CookingIngredientsSheet: View {
                 .padding(.horizontal, AppSpacing.screen)
             }
             .background(AppColors.backgroundPrimary.ignoresSafeArea())
-            .navigationTitle("Zutaten · \(viewModel.recipe.servings) Portionen")
+            .navigationTitle("Zutaten · \(viewModel.servings) Portionen")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {

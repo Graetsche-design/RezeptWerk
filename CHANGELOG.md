@@ -3,6 +3,36 @@
 Die Versionsgeschichte der App. Die passenden „Was ist neu“-Texte für
 App Store Connect stehen in `AppStore-Texte.md`.
 
+## Version 2.2 (in Arbeit)
+
+**Neue Funktionen**
+
+- **Portionen im Wochenplan**: Beim Einplanen lässt sich die Portionszahl
+  einstellen — „wie im Rezept“ oder eine feste Zahl, die gemerkt wird,
+  weil sie meist dem Haushalt entspricht. Am geplanten Gericht steht die
+  Zahl in einer Kapsel und lässt sich antippen und ändern. Wer ein
+  Gericht aus dem Plan öffnet, bekommt den Portionsrechner gleich passend
+  eingestellt.
+- **Portionen wirken jetzt überall**: Das Zutaten-Blatt im Kochmodus und
+  „Zur Einkaufsliste“ rechnen mit den Portionen aus dem Portionsrechner;
+  „Aus Wochenplan übernehmen“ rechnet jedes Gericht auf seine geplanten
+  Portionen um. Vorher galten dort immer die Originalmengen des Rezepts.
+- **Hilfe aktualisiert**: Kochmodus, Wochenplan und Einkaufsliste
+  erklären die neuen Möglichkeiten.
+
+**Technik**
+
+- `PlannedMeal.servings` (0 = wie im Rezept; additive Migration) mit
+  `effectiveServings`/`scaleFactor`; `Recipe.scaleFactor(forServings:)`
+  als gemeinsame Umrechnung für Portionsrechner, Kochmodus und
+  Einkaufsliste; `CookingModeViewModel(recipe:servings:)`;
+  `ShoppingListService.add(recipe:servings:)`; neues `MealServingsSheet`.
+- Aus dem Wochenplan wird über den Planeintrag navigiert
+  (`navigationDestination(for: PlannedMeal.self)` in Dashboard- und
+  iPad-Stack), damit die Detailansicht die geplanten Portionen kennt.
+- Unit-Tests von 47 auf 55 erweitert (Portionsumrechnung,
+  Wochenplan-Portionen).
+
 ## Version 2.1 (Juli 2026)
 
 **Neue Funktionen**

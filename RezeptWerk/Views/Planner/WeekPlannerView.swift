@@ -7,7 +7,8 @@ import SwiftData
 /// Wichtig: Diese View bringt **keinen** eigenen `NavigationStack` mit. Sie
 /// lebt entweder im Stack des Dashboards (iPhone, per `NavigationLink`) oder
 /// im Stack des iPad-Tabs (siehe `RootView`). Beide stellen das
-/// `navigationDestination(for: Recipe.self)` bereit.
+/// `navigationDestination(for: PlannedMeal.self)` bereit — ein geplantes
+/// Gericht öffnet die Detailansicht mit seinen geplanten Portionen.
 struct WeekPlannerView: View {
 
     @Query(sort: \PlannedMeal.sortIndex)
@@ -19,6 +20,8 @@ struct WeekPlannerView: View {
     @State private var weekOffset = 0
     /// Tag, für den gerade ein Gericht eingeplant wird (steuert das Sheet).
     @State private var dayToPlan: Date?
+    /// Planeintrag, dessen Portionen gerade geändert werden (steuert das Sheet).
+    @State private var mealToAdjust: PlannedMeal?
     @State private var saveFailed = false
 
     /// Montag-basierter Kalender (deutsche Wochenführung).
@@ -69,6 +72,9 @@ struct WeekPlannerView: View {
         }
         .sheet(item: planningSheetBinding) { day in
             PlanMealSheet(date: day.date)
+        }
+        .sheet(item: $mealToAdjust) { meal in
+            MealServingsSheet(meal: meal)
         }
     }
 
@@ -174,11 +180,14 @@ struct WeekPlannerView: View {
         )
     }
 
-    /// Eine geplante Mahlzeit: Mahlzeit-Badge + Rezept (antippbar) + Entfernen.
+    /// Eine geplante Mahlzeit: Mahlzeit-Badge + Rezept (antippbar) +
+    /// Portionen (antippbar) + Entfernen.
     private func plannedRow(_ meal: PlannedMeal) -> some View {
         HStack(spacing: AppSpacing.m) {
             if let recipe = meal.recipe {
-                NavigationLink(value: recipe) {
+                // Ziel ist der Planeintrag, nicht das Rezept: So startet
+                // die Detailansicht gleich mit den geplanten Portionen.
+                NavigationLink(value: meal) {
                     HStack(spacing: AppSpacing.m) {
                         RecipeImageView(
                             data: recipe.coverImageData,
@@ -208,6 +217,22 @@ struct WeekPlannerView: View {
             }
 
             Spacer(minLength: 0)
+
+            if meal.recipe != nil {
+                Button {
+                    mealToAdjust = meal
+                } label: {
+                    Label("\(meal.effectiveServings)", systemImage: "person.2")
+                        .font(AppTypography.caption.weight(.semibold))
+                        .foregroundStyle(AppColors.copper)
+                        .padding(.horizontal, AppSpacing.s)
+                        .padding(.vertical, 5)
+                        .background(AppColors.backgroundSunken, in: Capsule())
+                        .overlay(Capsule().strokeBorder(AppColors.separator, lineWidth: 1))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("\(meal.effectiveServings) Portionen, ändern")
+            }
 
             Button {
                 remove(meal)
@@ -266,8 +291,10 @@ struct IdentifiableDate: Identifiable {
 #Preview {
     NavigationStack {
         WeekPlannerView()
-            .navigationDestination(for: Recipe.self) { recipe in
-                RecipeDetailView(recipe: recipe)
+            .navigationDestination(for: PlannedMeal.self) { meal in
+                if let recipe = meal.recipe {
+                    RecipeDetailView(recipe: recipe, initialServings: meal.effectiveServings)
+                }
             }
     }
     .modelContainer(PreviewSupport.container)

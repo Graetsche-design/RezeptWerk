@@ -126,7 +126,7 @@ enum HelpContent {
             .bullets([
                 "Ein Schritt pro Seite in sehr großer Schrift.",
                 "Weiter und Zurück über die Buttons oder durch Wischen.",
-                "Das Listen-Symbol oben rechts zeigt die Zutaten zum Abhaken.",
+                "Das Listen-Symbol oben rechts zeigt die Zutaten zum Abhaken – mit den Mengen für die Portionen, die du vorher im Portionsrechner eingestellt hast (oder die im Wochenplan zum Gericht gehören).",
                 "Hat ein Schritt einen Timer, erscheint er automatisch – mit Start/Pause und Signal am Ende.",
                 "Der Bildschirm bleibt an, solange der Kochmodus offen ist.",
                 "Am Ende kannst du das Rezept gleich bewerten.",
@@ -145,10 +145,14 @@ enum HelpContent {
             .paragraph("Den Wochenplan öffnest du auf dem iPhone über die Karte „Wochenplan“ auf der Startseite, auf dem iPad über die Seitenleiste."),
             .steps([
                 "Wähle einen Tag und tippe auf „Gericht planen“.",
-                "Wähle die Mahlzeit (Frühstück, Mittag, Abend, Snack) und ein Rezept.",
+                "Wähle die Mahlzeit (Frühstück, Mittag, Abend, Snack).",
+                "Stelle die Portionen ein: „wie im Rezept“ oder eine feste Zahl – die wird gemerkt, weil sie meist deinem Haushalt entspricht.",
+                "Tippe auf ein Rezept – fertig.",
                 "Mit den Pfeilen ‹ › blätterst du durch die Wochen, „Heute“ springt zurück.",
                 "Zum Entfernen tippst du beim geplanten Gericht auf das Minus-Symbol.",
             ]),
+            .heading("Portionen"),
+            .paragraph("Beim geplanten Gericht steht die Portionszahl in einer kleinen Kapsel – antippen ändert sie. Öffnest du das Gericht aus dem Plan, startet der Portionsrechner gleich mit dieser Zahl, und Kochmodus wie Einkaufsliste rechnen die Mengen entsprechend um."),
             .tip("Markiere bei deinen Rezepten unter „Geeignet für“, zu welchen Mahlzeiten sie passen. Beim Einplanen werden passende Rezepte dann oben mit „Geeignet“-Hinweis angezeigt."),
         ]
     )
@@ -162,8 +166,8 @@ enum HelpContent {
         blocks: [
             .paragraph("Die Einkaufsliste erreichst du über die Startseite, den iPad-Tab, den Wochenplan oder das Menü in einem Rezept."),
             .bullets([
-                "„Aus Wochenplan übernehmen“ sammelt alle Zutaten der geplanten Woche – gleiche Zutaten werden zusammengefasst (z. B. 2× 200 g Mehl → 400 g Mehl).",
-                "In einem Rezept fügst du über „Mehr → Zur Einkaufsliste“ dessen Zutaten hinzu.",
+                "„Aus Wochenplan übernehmen“ sammelt alle Zutaten der geplanten Woche – jedes Gericht mit seinen geplanten Portionen. Gleiche Zutaten werden zusammengefasst (z. B. 2× 200 g Mehl → 400 g Mehl).",
+                "In einem Rezept fügst du über „Mehr → Zur Einkaufsliste“ dessen Zutaten hinzu – umgerechnet auf die Portionen, die du vorher im Portionsrechner eingestellt hast.",
                 "Eigene Einträge tippst du unten ein, z. B. „2 Zwiebeln“.",
                 "Tippen hakt einen Eintrag ab, Wischen löscht ihn.",
                 "Über das Menü oben kannst du erledigte oder alle Einträge löschen.",

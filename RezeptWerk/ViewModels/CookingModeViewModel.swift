@@ -13,6 +13,10 @@ final class CookingModeViewModel {
 
     let recipe: Recipe
 
+    /// Portionen, für die gekocht wird — aus dem Portionsrechner der
+    /// Detailansicht oder dem Wochenplan. Standard: die des Rezepts.
+    let servings: Int
+
     /// Index des aktuellen Schritts. `steps.count` = Abschluss-Seite.
     /// Bei jedem Wechsel — egal ob über die Buttons oder durch Wischen im
     /// Pager (Binding) — wird der Timer auf den neuen Schritt gestellt.
@@ -42,10 +46,25 @@ final class CookingModeViewModel {
     /// zwischendurch im Hintergrund war oder das System kurz gestockt hat.
     private var timerEndDate: Date?
 
-    init(recipe: Recipe) {
+    /// - Parameter servings: Portionen, für die gekocht wird. `nil` oder 0
+    ///   bedeutet: wie im Rezept.
+    init(recipe: Recipe, servings: Int? = nil) {
         self.recipe = recipe
+        if let servings, servings > 0 {
+            self.servings = servings
+        } else {
+            self.servings = recipe.servings
+        }
         prepareTimerForCurrentStep()
     }
+
+    // MARK: Portionen
+
+    /// Faktor für die Zutatenmengen im Zutaten-Blatt.
+    var scaleFactor: Double { recipe.scaleFactor(forServings: servings) }
+
+    /// `true`, wenn für eine andere Portionszahl als im Rezept gekocht wird.
+    var isScaled: Bool { servings != recipe.servings }
 
     // MARK: Schritte
 

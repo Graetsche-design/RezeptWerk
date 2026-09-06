@@ -20,7 +20,16 @@ struct RecipeDetailView: View {
     @State private var saveFailed = false
 
     /// Angezeigte Portionen für den Portionsrechner (0 = noch nicht gesetzt).
+    /// Wirkt auch auf den Kochmodus und „Zur Einkaufsliste“.
     @State private var displayedServings = 0
+
+    /// - Parameter initialServings: Portionen, mit denen der Portionsrechner
+    ///   startet (z. B. die geplanten aus dem Wochenplan). `nil` = wie im
+    ///   Rezept.
+    init(recipe: Recipe, initialServings: Int? = nil) {
+        self.recipe = recipe
+        _displayedServings = State(initialValue: initialServings ?? 0)
+    }
 
     var body: some View {
         ScrollView {
@@ -86,7 +95,7 @@ struct RecipeDetailView: View {
             AddCookingNoteSheet(recipe: recipe)
         }
         .fullScreenCover(isPresented: $showCookingMode) {
-            CookingModeView(recipe: recipe)
+            CookingModeView(recipe: recipe, servings: displayedServings)
         }
         .confirmationDialog("Rezept löschen?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("„\(recipe.title)“ löschen", role: .destructive) {
@@ -339,8 +348,17 @@ struct RecipeDetailView: View {
                     Label("Teilen & Export", systemImage: "square.and.arrow.up")
                 }
                 Button {
-                    let count = ShoppingListService.add(recipe: recipe, to: modelContext)
-                    shoppingConfirmation = "\(count) Zutaten zur Einkaufsliste hinzugefügt."
+                    // Die Mengen kommen für die im Portionsrechner
+                    // eingestellten Portionen an.
+                    let count = ShoppingListService.add(
+                        recipe: recipe,
+                        servings: displayedServings,
+                        to: modelContext
+                    )
+                    let isScaled = displayedServings > 0 && displayedServings != recipe.servings
+                    shoppingConfirmation = isScaled
+                        ? "\(count) Zutaten für \(displayedServings) Portionen zur Einkaufsliste hinzugefügt."
+                        : "\(count) Zutaten zur Einkaufsliste hinzugefügt."
                 } label: {
                     Label("Zur Einkaufsliste", systemImage: "cart.badge.plus")
                 }

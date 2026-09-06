@@ -30,8 +30,10 @@ struct CookingModeView: View {
     @AppStorage(SettingsKeys.keepScreenOn)
     private var keepScreenOn = false
 
-    init(recipe: Recipe) {
-        _viewModel = State(initialValue: CookingModeViewModel(recipe: recipe))
+    /// - Parameter servings: Portionen, für die gekocht wird (Portionsrechner
+    ///   oder Wochenplan). `nil` oder 0 = wie im Rezept.
+    init(recipe: Recipe, servings: Int? = nil) {
+        _viewModel = State(initialValue: CookingModeViewModel(recipe: recipe, servings: servings))
     }
 
     private var fontScale: Double {
