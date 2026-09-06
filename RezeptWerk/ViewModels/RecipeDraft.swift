@@ -169,6 +169,18 @@ final class RecipeDraft {
         }
     }
 
+    /// Draft als Kopie eines bestehenden Rezepts — für Varianten
+    /// („Chili-Krakauer“ aus „Käsekrakauer“). Übernimmt alles inklusive
+    /// Bilder, Tags und Fachdaten; Bewertung und Favorit beginnen bei null,
+    /// der Titel bekommt ein „(Kopie)“. Gespeichert wird als **neues**
+    /// Rezept (`RecipeEditorView(recipe: nil, prefilledDraft:)`).
+    convenience init(duplicating recipe: Recipe) {
+        self.init(recipe: recipe)
+        title = "\(recipe.title) (Kopie)"
+        rating = 0
+        isFavorite = false
+    }
+
     /// Draft aus einem Import-Ergebnis — öffnet den Editor vorbefüllt.
     init(parsed: ParsedRecipe) {
         title = parsed.title

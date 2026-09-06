@@ -26,7 +26,9 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
   (mit Link), Verwaltungsdaten („zuletzt gekocht“).
 - **Editor** in klaren Abschnitten — derselbe Editor dient für Neuanlage,
   Bearbeitung und Import-Korrektur. Mehrere Bilder (komprimiert), Tags mit
-  Wiederverwendung, Timer pro Schritt.
+  Wiederverwendung, Timer pro Schritt. **Duplizieren** (Detailansicht und
+  Schnellmenü der Rezeptliste) öffnet den Editor mit einer Kopie — für
+  Varianten; Bewertung und Favorit beginnen bei null.
 - **Wurst & Räuchern**: eigener Fachdaten-Block (Fleischmenge, Gewürze/kg,
   NPS g/kg, Kutterhilfsmittel, Schüttung, Darm/Kaliber, Räucherart/-zeit/
   -temperatur, Brüh- und Kerntemperatur, Reife- und Trocknungszeit,

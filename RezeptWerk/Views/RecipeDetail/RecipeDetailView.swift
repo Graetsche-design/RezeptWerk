@@ -23,6 +23,13 @@ struct RecipeDetailView: View {
     /// Wirkt auch auf den Kochmodus und „Zur Einkaufsliste“.
     @State private var displayedServings = 0
 
+    /// Öffnet den Editor mit einer Kopie des Rezepts („Duplizieren“).
+    @State private var showDuplicateEditor = false
+    /// Titel der gespeicherten Kopie — gemeldet wird erst, wenn der Editor
+    /// zu ist (sonst kollidiert der Hinweis mit der Sheet-Animation).
+    @State private var pendingDuplicateTitle: String?
+    @State private var duplicateSavedTitle: String?
+
     /// - Parameter initialServings: Portionen, mit denen der Portionsrechner
     ///   startet (z. B. die geplanten aus dem Wochenplan). `nil` = wie im
     ///   Rezept.
@@ -94,6 +101,18 @@ struct RecipeDetailView: View {
         .sheet(isPresented: $showAddNote) {
             AddCookingNoteSheet(recipe: recipe)
         }
+        .sheet(isPresented: $showDuplicateEditor, onDismiss: {
+            if let title = pendingDuplicateTitle {
+                pendingDuplicateTitle = nil
+                duplicateSavedTitle = title
+            }
+        }) {
+            RecipeEditorView(
+                recipe: nil,
+                prefilledDraft: RecipeDraft(duplicating: recipe),
+                onSaved: { copy in pendingDuplicateTitle = copy.title }
+            )
+        }
         .fullScreenCover(isPresented: $showCookingMode) {
             CookingModeView(recipe: recipe, servings: displayedServings)
         }
@@ -121,6 +140,17 @@ struct RecipeDetailView: View {
             Button("Prima", role: .cancel) {}
         } message: {
             Text(shoppingConfirmation ?? "")
+        }
+        .alert(
+            "Kopie gespeichert",
+            isPresented: Binding(
+                get: { duplicateSavedTitle != nil },
+                set: { if !$0 { duplicateSavedTitle = nil } }
+            )
+        ) {
+            Button("Prima", role: .cancel) {}
+        } message: {
+            Text("„\(duplicateSavedTitle ?? "")“ ist jetzt ein eigenes Rezept — ganz oben in der Rezeptliste und auf der Startseite unter „Zuletzt hinzugefügt“.")
         }
         .onAppear {
             if displayedServings == 0 {
@@ -341,6 +371,11 @@ struct RecipeDetailView: View {
                     showEditor = true
                 } label: {
                     Label("Bearbeiten", systemImage: "pencil")
+                }
+                Button {
+                    showDuplicateEditor = true
+                } label: {
+                    Label("Duplizieren", systemImage: "doc.on.doc")
                 }
                 Button {
                     showExport = true

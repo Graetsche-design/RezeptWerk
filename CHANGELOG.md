@@ -20,8 +20,13 @@ App Store Connect stehen in `AppStore-Texte.md`.
 - **Einkaufsliste teilen**: Das Teilen-Symbol in der Einkaufsliste
   schickt die offenen Einträge als Text an WhatsApp, Nachrichten, Mail
   oder die Erinnerungen-App.
-- **Hilfe aktualisiert**: Kochmodus, Wochenplan und Einkaufsliste
-  erklären die neuen Möglichkeiten.
+- **Rezept duplizieren**: „Mehr → Duplizieren“ in der Rezeptansicht (und
+  im Schnellmenü der Rezeptliste) öffnet den Editor mit einer Kopie samt
+  Bildern, Tags und Fachdaten — für Varianten wie „Chili-Krakauer“ aus
+  „Käsekrakauer“. Bewertung und Favorit beginnen bei null, das Original
+  bleibt unberührt.
+- **Hilfe aktualisiert**: Rezept anlegen, Kochmodus, Wochenplan und
+  Einkaufsliste erklären die neuen Möglichkeiten.
 
 **Technik**
 
@@ -30,12 +35,12 @@ App Store Connect stehen in `AppStore-Texte.md`.
   als gemeinsame Umrechnung für Portionsrechner, Kochmodus und
   Einkaufsliste; `CookingModeViewModel(recipe:servings:)`;
   `ShoppingListService.add(recipe:servings:)` und `shareText(items:)`;
-  neues `MealServingsSheet`.
+  `RecipeDraft(duplicating:)`; neues `MealServingsSheet`.
 - Aus dem Wochenplan wird über den Planeintrag navigiert
   (`navigationDestination(for: PlannedMeal.self)` in Dashboard- und
   iPad-Stack), damit die Detailansicht die geplanten Portionen kennt.
-- Unit-Tests von 47 auf 56 erweitert (Portionsumrechnung,
-  Wochenplan-Portionen, Teilen-Text).
+- Unit-Tests von 47 auf 58 erweitert (Portionsumrechnung, Wochenplan-
+  Portionen, Teilen-Text, Duplizieren).
 
 ## Version 2.1 (Juli 2026)
 

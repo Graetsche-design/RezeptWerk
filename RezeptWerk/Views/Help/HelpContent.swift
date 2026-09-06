@@ -63,7 +63,7 @@ enum HelpContent {
             ]),
             .heading("Favoriten"),
             .paragraph("Tippe in einem Rezept auf das Herz – es erscheint dann im Tab „Favoriten“ und im Karussell auf der Startseite."),
-            .tip("Tippe in der Rezeptliste lange auf eine Karte – ein Schnellmenü bietet Favorit, Bearbeiten und Löschen."),
+            .tip("Tippe in der Rezeptliste lange auf eine Karte – ein Schnellmenü bietet Favorit, Bearbeiten, Duplizieren und Löschen."),
         ]
     )
 
@@ -88,6 +88,8 @@ enum HelpContent {
                 "Tags, Notizen und Quelle (Text und/oder Link).",
                 "Wurst & Räuchern: Fachdaten (siehe eigenes Thema).",
             ]),
+            .heading("Variante anlegen (duplizieren)"),
+            .paragraph("Eine Abwandlung – etwa „Chili-Krakauer“ aus „Käsekrakauer“ – legst du über „Mehr → Duplizieren“ in der Rezeptansicht an (oder im Schnellmenü der Rezeptliste). Der Editor öffnet sich mit einer Kopie samt Bildern, Tags und Fachdaten; Bewertung und Favorit beginnen bei null. Passe an, was anders ist, und speichere – das Original bleibt unberührt."),
             .tip("Nur der Titel ist Pflicht – alles andere kannst du nach und nach ergänzen. Mengen mit Komma (z. B. „1,5“) sind erlaubt."),
         ]
     )
