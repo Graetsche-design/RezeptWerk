@@ -3,6 +3,55 @@
 Die Versionsgeschichte der App. Die passenden „Was ist neu“-Texte für
 App Store Connect stehen in `AppStore-Texte.md`.
 
+## Version 2.1 (Juli 2026)
+
+**Neue Funktionen**
+
+- **Pökel-Rechner** (Werkzeuge): fürs Nasspökeln — Fleischgewicht und
+  Wassermenge eingeben (mit 40-%-Vorschlag), Lakenstärke per Schnellwahl
+  (6/8/10/12 %) oder frei, optional Zucker. Ergebnis: NPS-Menge gesamt
+  und je Liter, Pökelzeit-Faustformel nach der dicksten Stelle des
+  Fleischs samt Durchbrennen-Hinweis. Eingaben werden gemerkt;
+  Richtwerte anpassbar in `Views/Tools/PoekelRechnerView.swift`.
+- **Maß-Umrechner** (Werkzeuge): amerikanische Rezept-Angaben in
+  deutsche Maße — Cup, tbsp, tsp und fl oz zutatengenau in Gramm
+  (16 Dichte-Richtwerte), Unzen und Pfund in Gramm, Fahrenheit ↔
+  Celsius samt Gasherd-Stufen-Referenz. Werte anpassbar in
+  `Views/Tools/UmrechnerData.swift`.
+- **„Kochen mit ReiMa“ verlinkt**: neue Karte auf der Startseite und
+  eigener Bereich in den Einstellungen mit kurzer Vorstellung der
+  Webseite — ein Tipp öffnet kochenmitreima.de im Browser.
+- **Hilfe-Thema „Werkzeuge“**: Die In-App-Anleitung erklärt jetzt alle
+  vier Werkzeuge (auch Kerntemperaturen und Wurst-Rechner).
+
+**Fehlerbehebungen & Feinschliff**
+
+- **Rezept-Empfang ohne Kategorie-Duplikate**: Beim Öffnen einer
+  `.rezeptwerk`-Datei wird eine vorhandene Kategorie wiederverwendet
+  (Groß-/Kleinschreibung egal); unbekannte Kategorien entstehen erst
+  beim Speichern — Abbrechen hinterlässt nichts mehr. Der Editor weist
+  auf Kategorien hin, die beim Speichern neu angelegt werden.
+- **Speicherfehler weiter abgesichert**: Auch der Rezept-Editor, das
+  Löschen von Rezepten und die Koch-Notiz der Kochmodus-Abschlussseite
+  nehmen fehlgeschlagene Änderungen jetzt zurück und melden sich —
+  nichts geht mehr still verloren.
+- **Geöffnete Rezept-Dateien belegen keinen Speicher mehr**:
+  `.rezeptwerk`-Dateien werden direkt an ihrem Ort gelesen, statt dass
+  iOS bei jedem Öffnen eine unsichtbare Kopie im App-Ordner ablegt.
+
+**Technik**
+
+- `LSSupportsOpeningDocumentsInPlace` in der Info.plist (behebt zugleich
+  die Xcode-Warnung zum Datei-Öffnen).
+- Vorgemerkte Kategorien aus empfangenen Dateien
+  (`RecipeDraft.pendingCategoryName`) werden zentral in
+  `RecipeImportService.save` aufgelöst; der Kochmodus stellt den Timer
+  zentral über `stepIndex.didSet` um.
+- Unit-Tests von 35 auf 47 erweitert (Umrechner- und Pökel-Mathematik).
+  Test-Stabilität: Die In-Memory-Container der Tests werden am Leben
+  gehalten — `mainContext` hält seinen Container nicht stark; seit
+  OS 26.5 stürzten die Test-Suiten sonst ab.
+
 ## Version 2.0 (Juli 2026)
 
 **Neue Funktionen**
