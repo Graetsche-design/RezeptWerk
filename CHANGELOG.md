@@ -35,8 +35,12 @@ App Store Connect stehen in `AppStore-Texte.md`.
   automatisch (Einstellungen → Kochmodus). Und Siri steuert den offenen
   Kochmodus: „Nächster Schritt in RezeptWerk“, „Vorheriger Schritt …“,
   „Schritt vorlesen …“, „Timer starten …“ — Siri liest den Schritt vor.
-- **Hilfe aktualisiert**: Rezept anlegen, Kochmodus, Wochenplan,
-  Einkaufsliste und Einstellungen erklären die neuen Möglichkeiten.
+- **Spotlight**: Rezepte über die iOS-Suche finden — Titel, Kategorie,
+  Tags und Zutaten sind indiziert, mit Titelbild; ein Tipp auf den
+  Treffer öffnet das Rezept direkt.
+- **Hilfe aktualisiert**: Rezepte finden, Rezept anlegen, Kochmodus,
+  Wochenplan, Einkaufsliste und Einstellungen erklären die neuen
+  Möglichkeiten.
 
 **Technik**
 
@@ -61,9 +65,15 @@ App Store Connect stehen in `AppStore-Texte.md`.
   baut die gesprochenen Texte. Die Info.plist weist Deutsch als
   App-Sprache aus (`CFBundleLocalizations`), damit Siri die deutschen
   Sätze zuordnet.
-- Unit-Tests von 47 auf 68 erweitert (Portionsumrechnung, Wochenplan-
+- `SpotlightIndexService` (CoreSpotlight): Kennzeichner ist die kodierte
+  `PersistentIdentifier`; Neuaufbau beim Start, nach
+  Backup-Wiederherstellung und Beispiel-Neuladen, einzelne Rezepte beim
+  Speichern/Löschen — Bildverkleinerung und Indizierung im Hintergrund.
+  `RootView` öffnet Treffer über
+  `onContinueUserActivity(CSSearchableItemActionType)`.
+- Unit-Tests von 47 auf 73 erweitert (Portionsumrechnung, Wochenplan-
   Portionen, Teilen-Text, Duplizieren, parallele Timer, Siri-Steuerung
-  und Sprachtexte).
+  und Sprachtexte, Spotlight-Kennzeichner und -Inhalte).
 
 ## Version 2.1 (Juli 2026)
 

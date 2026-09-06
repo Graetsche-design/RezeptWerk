@@ -54,6 +54,8 @@ enum HelpContent {
         blocks: [
             .heading("Suchen"),
             .paragraph("Tippe oben in das Suchfeld. Gesucht wird in Titel, Zutaten, Tags und Notizen – du findest also auch ein Rezept, wenn du nur eine Zutat im Kopf hast."),
+            .heading("Über die iOS-Suche (Spotlight)"),
+            .paragraph("Auch ohne die App zu öffnen: Wische auf dem Homescreen nach unten und tippe einen Rezeptnamen, eine Zutat oder einen Tag in die Suche – deine RezeptWerk-Rezepte erscheinen als Treffer mit Bild, ein Tipp öffnet das Rezept direkt."),
             .heading("Filtern & sortieren"),
             .steps([
                 "Öffne den Tab „Rezepte“.",

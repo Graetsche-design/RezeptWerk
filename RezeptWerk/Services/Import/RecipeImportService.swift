@@ -110,6 +110,8 @@ enum RecipeImportService {
 
         recipe.updatedAt = .now
         try context.save()
+        // Für die iOS-Suche (Spotlight) nachziehen.
+        SpotlightIndexService.index(recipe)
         return recipe
     }
 
@@ -119,6 +121,8 @@ enum RecipeImportService {
     /// wird dann zurückgenommen, damit nichts still verloren geht.
     @discardableResult
     static func delete(_ recipe: Recipe, in context: ModelContext) -> Bool {
+        // Aus der iOS-Suche nehmen, solange die Identität noch gültig ist.
+        SpotlightIndexService.remove(recipe)
         context.delete(recipe)
         do {
             try context.save()

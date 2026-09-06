@@ -21,6 +21,8 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 - **Rezeptübersicht**: Kartenliste (iPhone) / Grid (iPad), Volltextsuche
   über Titel, Zutaten, Tags, Notizen und Kategorie; Filter nach Kategorie,
   Unterkategorie, Tags, Schwierigkeit und Favoriten; Sortierung.
+- **Spotlight**: Rezepte über die iOS-Suche finden (Titel, Kategorie,
+  Tags, Zutaten, Titelbild) — der Treffer öffnet das Rezept direkt.
 - **Rezeptdetails**: Bild, Bewertung (antippbar), Info-Pills, Tags,
   Zutaten mit **Portionsrechner**, nummerierte Schritte, Notizen, Quelle
   (mit Link), Verwaltungsdaten („zuletzt gekocht“).
@@ -148,7 +150,7 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 | Minimum | iOS / iPadOS 18 |
 | Xcode | 16 oder neuer (entwickelt & getestet mit 26.5) |
 | Abhängigkeiten | **Keine** — nur Apple-Frameworks |
-| Frameworks | SwiftUI, SwiftData, PhotosUI, Vision (OCR), VisionKit (Scanner), PDFKit, UniformTypeIdentifiers, AVFoundation (Sprachausgabe), AppIntents (Siri-Kurzbefehle) |
+| Frameworks | SwiftUI, SwiftData, PhotosUI, Vision (OCR), VisionKit (Scanner), PDFKit, UniformTypeIdentifiers, AVFoundation (Sprachausgabe), AppIntents (Siri-Kurzbefehle), CoreSpotlight (iOS-Suche) |
 | Berechtigungen | Nur Kamera (Dokumentenscanner); Fotoauswahl braucht keine |
 
 Es gibt genau **zwei bewusste UIKit-Stellen** (kommentiert):
@@ -248,6 +250,7 @@ Rezepteapp/
     ├── Services/
     │   ├── Announcement/         AnnouncementService (Meldung an alle Nutzer)
     │   ├── Speech/               SpeechService (Vorlesen im Kochmodus)
+    │   ├── Spotlight/            SpotlightIndexService (iOS-Suche)
     │   ├── Share/                RecipeShareService (Rezept-Tausch .rezeptwerk)
     │   ├── Notifications/        TimerNotificationService (Timer klingelt überall)
     │   ├── Backup/               BackupModels · BackupService · BackupFileDocument
@@ -389,6 +392,5 @@ Ausführlich in der [ANLEITUNG.md](ANLEITUNG.md), Abschnitt 5.
 
 - Reife-Tracker für Wurst & Schinken (Wiegen, Verlaufskurve, Erinnerungen)
 - Web-Parser für Seiten ohne strukturierte Daten (Readability-Heuristik)
-- Spotlight-Integration; weitere Widgets („Zuletzt gekocht“, Zufallsrezept)
-- Siri/Kurzbefehle im Kochmodus („nächster Schritt“, freihändig)
+- Weitere Widgets („Zuletzt gekocht“, Zufallsrezept)
 - Timer als Live-Aktivität im Sperrbildschirm/Dynamic Island

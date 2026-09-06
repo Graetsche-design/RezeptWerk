@@ -32,6 +32,10 @@ struct RezeptWerkApp: App {
         // entstanden sein können (mehrfache Kategorien/Beispielrezepte).
         DeduplicationService.run(context: container.mainContext)
 
+        // Spotlight-Index für die iOS-Suche aufbauen (Bilder und
+        // Indizierung laufen im Hintergrund).
+        SpotlightIndexService.reindexAll(context: container.mainContext)
+
         // Sync-Status ab dem Start beobachten, damit die Einstellungen ihn
         // anzeigen können (nur sinnvoll, wenn iCloud aktiv ist). Der Monitor
         // stößt außerdem nach jedem Cloud-Import das Aufräumen von

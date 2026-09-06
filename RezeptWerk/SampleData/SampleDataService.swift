@@ -53,5 +53,7 @@ enum SampleDataService {
         }
         SampleRecipes.insert(into: context)
         try? context.save()
+        // Die iOS-Suche kennt jetzt andere Rezepte — Index neu aufbauen.
+        SpotlightIndexService.reindexAll(context: context)
     }
 }
