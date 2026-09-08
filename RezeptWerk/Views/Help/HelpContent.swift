@@ -38,7 +38,7 @@ enum HelpContent {
                 "Rezepte: alle Rezepte mit Suche, Filter und Sortierung.",
                 "Favoriten: deine mit dem Herz markierten Rezepte.",
                 "Importieren: Rezepte aus Foto, PDF, Webseite oder Text übernehmen.",
-                "Einstellungen: Erscheinungsbild, Kochmodus, iCloud, Backup und diese Anleitung.",
+                "Einstellungen: Kochmodus, iCloud, Backup und diese Anleitung.",
             ]),
             .paragraph("Auf dem iPad erscheinen zusätzlich Wochenplan, Einkaufsliste und Kategorien in der seitlichen Leiste. Auf dem iPhone erreichst du diese bequem über die Karten auf der Startseite."),
             .tip("Die App startet mit ein paar Beispielrezepten, damit alles lebendig aussieht. Du kannst sie behalten, bearbeiten oder in den Einstellungen jederzeit neu laden."),
@@ -298,10 +298,11 @@ enum HelpContent {
     private static let settings = HelpTopic(
         title: "Einstellungen",
         icon: "gearshape",
-        summary: "Erscheinungsbild, Kochmodus, Daten und mehr.",
+        summary: "Bildschirm, Kochmodus, Daten und mehr.",
         blocks: [
+            .paragraph("RezeptWerk trägt das Design „Dunkle Glut“: immer dunkel wie Räucherholz, mit glühendem Kupfer – blendfrei in der Küche, ohne Umschalten."),
             .bullets([
-                "Erscheinungsbild: Automatisch, Hell oder Dunkel.",
+                "Bildschirm: „Bildschirm immer an“, solange die App geöffnet ist.",
                 "Kochmodus: Schriftgröße (Normal, Groß, Sehr groß) mit Live-Vorschau und „Schritte automatisch vorlesen“.",
                 "iCloud-Synchronisierung und Backup (siehe eigene Themen).",
                 "Deine Daten: Speicherort, Rezeptanzahl, Beispielrezepte neu laden.",

@@ -133,7 +133,7 @@ Rustikal, warm, handwerklich. iPhone & iPad, 100 % lokal, kein Backend.
 - **Anleitung & Hilfe (in der App)**: ein durchsuchbarer Hilfe-Bereich
   (Einstellungen → ganz oben) mit 14 Themen, die jede Funktion erklären —
   Themenübersicht mit Suche → gut gesetzte Detailseite je Thema.
-- **Einstellungen**: Erscheinungsbild, „Bildschirm immer an“ (Bildschirm
+- **Einstellungen**: „Bildschirm immer an“ (Bildschirm
   wird nicht dunkel, solange die App geöffnet ist), Kochmodus-Schriftgröße,
   Beispielrezepte neu laden (eigene Rezepte bleiben unberührt),
   Import-Tipps, App-Info — und der Bereich „Kochen mit ReiMa“ mit einer
@@ -344,22 +344,30 @@ der `Info.plist`. **Während der Entwicklung** gilt: Diese Schema-Änderung
 eine Migration erfordern — im Zweifel die App einmal löschen und neu
 installieren.
 
-## Designsystem
+## Designsystem — „Dunkle Glut“
 
-- **Farben** (alle adaptiv hell/dunkel, zentral in `AppColors` +
-  Asset-Katalog): Pergament/Creme ↔ Räucher-Anthrazit als Grund, warme
-  Karten, Espresso-Text, **Kupfer als einzige Akzentfarbe**, Holzbraun für
-  sekundäre Akzente.
-- **Typografie** (`AppTypography`): Serifenschrift (New York) für Titel und
+- **Immer dunkel**: Anthrazit wie Räucherholz als Grund (`#1B1713`), dunkle
+  Karten (`#272220`) mit feiner Kontur (`#393129`), Creme-Text (`#F0E8D9`).
+  Die App erzwingt den Dunkelmodus (`RootView`), damit auch System-Elemente
+  nie hell aufblitzen; Hell- und Dunkel-Einträge im Asset-Katalog sind
+  identisch. Eine Einstellung „Erscheinungsbild“ gibt es deshalb nicht mehr.
+- **Glühendes Kupfer** (`#D9803D`) als Akzent — für primäre Buttons als
+  Verlauf Richtung Glut-Rot mit Leuchtschatten, für die Begrüßung als
+  Verlauf Richtung Gold (`AppColors.copperGradient`/`titleGradient`). Jede
+  Standardkategorie bringt ihren eigenen Farbton mit
+  (`AppColors.categoryTint`), Symbole sitzen in getönten Kreisen
+  (`IconBadge`), Werkzeuge in getönten Quadraten.
+- **Typografie** (`AppTypography`): Serifenschrift für Titel und
   Überschriften — auch in der Navigationsleiste — Systemschrift für Text;
-  Dynamic-Type-fähig. Kochmodus mit eigener, einstellbarer Großschrift.
-- **Handschrift der App**: Karten mit feiner Kontur und warmem Schatten,
-  kupferner Unterstrich unter Abschnitts-Überschriften (auch im App-Icon),
-  ruhige SF-Symbols (Flamme, Pfanne, Rauch, Ofen …). Keine Fototapeten,
-  kein Kitsch.
-- Der **Kochmodus** ist bewusst immer dunkel (`preferredColorScheme(.dark)`)
-  — blendfrei und ruhig, alle Theme-Farben ziehen automatisch ihre
-  Dunkel-Variante.
+  Dynamic-Type-fähig. Liegt „Instrument Serif“ im Bundle (`UIAppFonts`),
+  wird sie automatisch verwendet, sonst New York. Kochmodus mit eigener,
+  einstellbarer Großschrift.
+- **Handschrift der App**: kupferner Unterstrich unter Abschnitts-
+  Überschriften (auch im App-Icon), Glut-Schein im Hintergrund von
+  Dashboard, Detailansicht und Kochmodus (`screenBackground(glowAt:)`),
+  Karten mit Radius 22, glühende Karte für den laufenden Timer
+  (`glowCard`), ruhige SF-Symbols. Keine Fototapeten, kein Kitsch.
+- Der **Kochmodus** ist auch für sich genommen dunkel — blendfrei am Herd.
 
 ## Grenzen der MVP-Version (bewusste Entscheidungen)
 

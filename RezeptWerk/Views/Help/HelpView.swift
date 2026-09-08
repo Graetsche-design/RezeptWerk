@@ -53,7 +53,7 @@ struct HelpView: View {
                 .font(.system(size: 18, weight: .medium))
                 .foregroundStyle(AppColors.copper)
                 .frame(width: 36, height: 36)
-                .background(AppColors.wood.opacity(0.16), in: Circle())
+                .background(AppColors.copper.opacity(0.18), in: Circle())
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(topic.title)

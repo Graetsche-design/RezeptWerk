@@ -88,7 +88,7 @@ struct RecipeDetailView: View {
             .padding(.horizontal, AppSpacing.screen)
             .padding(.bottom, AppSpacing.xxl)
         }
-        .screenBackground()
+        .screenBackground(glowAt: .topTrailing)
         .navigationBarTitleDisplayMode(.inline)
         .saveErrorAlert($saveFailed)
         .toolbar { toolbarContent }

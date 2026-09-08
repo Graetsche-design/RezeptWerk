@@ -69,10 +69,9 @@ struct CookingModeView: View {
                 navigationButtons
             }
         }
-        .background(AppColors.backgroundPrimary.ignoresSafeArea())
-        // Der Kochmodus ist bewusst immer dunkel: ruhig, blendfrei,
-        // Werkstatt-Atmosphäre — und alle Theme-Farben ziehen automatisch
-        // ihre Dunkel-Variante.
+        .screenBackground(glowAt: .top)
+        // Der Kochmodus ist auch für sich genommen dunkel: ruhig, blendfrei,
+        // Werkstatt-Atmosphäre.
         .preferredColorScheme(.dark)
         .sheet(isPresented: $showIngredients) {
             CookingIngredientsSheet(viewModel: viewModel, fontScale: fontScale)

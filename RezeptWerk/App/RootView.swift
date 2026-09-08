@@ -35,15 +35,8 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
 
-    @AppStorage(SettingsKeys.appearance)
-    private var appearanceRaw = AppearanceSetting.system.rawValue
-
     @AppStorage(SettingsKeys.keepScreenOn)
     private var keepScreenOn = false
-
-    private var appearance: AppearanceSetting {
-        AppearanceSetting(rawValue: appearanceRaw) ?? .system
-    }
 
     /// Geräteklasse statt Size-Class: bleibt beim Drehen stabil, sodass
     /// die Tab-Leiste auf dem iPhone nie in den „Mehr“-Überlauf rutscht.
@@ -107,7 +100,9 @@ struct RootView: View {
         }
         .tabViewStyle(.sidebarAdaptable)
         .tint(AppColors.copper)
-        .preferredColorScheme(appearance.colorScheme)
+        // Design „Dunkle Glut“: Die App ist immer dunkel — so passen auch
+        // System-Elemente (Blätter, Listen, Tastatur) zum Räucherholz-Grund.
+        .preferredColorScheme(.dark)
         .environment(\.switchTab, TabSwitchAction(switchTo: { selectedTab = $0 }))
         // Hinweisfenster für Meldungen des Entwicklers (z. B. Update-Hinweis).
         .overlay {

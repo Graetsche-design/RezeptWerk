@@ -1,12 +1,9 @@
 import SwiftUI
 import SwiftData
 
-/// Die Einstellungen: Erscheinungsbild, Kochmodus-Schriftgröße,
+/// Die Einstellungen: Bildschirm, Kochmodus, iCloud & Backup,
 /// Beispielrezepte, Import-Tipps und App-Info.
 struct SettingsView: View {
-
-    @AppStorage(SettingsKeys.appearance)
-    private var appearanceRaw = AppearanceSetting.system.rawValue
 
     @AppStorage(SettingsKeys.cookingFontSize)
     private var cookingFontSizeRaw = CookingFontSize.normal.rawValue
@@ -34,7 +31,6 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 helpSection
-                appearanceSection
                 screenSection
                 cookingModeSection
                 CloudBackupSettingsView()
@@ -71,16 +67,6 @@ struct SettingsView: View {
                 HelpView()
             } label: {
                 Label("Anleitung & Hilfe", systemImage: "book.pages")
-            }
-        }
-    }
-
-    private var appearanceSection: some View {
-        Section("Erscheinungsbild") {
-            Picker("Darstellung", selection: $appearanceRaw) {
-                ForEach(AppearanceSetting.allCases) { setting in
-                    Text(setting.label).tag(setting.rawValue)
-                }
             }
         }
     }

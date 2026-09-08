@@ -200,7 +200,12 @@ Im Editor hat jeder Schritt jetzt einen Knopf **„Foto zum Schritt“**.
 Das Bild erscheint in der Detailansicht und groß im Kochmodus —
 praktisch für „so muss der Teig aussehen“.
 
-### Neu in Version 2.5: Portionen, Timer, Siri & Spotlight
+### Neu in Version 2.5: Dunkle Glut, Portionen, Timer, Siri & Spotlight
+
+**Neues Design „Dunkle Glut“:** Die App ist jetzt immer dunkel — Anthrazit
+wie Räucherholz mit glühendem Kupfer. Ein Umschalten zwischen Hell und
+Dunkel gibt es nicht mehr; die Einstellung „Erscheinungsbild“ ist deshalb
+verschwunden.
 
 **Portionen im Wochenplan:**
 1. Wochenplan → **„Gericht planen“** → oben die Portionen einstellen

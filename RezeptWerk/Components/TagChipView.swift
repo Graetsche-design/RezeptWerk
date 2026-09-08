@@ -11,7 +11,7 @@ struct TagChipView: View {
     var body: some View {
         Text(text)
             .font(AppTypography.caption.weight(.medium))
-            .foregroundStyle(isSelected ? .white : AppColors.textSecondary)
+            .foregroundStyle(isSelected ? AppColors.backgroundPrimary : AppColors.textSecondary)
             .padding(.horizontal, AppSpacing.s + 2)
             .padding(.vertical, 5)
             .background(

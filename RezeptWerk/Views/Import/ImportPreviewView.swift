@@ -190,7 +190,7 @@ struct ImportPreviewView: View {
                 if let badge {
                     Text(badge)
                         .font(AppTypography.caption.weight(.bold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(AppColors.backgroundPrimary)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 2)
                         .background(AppColors.copper, in: Capsule())

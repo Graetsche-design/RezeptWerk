@@ -55,7 +55,7 @@ struct DashboardView: View {
                     dashboardContent
                 }
             }
-            .screenBackground()
+            .screenBackground(glowAt: .topTrailing)
             .navigationTitle("RezeptWerk")
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $searchText, prompt: "Rezepte durchsuchen …")
@@ -131,11 +131,7 @@ struct DashboardView: View {
             WeekPlannerView()
         } label: {
             HStack(spacing: AppSpacing.m) {
-                Image(systemName: "calendar")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(.white)
-                    .frame(width: 42, height: 42)
-                    .background(AppColors.copperGradient, in: Circle())
+                IconBadge(systemName: "calendar")
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Wochenplan")
@@ -165,18 +161,15 @@ struct DashboardView: View {
         .buttonStyle(.plain)
     }
 
-    /// Einstieg in die Einkaufsliste — zeigt die Anzahl offener Einträge.
+    /// Einstieg in die Einkaufsliste — zeigt die Anzahl offener Einträge,
+    /// bei offenen Einträgen als Kupfer-Plakette.
     private var shoppingListCard: some View {
         let openCount = shoppingItems.filter { !$0.isChecked }.count
         return NavigationLink {
             ShoppingListView()
         } label: {
             HStack(spacing: AppSpacing.m) {
-                Image(systemName: "cart")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(.white)
-                    .frame(width: 42, height: 42)
-                    .background(AppColors.copperGradient, in: Circle())
+                IconBadge(systemName: "cart")
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Einkaufsliste")
@@ -192,88 +185,108 @@ struct DashboardView: View {
 
                 Spacer(minLength: 0)
 
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(AppColors.textSecondary.opacity(0.6))
+                if openCount > 0 {
+                    Text("\(openCount)")
+                        .font(AppTypography.caption.weight(.bold))
+                        .foregroundStyle(AppColors.backgroundPrimary)
+                        .padding(.horizontal, AppSpacing.s + 2)
+                        .frame(minWidth: 28, minHeight: 28)
+                        .background(AppColors.copper, in: Capsule())
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(AppColors.textSecondary.opacity(0.6))
+                }
             }
             .card(padding: AppSpacing.l)
         }
         .buttonStyle(.plain)
     }
 
-    /// Der Werkzeuge-Bereich: Kerntemperatur-Spickzettel und Wurst-Rechner.
+    /// Der Werkzeuge-Bereich als kompaktes Raster — jedes Werkzeug mit
+    /// eigenem Farbton.
     private var toolsSection: some View {
         VStack(alignment: .leading, spacing: AppSpacing.m) {
             SectionHeaderView(title: "Werkzeuge")
 
-            toolCard(
-                title: "Kerntemperaturen",
-                subtitle: "Gar-Temperaturen zum Nachschlagen",
-                icon: "thermometer.medium"
+            LazyVGrid(
+                columns: [GridItem(.flexible(), spacing: AppSpacing.m), GridItem(.flexible(), spacing: AppSpacing.m)],
+                spacing: AppSpacing.m
             ) {
-                KerntemperaturView()
-            }
+                toolTile(
+                    // Weiche Trennstelle: In der schmalen Kachel darf das
+                    // Wort als „Kern-temperaturen“ umbrechen.
+                    title: "Kern\u{00AD}temperaturen",
+                    subtitle: "Nachschlagen",
+                    icon: "thermometer.medium",
+                    tint: AppColors.coral
+                ) {
+                    KerntemperaturView()
+                }
 
-            toolCard(
-                title: "Wurst-Rechner",
-                subtitle: "Zutaten je kg hochrechnen",
-                icon: "scalemass"
-            ) {
-                WurstRechnerView()
-            }
+                toolTile(
+                    title: "Wurst-Rechner",
+                    subtitle: "Zutaten je kg",
+                    icon: "scalemass",
+                    tint: AppColors.tan
+                ) {
+                    WurstRechnerView()
+                }
 
-            toolCard(
-                title: "Pökel-Rechner",
-                subtitle: "Lake ansetzen: NPS-Menge & Pökelzeit",
-                icon: "drop.fill"
-            ) {
-                PoekelRechnerView()
-            }
+                toolTile(
+                    title: "Pökel-Rechner",
+                    subtitle: "Lake & Pökelzeit",
+                    icon: "drop.fill",
+                    tint: AppColors.sky
+                ) {
+                    PoekelRechnerView()
+                }
 
-            toolCard(
-                title: "Umrechner",
-                subtitle: "Cups, Unzen & Fahrenheit umrechnen",
-                icon: "arrow.left.arrow.right"
-            ) {
-                UmrechnerView()
+                toolTile(
+                    title: "Umrechner",
+                    subtitle: "Cups, Unzen, °F",
+                    icon: "arrow.left.arrow.right",
+                    tint: AppColors.teal
+                ) {
+                    UmrechnerView()
+                }
             }
         }
     }
 
-    /// Eine Werkzeug-Karte (gleicher Bauplan wie Wochenplan/Einkaufsliste).
-    private func toolCard<Destination: View>(
+    /// Eine Werkzeug-Kachel: getöntes Symbol-Quadrat, Titel, Untertitel.
+    private func toolTile<Destination: View>(
         title: String,
         subtitle: String,
         icon: String,
+        tint: Color,
         @ViewBuilder destination: @escaping () -> Destination
     ) -> some View {
         NavigationLink {
             destination()
         } label: {
-            HStack(spacing: AppSpacing.m) {
-                Image(systemName: icon)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(.white)
-                    .frame(width: 42, height: 42)
-                    .background(AppColors.copperGradient, in: Circle())
+            HStack(spacing: AppSpacing.s + 2) {
+                IconBadge(systemName: icon, size: 38, tint: tint, cornerRadius: AppRadius.small)
 
                 VStack(alignment: .leading, spacing: 2) {
+                    // Die Kachel ist schmal: lange Namen dürfen auf zwei
+                    // Zeilen gehen und notfalls leicht schrumpfen.
                     Text(title)
-                        .font(AppTypography.cardTitle)
+                        .font(AppTypography.secondary.weight(.semibold))
                         .foregroundStyle(AppColors.textPrimary)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
+                        .multilineTextAlignment(.leading)
 
                     Text(subtitle)
                         .font(AppTypography.caption)
                         .foregroundStyle(AppColors.textSecondary)
+                        .lineLimit(1)
                 }
 
                 Spacer(minLength: 0)
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(AppColors.textSecondary.opacity(0.6))
             }
-            .card(padding: AppSpacing.l)
+            .card(padding: AppSpacing.m)
         }
         .buttonStyle(.plain)
     }
@@ -286,11 +299,7 @@ struct DashboardView: View {
             if let url = URL(string: "https://kochenmitreima.de") {
                 Link(destination: url) {
                     HStack(spacing: AppSpacing.m) {
-                        Image(systemName: "globe")
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundStyle(.white)
-                            .frame(width: 42, height: 42)
-                            .background(AppColors.copperGradient, in: Circle())
+                        IconBadge(systemName: "globe")
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Kochen mit ReiMa")

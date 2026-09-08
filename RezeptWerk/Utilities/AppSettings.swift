@@ -5,8 +5,6 @@ import SwiftUI
 /// Die Einstellungen werden in den `UserDefaults` gespeichert — also lokal
 /// auf dem Gerät, genau wie alle anderen Daten der App.
 enum SettingsKeys {
-    /// Erscheinungsbild: System / Hell / Dunkel.
-    static let appearance = "settings.appearance"
     /// Schriftgröße im Kochmodus.
     static let cookingFontSize = "settings.cookingFontSize"
     /// iCloud-Synchronisierung an/aus (Standard: aus).
@@ -32,32 +30,6 @@ enum SettingsKeys {
     static let brineStrengthPercent = "tools.brineCalculator.strengthPercent"
     static let brineSugarPerLiter = "tools.brineCalculator.sugarPerLiter"
     static let brineThicknessCm = "tools.brineCalculator.thicknessCm"
-}
-
-/// Erscheinungsbild der App.
-enum AppearanceSetting: String, CaseIterable, Identifiable {
-    case system
-    case light
-    case dark
-
-    var id: String { rawValue }
-
-    var label: String {
-        switch self {
-        case .system: "Automatisch"
-        case .light: "Hell"
-        case .dark: "Dunkel"
-        }
-    }
-
-    /// `nil` bedeutet: dem System folgen.
-    var colorScheme: ColorScheme? {
-        switch self {
-        case .system: nil
-        case .light: .light
-        case .dark: .dark
-        }
-    }
 }
 
 /// Schriftgröße im Kochmodus — bewusst nur drei klare Stufen.

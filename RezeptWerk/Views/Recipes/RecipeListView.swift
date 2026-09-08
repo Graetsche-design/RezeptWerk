@@ -184,7 +184,7 @@ struct RecipeListView: View {
                 if filter.isActive {
                     Text("\(filter.activeCount)")
                         .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(AppColors.backgroundPrimary)
                         .padding(4)
                         .background(AppColors.copper, in: Circle())
                         .offset(x: 6, y: -6)
